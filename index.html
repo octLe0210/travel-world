@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>世界之旅 - 开启您的探索</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', Roboto, sans-serif;
+  overflow: hidden;
+  height: 100vh;
+  background: #0a0d14;
+  color: #fff;
+}
+
+/* ===== Canvas Background ===== */
+#particleCanvas {
+  position: fixed; inset: 0; z-index: 0;
+}
+
+/* ===== Hero Section ===== */
+.hero {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  height: 100vh; text-align: center; padding: 40px;
+}
+
+/* ===== Globe ===== */
+.globe-wrap {
+  position: relative; width: 260px; height: 260px; margin-bottom: 20px;
+}
+.globe-outer {
+  width: 260px; height: 260px; border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, rgba(52,152,219,0.15) 0%, rgba(26,29,40,0.6) 60%, rgba(10,13,20,0.9) 100%);
+  box-shadow:
+    0 0 60px rgba(52,152,219,0.2),
+    0 0 120px rgba(52,152,219,0.08),
+    inset 0 0 60px rgba(52,152,219,0.1);
+  animation: globePulse 3s ease-in-out infinite;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+@keyframes globePulse {
+  0%, 100% { box-shadow: 0 0 60px rgba(52,152,219,0.2), 0 0 120px rgba(52,152,219,0.08), inset 0 0 60px rgba(52,152,219,0.1); }
+  50% { box-shadow: 0 0 80px rgba(52,152,219,0.35), 0 0 160px rgba(52,152,219,0.15), inset 0 0 80px rgba(52,152,219,0.2); }
+}
+.globe-icon { font-size: 100px; animation: globeSpin 20s linear infinite; user-select: none; }
+@keyframes globeSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.globe-orbit {
+  position: absolute; inset: -30px; border-radius: 50%;
+  border: 1px solid rgba(52,152,219,0.12);
+  animation: orbitSpin 8s linear infinite;
+}
+.globe-orbit:nth-child(2) { inset: -50px; animation-duration: 12s; animation-direction: reverse; }
+.globe-orbit:nth-child(3) { inset: -70px; animation-duration: 16s; }
+@keyframes orbitSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.orbit-dot {
+  position: absolute; width: 8px; height: 8px; border-radius: 50%;
+  top: -4px; left: 50%; margin-left: -4px;
+}
+.dot1 { background: #f39c12; box-shadow: 0 0 12px #f39c12; }
+.dot2 { background: #e74c3c; box-shadow: 0 0 12px #e74c3c; }
+.dot3 { background: #2ecc71; box-shadow: 0 0 12px #2ecc71; }
+
+/* ===== Airplane ===== */
+.plane {
+  position: absolute; font-size: 28px; z-index: 10;
+  animation: planeFly 6s ease-in-out infinite;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+}
+@keyframes planeFly {
+  0%   { transform: translate(-120px, 0) rotate(-8deg); opacity: 0; }
+  10%  { opacity: 1; }
+  50%  { transform: translate(120px, -30px) rotate(3deg); opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translate(320px, -15px) rotate(5deg); opacity: 0; }
+}
+
+/* ===== Title ===== */
+.title-wrap { margin-bottom: 12px; }
+.title-sub {
+  font-size: 16px; color: rgba(255,255,255,0.5); letter-spacing: 6px;
+  text-transform: uppercase; margin-bottom: 8px;
+  animation: fadeUp 0.8s ease both; animation-delay: 0.3s;
+}
+.title-main {
+  font-size: clamp(44px, 7vw, 72px); font-weight: 900;
+  background: linear-gradient(135deg, #fff 0%, #a0c4ff 40%, #f39c12 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; line-height: 1.15;
+  animation: fadeUp 0.8s ease both; animation-delay: 0.5s;
+}
+.title-desc {
+  font-size: 18px; color: rgba(255,255,255,0.55); margin-top: 16px;
+  max-width: 560px; line-height: 1.7;
+  animation: fadeUp 0.8s ease both; animation-delay: 0.7s;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Stats ===== */
+.stats-row {
+  display: flex; gap: 40px; margin: 36px 0 40px;
+  animation: fadeUp 0.8s ease both; animation-delay: 0.85s;
+}
+.stat-item { text-align: center; }
+.stat-num {
+  font-size: 36px; font-weight: 800; color: #f39c12;
+  line-height: 1; margin-bottom: 6px;
+  font-variant-numeric: tabular-nums;
+}
+.stat-label { font-size: 13px; color: rgba(255,255,255,0.4); letter-spacing: 2px; }
+
+/* ===== Button ===== */
+.btn-start {
+  position: relative; display: inline-flex; align-items: center; gap: 12px;
+  padding: 18px 48px; font-size: 18px; font-weight: 700;
+  color: #fff; background: linear-gradient(135deg, #f39c12, #e67e22);
+  border: none; border-radius: 50px; cursor: pointer;
+  text-decoration: none; letter-spacing: 1px;
+  box-shadow: 0 8px 32px rgba(243,156,18,0.35);
+  transition: all 0.3s;
+  animation: fadeUp 0.8s ease both, btnGlow 2.5s ease-in-out infinite;
+  animation-delay: 1s, 1s;
+  overflow: hidden;
+}
+.btn-start::after {
+  content: ''; position: absolute; inset: 0; border-radius: 50px;
+  background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%);
+  transform: translateX(-100%);
+  animation: btnShine 2s ease-in-out infinite;
+}
+@keyframes btnShine {
+  0%, 100% { transform: translateX(-100%); }
+  50% { transform: translateX(100%); }
+}
+@keyframes btnGlow {
+  0%, 100% { box-shadow: 0 8px 32px rgba(243,156,18,0.35); }
+  50% { box-shadow: 0 8px 50px rgba(243,156,18,0.55), 0 0 80px rgba(243,156,18,0.2); }
+}
+.btn-start:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 12px 40px rgba(243,156,18,0.5);
+}
+.btn-start:active { transform: translateY(0) scale(0.98); }
+.btn-arrow {
+  display: inline-block; font-size: 22px;
+  animation: arrowBounce 1.2s ease-in-out infinite;
+}
+@keyframes arrowBounce {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(6px); }
+}
+
+/* ===== Floating Travel Icons ===== */
+.float-icons {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+}
+.float-icon {
+  position: absolute; font-size: 32px; opacity: 0.08;
+  animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+  0%   { transform: translateY(105vh) rotate(0deg); opacity: 0; }
+  10%  { opacity: 0.08; }
+  90%  { opacity: 0.08; }
+  100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+}
+
+/* ===== Scroll Hint ===== */
+.scroll-hint {
+  position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+  z-index: 1; animation: fadeUp 0.8s ease both; animation-delay: 1.3s;
+}
+.scroll-mouse {
+  width: 26px; height: 40px; border: 2px solid rgba(255,255,255,0.25);
+  border-radius: 14px; margin: 0 auto 8px; position: relative;
+}
+.scroll-mouse::after {
+  content: ''; position: absolute; top: 8px; left: 50%;
+  width: 4px; height: 8px; background: rgba(255,255,255,0.5);
+  border-radius: 2px; margin-left: -2px;
+  animation: scrollWheel 2s ease-in-out infinite;
+}
+@keyframes scrollWheel {
+  0%, 100% { top: 8px; opacity: 1; }
+  50% { top: 22px; opacity: 0.3; }
+}
+.scroll-text {
+  font-size: 11px; color: rgba(255,255,255,0.3); letter-spacing: 3px;
+}
+</style>
+</head>
+<body>
+
+<!-- Particle Background -->
+<canvas id="particleCanvas"></canvas>
+
+<!-- Floating Travel Icons -->
+<div class="float-icons">
+  <span class="float-icon" style="left:5%;font-size:36px;animation-duration:18s;animation-delay:0s;">🏝️</span>
+  <span class="float-icon" style="left:12%;font-size:28px;animation-duration:22s;animation-delay:2s;">🗽</span>
+  <span class="float-icon" style="left:25%;font-size:32px;animation-duration:20s;animation-delay:5s;">🏰</span>
+  <span class="float-icon" style="left:38%;font-size:24px;animation-duration:24s;animation-delay:1s;">🌍</span>
+  <span class="float-icon" style="left:50%;font-size:30px;animation-duration:19s;animation-delay:3s;">🏔️</span>
+  <span class="float-icon" style="left:62%;font-size:34px;animation-duration:21s;animation-delay:7s;">🗼</span>
+  <span class="float-icon" style="left:75%;font-size:26px;animation-duration:23s;animation-delay:4s;">🏯</span>
+  <span class="float-icon" style="left:85%;font-size:30px;animation-duration:17s;animation-delay:6s;">🎡</span>
+  <span class="float-icon" style="left:92%;font-size:28px;animation-duration:20s;animation-delay:8s;">🏛️</span>
+  <span class="float-icon" style="left:18%;font-size:22px;animation-duration:25s;animation-delay:9s;">🗿</span>
+</div>
+
+<!-- Airplane -->
+<div class="plane" style="top:20%;left:10%;animation-delay:0s;">✈️</div>
+<div class="plane" style="top:35%;left:5%;animation-delay:3s;animation-duration:7s;">✈️</div>
+<div class="plane" style="top:55%;left:8%;animation-delay:4.5s;animation-duration:6.5s;">🛩️</div>
+
+<!-- Hero Content -->
+<div class="hero">
+  <div class="globe-wrap">
+    <div class="globe-orbit"><div class="orbit-dot dot1"></div></div>
+    <div class="globe-orbit"><div class="orbit-dot dot2"></div></div>
+    <div class="globe-orbit"><div class="orbit-dot dot3"></div></div>
+    <div class="globe-outer">
+      <span class="globe-icon">🌍</span>
+    </div>
+  </div>
+
+  <div class="title-wrap">
+    <div class="title-sub">Explore The World</div>
+    <h1 class="title-main">世界之旅</h1>
+  </div>
+  <p class="title-desc">
+    跨越山海，探索未知。从繁华都市到静谧自然，<br>开启属于您的环球旅行。
+  </p>
+
+  <div class="stats-row">
+    <div class="stat-item">
+      <div class="stat-num" data-count="196">0</div>
+      <div class="stat-label">目的地国家</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" data-count="1200">0</div>
+      <div class="stat-label">精选线路</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" data-count="50">0</div>
+      <div class="stat-label">百万旅行者</div>
+    </div>
+  </div>
+
+  <a href="travel.html" class="btn-start">
+    开始您的旅游 <span class="btn-arrow">→</span>
+  </a>
+
+  <div class="scroll-hint">
+    <div class="scroll-mouse"></div>
+    <div class="scroll-text">向下滚动</div>
+  </div>
+</div>
+
+<script>
+// ===== Particle Canvas =====
+const canvas = document.getElementById('particleCanvas');
+const ctx = canvas.getContext('2d');
+let w, h, particles = [];
+
+function resize() {
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+class Particle {
+  constructor() {
+    this.reset();
+    this.y = Math.random() * h;
+  }
+  reset() {
+    this.x = Math.random() * w;
+    this.y = -10;
+    this.size = Math.random() * 2 + 0.5;
+    this.speed = Math.random() * 0.6 + 0.2;
+    this.opacity = Math.random() * 0.5 + 0.1;
+    this.drift = (Math.random() - 0.5) * 0.3;
+    this.twinkle = Math.random() * Math.PI * 2;
+    this.twinkleSpeed = Math.random() * 0.02 + 0.005;
+  }
+  update() {
+    this.y += this.speed;
+    this.x += this.drift + Math.sin(this.y * 0.01) * 0.15;
+    this.twinkle += this.twinkleSpeed;
+    if (this.y > h + 10) this.reset();
+  }
+  draw() {
+    const alpha = this.opacity * (0.6 + 0.4 * Math.sin(this.twinkle));
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+    ctx.fill();
+  }
+}
+
+for (let i = 0; i < 120; i++) {
+  particles.push(new Particle());
+}
+
+function animate() {
+  ctx.clearRect(0, 0, w, h);
+  particles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animate);
+}
+animate();
+
+// ===== Counter Animation =====
+function animateCounters() {
+  document.querySelectorAll('.stat-num').forEach(el => {
+    const target = parseInt(el.dataset.count);
+    const duration = 2000;
+    const start = performance.now();
+    function tick(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = progress === 1 ? target.toLocaleString() + (target >= 50 ? '+' : '') : Math.floor(eased * target).toLocaleString();
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+}
+
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { animateCounters(); obs.disconnect(); } });
+}, { threshold: 0.5 });
+obs.observe(document.querySelector('.stats-row'));
+
+// ===== Mouse Parallax on Globe =====
+document.addEventListener('mousemove', e => {
+  const x = (e.clientX / window.innerWidth - 0.5) * 20;
+  const y = (e.clientY / window.innerHeight - 0.5) * 20;
+  const wrap = document.querySelector('.globe-wrap');
+  if (wrap) wrap.style.transform = `translate(${x}px, ${y}px)`;
+});
+
+// Start counter on load too (visible immediately)
+setTimeout(animateCounters, 1200);
+</script>
+</body>
+</html>
