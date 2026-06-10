@@ -115,6 +115,18 @@ body {
 .search-toast.info { background: #2c3e50; color: #fff; }
 @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(-16px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
 
+/* Region tags */
+.region-tags {
+  display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px;
+}
+.region-tag {
+  padding: 8px 20px; border-radius: 50px; font-size: 14px; font-weight: 600;
+  border: 2px solid #e0e0e0; background: #fff; color: #666; cursor: pointer;
+  transition: all 0.2s; user-select: none;
+}
+.region-tag:hover { border-color: #f39c12; color: #f39c12; }
+.region-tag.active { background: #f39c12; color: #fff; border-color: #f39c12; }
+
 /* Responsive */
 @media (max-width: 767px) {
   .card-grid { grid-template-columns: 1fr; }
@@ -248,6 +260,13 @@ const params = new URLSearchParams(window.location.search);
 const type = params.get('type') || 'destinations';
 const data = allData[type] || allData.destinations;
 
+// Region mapping for destinations
+const regionMap = {
+  '巴黎，法国': '欧洲', '马尔代夫': '亚洲', '东京，日本': '亚洲',
+  '冰岛': '欧洲', '巴厘岛，印尼': '亚洲', '纽约，美国': '美洲',
+};
+let activeRegion = '全部';
+
 document.getElementById('listTitle').textContent = data.title;
 document.getElementById('listSubtitle').textContent = data.subtitle;
 
@@ -293,6 +312,24 @@ if (type === 'hotels' && data.locations) {
     activeFilter = e.target.value;
     render();
   });
+} else if (type === 'destinations') {
+  filtersBar.innerHTML = `
+    <div class="region-tags" id="regionTags">
+      <span class="region-tag active" data-region="全部">全部</span>
+      <span class="region-tag" data-region="亚洲">亚洲</span>
+      <span class="region-tag" data-region="欧洲">欧洲</span>
+      <span class="region-tag" data-region="美洲">美洲</span>
+    </div>
+    <span class="result-count" id="resultCount"></span>
+  `;
+  document.querySelectorAll('.region-tag').forEach(tag => {
+    tag.addEventListener('click', () => {
+      document.querySelectorAll('.region-tag').forEach(t => t.classList.remove('active'));
+      tag.classList.add('active');
+      activeRegion = tag.dataset.region;
+      render();
+    });
+  });
 } else {
   filtersBar.innerHTML = `<span class="result-count" id="resultCount"></span>`;
 }
@@ -333,6 +370,11 @@ function render() {
       </div>
     `).join('')}</div>`;
     return;
+  }
+
+  // Apply region filter
+  if (type === 'destinations' && activeRegion !== '全部') {
+    list = list.filter(d => regionMap[d.name] === activeRegion);
   }
 
   // Destinations use a specific layout
