@@ -19,6 +19,27 @@ img { max-width: 100%; display: block; }
 a { text-decoration: none; color: inherit; }
 ul { list-style: none; }
 
+/* ===== Nav Progress Bar ===== */
+#navProgress {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  z-index: 9999;
+  pointer-events: none;
+  background: transparent;
+}
+#navProgress::after {
+  content: '';
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #f39c12, #e67e22, #f39c12);
+  border-radius: 0 2px 2px 0;
+  transition: width 0.35s ease;
+}
+#navProgress.running::after { width: 70%; }
+#navProgress.done::after { width: 100%; transition: width 0.2s ease; opacity: 0; }
+
 /* ===== Splash Hero ===== */
 #splashHero {
   position: relative; height: 100vh; overflow: hidden;
@@ -379,8 +400,8 @@ ul { list-style: none; }
 
 /* ===== Detail Overlay ===== */
 .detail-overlay { position: fixed; inset: 0; z-index: 3000; background: #fff; overflow-y: auto; display: none; }
-.detail-overlay.show { display: block; animation: detailIn 0.35s ease; }
-@keyframes detailIn { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+.detail-overlay.show { display: block; animation: overlayIn 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+@keyframes overlayIn { from { opacity: 0; transform: translateY(16px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 .detail-back { position: fixed; top: 20px; left: 20px; z-index: 3001; width: 44px; height: 44px; border-radius: 50%; background: rgba(0,0,0,0.5); color: #fff; border: none; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
 .detail-back:hover { background: rgba(0,0,0,0.7); transform: scale(1.08); }
 .detail-hero { height: 400px; background-size: cover; background-position: center; position: relative; display: flex; align-items: flex-end; }
@@ -408,7 +429,7 @@ ul { list-style: none; }
 
 /* ===== Service Overlay (Hotels/Flights/Cars) ===== */
 .svc-overlay { position: fixed; inset: 0; z-index: 3000; background: #f5f6fa; overflow-y: auto; display: none; }
-.svc-overlay.show { display: block; animation: detailIn 0.35s ease; }
+.svc-overlay.show { display: block; animation: overlayIn 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
 .svc-header { background: linear-gradient(135deg, #1a1d28, #252a3a); color: #fff; padding: 48px 24px 32px; text-align: center; }
 .svc-header h2 { font-size: 26px; font-weight: 800; }
 .svc-header p { font-size: 13px; opacity: 0.6; margin-top: 4px; }
@@ -466,7 +487,7 @@ ul { list-style: none; }
 
 /* ===== Booking Center ===== */
 .booking-center { position: fixed; inset: 0; z-index: 3000; background: #f5f6fa; overflow-y: auto; display: none; }
-.booking-center.show { display: block; animation: detailIn 0.35s ease; }
+.booking-center.show { display: block; animation: overlayIn 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
 .bc-header { background: linear-gradient(135deg, #1a1d28, #252a3a); color: #fff; padding: 48px 24px 0; text-align: center; }
 .bc-header h2 { font-size: 26px; font-weight: 800; margin-bottom: 20px; }
 .bc-tabs { display: flex; justify-content: center; gap: 0; }
@@ -504,7 +525,7 @@ ul { list-style: none; }
 
 /* ===== User Profile Overlay ===== */
 .profile-overlay { position: fixed; inset: 0; z-index: 3000; background: #f5f6fa; overflow-y: auto; display: none; }
-.profile-overlay.show { display: block; animation: detailIn 0.35s ease; }
+.profile-overlay.show { display: block; animation: overlayIn 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
 .profile-header {
   background: linear-gradient(135deg, #1a1d28, #252a3a); color: #fff;
   padding: 48px 24px 40px; text-align: center;
@@ -688,6 +709,8 @@ button, .qs-card, .dest-card, .service-card, .guide-card, .sidebar-nav a, .sideb
 </style>
 </head>
 <body>
+
+<div id="navProgress"></div>
 
 <div class="app-layout">
 <!-- ====== Sidebar ====== -->
@@ -980,6 +1003,20 @@ button, .qs-card, .dest-card, .service-card, .guide-card, .sidebar-nav a, .sideb
 <div class="app-toast" id="appToast"></div>
 
 <script>
+// ===== Nav Progress Bar =====
+const navProgress = document.getElementById('navProgress');
+let progressTimer = null;
+function triggerProgress() {
+  navProgress.classList.remove('done');
+  navProgress.classList.add('running');
+  clearTimeout(progressTimer);
+  progressTimer = setTimeout(() => {
+    navProgress.classList.remove('running');
+    navProgress.classList.add('done');
+    setTimeout(() => navProgress.classList.remove('done'), 250);
+  }, 500);
+}
+
 // ===== Splash Hero =====
 // Particle Canvas
 const particleCanvas = document.getElementById('particleCanvas');
@@ -1059,6 +1096,7 @@ document.addEventListener('mousemove', e => {
 
 // Start button scrolls to destinations
 document.getElementById('splashStartBtn').addEventListener('click', () => {
+  triggerProgress();
   document.getElementById('destinations').scrollIntoView({ behavior: 'smooth' });
 });
 
@@ -1210,6 +1248,7 @@ function renderHotelResults(data) {
 }
 
 function openHotelOverlay() {
+  triggerProgress();
   document.getElementById('hotelOverlay').classList.add('show');
   document.body.style.overflow = 'hidden';
   renderHotelResults(hotelData);
@@ -1261,6 +1300,7 @@ function renderFlightResults(data) {
 }
 
 function openFlightOverlay() {
+  triggerProgress();
   document.getElementById('flightOverlay').classList.add('show');
   document.body.style.overflow = 'hidden';
   renderFlightResults(flightData);
@@ -1311,6 +1351,7 @@ function renderCarResults(data) {
 }
 
 function openCarOverlay() {
+  triggerProgress();
   document.getElementById('carOverlay').classList.add('show');
   document.body.style.overflow = 'hidden';
   renderCarResults(carData);
@@ -1361,6 +1402,7 @@ document.querySelector('.qs-card:nth-child(3)').onclick = () => openCarOverlay()
 
 // ===== Item Detail Overlay (hotel/flight/car single item) =====
 function showItemDetail(type, item) {
+  triggerProgress();
   const hero = document.getElementById('detailHero');
   const body = document.getElementById('detailBody');
   body.className = 'detail-body';
@@ -1433,6 +1475,7 @@ const detailBody = document.getElementById('detailBody');
 const detailBack = document.getElementById('detailBack');
 
 function showDetail(id) {
+  triggerProgress();
   const d = destData[id]; if (!d) return;
   detailBody.className = 'detail-body';
   detailHero.style.backgroundImage = `linear-gradient(transparent 50%, rgba(0,0,0,0.55)), url(${d.heroImg})`;
@@ -1463,6 +1506,7 @@ const guideData = {
 };
 
 function showGuideDetail(id) {
+  triggerProgress();
   const d = guideData[id]; if (!d) return;
   detailHero.style.backgroundImage = `linear-gradient(transparent 40%, rgba(0,0,0,0.6)), url(${d.heroImg})`;
   detailHero.style.backgroundSize = 'cover'; detailHero.style.backgroundPosition = 'center';
@@ -1756,7 +1800,11 @@ document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
 // ===== Sidebar nav active =====
 document.querySelectorAll('.sidebar-nav a[href^="#"]').forEach(link => {
-  link.addEventListener('click', () => { document.querySelectorAll('.sidebar-nav a').forEach(l => l.classList.remove('active')); link.classList.add('active'); });
+  link.addEventListener('click', () => {
+    triggerProgress();
+    document.querySelectorAll('.sidebar-nav a').forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+  });
 });
 
 // ===== Swipe-down to close overlays =====
