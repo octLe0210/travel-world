@@ -237,6 +237,10 @@ ul { list-style: none; }
 
 /* Search bar */
 .hero-search {
+  position: absolute;
+  top: 32px;
+  right: 40px;
+  z-index: 10;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -724,7 +728,7 @@ button, .qs-card, .dest-card, .service-card, .guide-card, .sidebar-nav a, .sideb
   <div class="splash-plane" style="top:35%;left:5%;animation-delay:3s;animation-duration:7s;">✈️</div>
   <div class="splash-plane" style="top:55%;left:8%;animation-delay:4.5s;animation-duration:6.5s;">🛩️</div>
 
-  <div class="hero-search" style="position:absolute;top:32px;right:40px;z-index:10;">
+  <div class="hero-search">
     <input type="text" id="searchInput" placeholder="搜索目的地...">
     <button id="searchBtn">搜索</button>
   </div>
