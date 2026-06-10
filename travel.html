@@ -596,8 +596,15 @@ ul { list-style: none; }
 .modal button { padding: 12px 32px; background: #f39c12; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
 
 /* Reveal */
-.reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
-.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
 
 /* ===== Touch & Scroll Optimization ===== */
 .detail-overlay, .svc-overlay, .booking-center, .profile-overlay {
@@ -1733,7 +1740,17 @@ function renderBookings() {
 function quickBook(destName) { hideDetail(); document.getElementById('dest').value = destName; switchBcTab('form'); bookingCenter.classList.add('show'); document.body.style.overflow = 'hidden'; bookingCenter.scrollTop = 0; }
 
 // ===== Scroll Reveal =====
-const observer = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.1 });
+// 滚动淡入（逐张错开）
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => {
+        entry.target.classList.add('revealed');
+      }, i * 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
 // ===== Sidebar nav active =====
