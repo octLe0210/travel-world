@@ -388,6 +388,7 @@ function render() {
           </div>
           <div class="list-card-footer">
             <div class="price">¥${f.price.toLocaleString()} <small>${data.unit}</small></div>
+            <button class="btn" onclick="requireLogin(() => showToast('已选择「${f.from}→${f.to}」', 'success'))">预订</button>
           </div>
         </div>
       </div>
