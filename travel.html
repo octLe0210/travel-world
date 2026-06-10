@@ -237,20 +237,40 @@ ul { list-style: none; }
 
 /* Search bar */
 .hero-search {
-  display: flex; background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(12px); border-radius: 50px;
-  border: 1px solid rgba(255,255,255,0.2); overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50px;
+  padding: 6px 6px 6px 20px;
 }
 .hero-search input {
-  padding: 12px 20px; border: none; background: transparent;
-  color: #fff; font-size: 14px; outline: none; width: 200px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 14px;
+  width: 200px;
 }
-.hero-search input::placeholder { color: rgba(255,255,255,0.6); }
+.hero-search input::placeholder { color: rgba(255, 255, 255, 0.6); }
 .hero-search button {
-  padding: 12px 20px; background: #f39c12; color: #fff; border: none;
-  font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.3s;
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+  border: none;
+  border-radius: 50px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: all 0.3s;
 }
-.hero-search button:hover { background: #e67e22; }
+.hero-search button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(243, 156, 18, 0.5);
+}
 
 /* Quick services bar */
 .quick-services {
