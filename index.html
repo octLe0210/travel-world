@@ -3,127 +3,101 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>世界之旅 - 开启您的探索</title>
+<title>世界之旅 - 全球旅游信息平台</title>
+<meta name="description" content="世界之旅——探索全球最美景点，预订酒店、机票、租车一站式服务。覆盖巴黎、马尔代夫、东京、冰岛、巴厘岛、纽约等热门目的地，提供专业旅行攻略。">
+<link rel="preconnect" href="https://picsum.photos">
+<link rel="dns-prefetch" href="https://picsum.photos">
 <style>
+/* ===== Reset & Base ===== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', Roboto, sans-serif;
-  overflow: hidden;
-  height: 100vh;
-  background: #0a0d14;
-  color: #fff;
+  color: #333; line-height: 1.6; background: #f5f6fa; overflow-x: hidden;
 }
+img { max-width: 100%; display: block; }
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
 
-/* ===== Canvas Background ===== */
-#particleCanvas {
-  position: fixed; inset: 0; z-index: 0;
-}
-
-/* ===== Hero Section ===== */
-.hero {
-  position: relative; z-index: 1;
+/* ===== Splash Hero ===== */
+#splashHero {
+  position: relative; height: 100vh; overflow: hidden;
+  background: #0a0d14; color: #fff;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  height: 100vh; text-align: center; padding: 40px;
+  text-align: center; padding: 40px;
 }
-
-/* ===== Globe ===== */
-.globe-wrap {
-  position: relative; width: 260px; height: 260px; margin-bottom: 20px;
-}
-.globe-outer {
+#particleCanvas { position: absolute; inset: 0; z-index: 0; }
+.splash-content { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
+.splash-globe-wrap { position: relative; width: 260px; height: 260px; margin-bottom: 20px; }
+.splash-globe-outer {
   width: 260px; height: 260px; border-radius: 50%;
   background: radial-gradient(circle at 40% 35%, rgba(52,152,219,0.15) 0%, rgba(26,29,40,0.6) 60%, rgba(10,13,20,0.9) 100%);
-  box-shadow:
-    0 0 60px rgba(52,152,219,0.2),
-    0 0 120px rgba(52,152,219,0.08),
-    inset 0 0 60px rgba(52,152,219,0.1);
-  animation: globePulse 3s ease-in-out infinite;
-  display: flex; align-items: center; justify-content: center;
-  overflow: hidden;
+  box-shadow: 0 0 60px rgba(52,152,219,0.2), 0 0 120px rgba(52,152,219,0.08), inset 0 0 60px rgba(52,152,219,0.1);
+  animation: splashGlobePulse 3s ease-in-out infinite;
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
 }
-@keyframes globePulse {
+@keyframes splashGlobePulse {
   0%, 100% { box-shadow: 0 0 60px rgba(52,152,219,0.2), 0 0 120px rgba(52,152,219,0.08), inset 0 0 60px rgba(52,152,219,0.1); }
   50% { box-shadow: 0 0 80px rgba(52,152,219,0.35), 0 0 160px rgba(52,152,219,0.15), inset 0 0 80px rgba(52,152,219,0.2); }
 }
-.globe-icon { font-size: 100px; animation: globeSpin 20s linear infinite; user-select: none; }
-@keyframes globeSpin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-.globe-orbit {
+.splash-globe-icon { font-size: 100px; animation: splashGlobeSpin 20s linear infinite; user-select: none; }
+@keyframes splashGlobeSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.splash-globe-orbit {
   position: absolute; inset: -30px; border-radius: 50%;
-  border: 1px solid rgba(52,152,219,0.12);
-  animation: orbitSpin 8s linear infinite;
+  border: 1px solid rgba(52,152,219,0.12); animation: splashOrbitSpin 8s linear infinite;
 }
-.globe-orbit:nth-child(2) { inset: -50px; animation-duration: 12s; animation-direction: reverse; }
-.globe-orbit:nth-child(3) { inset: -70px; animation-duration: 16s; }
-@keyframes orbitSpin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-.orbit-dot {
-  position: absolute; width: 8px; height: 8px; border-radius: 50%;
-  top: -4px; left: 50%; margin-left: -4px;
-}
-.dot1 { background: #f39c12; box-shadow: 0 0 12px #f39c12; }
-.dot2 { background: #e74c3c; box-shadow: 0 0 12px #e74c3c; }
-.dot3 { background: #2ecc71; box-shadow: 0 0 12px #2ecc71; }
-
-/* ===== Airplane ===== */
-.plane {
+.splash-globe-orbit:nth-child(2) { inset: -50px; animation-duration: 12s; animation-direction: reverse; }
+.splash-globe-orbit:nth-child(3) { inset: -70px; animation-duration: 16s; }
+@keyframes splashOrbitSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.splash-orbit-dot { position: absolute; width: 8px; height: 8px; border-radius: 50%; top: -4px; left: 50%; margin-left: -4px; }
+.splash-orbit-dot.dot1 { background: #f39c12; box-shadow: 0 0 12px #f39c12; }
+.splash-orbit-dot.dot2 { background: #e74c3c; box-shadow: 0 0 12px #e74c3c; }
+.splash-orbit-dot.dot3 { background: #2ecc71; box-shadow: 0 0 12px #2ecc71; }
+.splash-plane {
   position: absolute; font-size: 28px; z-index: 10;
-  animation: planeFly 6s ease-in-out infinite;
+  animation: splashPlaneFly 6s ease-in-out infinite;
   filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
 }
-@keyframes planeFly {
-  0%   { transform: translate(-120px, 0) rotate(-8deg); opacity: 0; }
-  10%  { opacity: 1; }
-  50%  { transform: translate(120px, -30px) rotate(3deg); opacity: 1; }
-  90%  { opacity: 1; }
+@keyframes splashPlaneFly {
+  0% { transform: translate(-120px, 0) rotate(-8deg); opacity: 0; }
+  10% { opacity: 1; }
+  50% { transform: translate(120px, -30px) rotate(3deg); opacity: 1; }
+  90% { opacity: 1; }
   100% { transform: translate(320px, -15px) rotate(5deg); opacity: 0; }
 }
-
-/* ===== Title ===== */
-.title-wrap { margin-bottom: 12px; }
-.title-sub {
+.splash-title-sub {
   font-size: 16px; color: rgba(255,255,255,0.5); letter-spacing: 6px;
   text-transform: uppercase; margin-bottom: 8px;
-  animation: fadeUp 0.8s ease both; animation-delay: 0.3s;
+  animation: splashFadeUp 0.8s ease both; animation-delay: 0.3s;
 }
-.title-main {
+.splash-title-main {
   font-size: clamp(44px, 7vw, 72px); font-weight: 900;
   background: linear-gradient(135deg, #fff 0%, #a0c4ff 40%, #f39c12 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text; line-height: 1.15;
-  animation: fadeUp 0.8s ease both; animation-delay: 0.5s;
+  animation: splashFadeUp 0.8s ease both; animation-delay: 0.5s;
 }
-.title-desc {
+.splash-title-desc {
   font-size: 18px; color: rgba(255,255,255,0.55); margin-top: 16px;
   max-width: 560px; line-height: 1.7;
-  animation: fadeUp 0.8s ease both; animation-delay: 0.7s;
+  animation: splashFadeUp 0.8s ease both; animation-delay: 0.7s;
 }
-@keyframes fadeUp {
+@keyframes splashFadeUp {
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
-/* ===== Stats ===== */
-.stats-row {
+.splash-stats-row {
   display: flex; gap: 40px; margin: 36px 0 40px;
-  animation: fadeUp 0.8s ease both; animation-delay: 0.85s;
+  animation: splashFadeUp 0.8s ease both; animation-delay: 0.85s;
 }
-.stat-item { text-align: center; }
-.stat-num {
+.splash-stat-item { text-align: center; }
+.splash-stat-num {
   font-size: 36px; font-weight: 800; color: #f39c12;
-  line-height: 1; margin-bottom: 6px;
-  font-variant-numeric: tabular-nums;
+  line-height: 1; margin-bottom: 6px; font-variant-numeric: tabular-nums;
 }
-.stat-label { font-size: 13px; color: rgba(255,255,255,0.4); letter-spacing: 2px; }
-
-/* ===== Button ===== */
-.btn-start {
+.splash-stat-label { font-size: 13px; color: rgba(255,255,255,0.4); letter-spacing: 2px; }
+.splash-btn-start {
   position: relative; display: inline-flex; align-items: center; gap: 12px;
   padding: 18px 48px; font-size: 18px; font-weight: 700;
   color: #fff; background: linear-gradient(135deg, #f39c12, #e67e22);
@@ -131,165 +105,865 @@ body {
   text-decoration: none; letter-spacing: 1px;
   box-shadow: 0 8px 32px rgba(243,156,18,0.35);
   transition: all 0.3s;
-  animation: fadeUp 0.8s ease both, btnGlow 2.5s ease-in-out infinite;
-  animation-delay: 1s, 1s;
-  overflow: hidden;
+  animation: splashFadeUp 0.8s ease both, splashBtnGlow 2.5s ease-in-out infinite;
+  animation-delay: 1s, 1s; overflow: hidden;
 }
-.btn-start::after {
+.splash-btn-start::after {
   content: ''; position: absolute; inset: 0; border-radius: 50px;
   background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%);
-  transform: translateX(-100%);
-  animation: btnShine 2s ease-in-out infinite;
+  transform: translateX(-100%); animation: splashBtnShine 2s ease-in-out infinite;
 }
-@keyframes btnShine {
+@keyframes splashBtnShine {
   0%, 100% { transform: translateX(-100%); }
   50% { transform: translateX(100%); }
 }
-@keyframes btnGlow {
+@keyframes splashBtnGlow {
   0%, 100% { box-shadow: 0 8px 32px rgba(243,156,18,0.35); }
   50% { box-shadow: 0 8px 50px rgba(243,156,18,0.55), 0 0 80px rgba(243,156,18,0.2); }
 }
-.btn-start:hover {
-  transform: translateY(-3px) scale(1.03);
-  box-shadow: 0 12px 40px rgba(243,156,18,0.5);
-}
-.btn-start:active { transform: translateY(0) scale(0.98); }
-.btn-arrow {
-  display: inline-block; font-size: 22px;
-  animation: arrowBounce 1.2s ease-in-out infinite;
-}
-@keyframes arrowBounce {
+.splash-btn-start:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 12px 40px rgba(243,156,18,0.5); }
+.splash-btn-start:active { transform: translateY(0) scale(0.98); }
+.splash-btn-arrow { display: inline-block; font-size: 22px; animation: splashArrowBounce 1.2s ease-in-out infinite; }
+@keyframes splashArrowBounce {
   0%, 100% { transform: translateX(0); }
   50% { transform: translateX(6px); }
 }
-
-/* ===== Floating Travel Icons ===== */
-.float-icons {
-  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
-}
-.float-icon {
+.splash-float-icons { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.splash-float-icon {
   position: absolute; font-size: 32px; opacity: 0.08;
-  animation: floatUp linear infinite;
+  animation: splashFloatUp linear infinite;
 }
-@keyframes floatUp {
-  0%   { transform: translateY(105vh) rotate(0deg); opacity: 0; }
-  10%  { opacity: 0.08; }
-  90%  { opacity: 0.08; }
+@keyframes splashFloatUp {
+  0% { transform: translateY(105vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.08; }
+  90% { opacity: 0.08; }
   100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
 }
-
-/* ===== Scroll Hint ===== */
-.scroll-hint {
+.splash-scroll-hint {
   position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
-  z-index: 1; animation: fadeUp 0.8s ease both; animation-delay: 1.3s;
+  z-index: 1; animation: splashFadeUp 0.8s ease both; animation-delay: 1.3s;
 }
-.scroll-mouse {
+.splash-scroll-mouse {
   width: 26px; height: 40px; border: 2px solid rgba(255,255,255,0.25);
   border-radius: 14px; margin: 0 auto 8px; position: relative;
 }
-.scroll-mouse::after {
+.splash-scroll-mouse::after {
   content: ''; position: absolute; top: 8px; left: 50%;
   width: 4px; height: 8px; background: rgba(255,255,255,0.5);
   border-radius: 2px; margin-left: -2px;
-  animation: scrollWheel 2s ease-in-out infinite;
+  animation: splashScrollWheel 2s ease-in-out infinite;
 }
-@keyframes scrollWheel {
+@keyframes splashScrollWheel {
   0%, 100% { top: 8px; opacity: 1; }
   50% { top: 22px; opacity: 0.3; }
 }
-.scroll-text {
-  font-size: 11px; color: rgba(255,255,255,0.3); letter-spacing: 3px;
+.splash-scroll-text { font-size: 11px; color: rgba(255,255,255,0.3); letter-spacing: 3px; }
+
+/* ===== Sidebar ===== */
+.sidebar {
+  position: fixed; top: 0; left: 0; bottom: 0; width: 220px;
+  background: linear-gradient(180deg, #1a1d28 0%, #252a3a 100%);
+  z-index: 1000; display: flex; flex-direction: column;
+  box-shadow: 4px 0 30px rgba(0,0,0,0.15);
+  animation: sidebarIn 0.45s ease;
+}
+@keyframes sidebarIn {
+  from { transform: translateX(-30px); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+.sidebar-logo {
+  padding: 28px 24px 20px; font-size: 22px; font-weight: 800;
+  color: #fff; letter-spacing: -0.5px;
+}
+.sidebar-logo span { color: #f39c12; }
+.sidebar-nav { flex: 1; padding: 8px 12px; display: flex; flex-direction: column; gap: 2px; overflow-y: auto; }
+.sidebar-nav a {
+  display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+  color: rgba(255,255,255,0.65); font-size: 14px; font-weight: 500;
+  border-radius: 10px; transition: all 0.2s; position: relative;
+}
+.sidebar-nav a:hover { background: rgba(255,255,255,0.08); color: #fff; }
+.sidebar-nav a.active { background: rgba(243,156,18,0.15); color: #f39c12; }
+.sidebar-nav a .s-icon { font-size: 22px; width: 28px; text-align: center; flex-shrink: 0; }
+.sidebar-badge {
+  background: #e74c3c; color: #fff; font-size: 10px; font-weight: 700;
+  min-width: 18px; height: 18px; border-radius: 9px;
+  display: none; align-items: center; justify-content: center;
+  margin-left: auto; padding: 0 5px;
+}
+.sidebar-badge.show { display: flex; }
+.sidebar-user {
+  padding: 14px 16px; border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; gap: 10px; cursor: pointer;
+  transition: background 0.2s;
+}
+.sidebar-user:hover { background: rgba(255,255,255,0.04); }
+.sidebar-user .login-prompt {
+  color: #fff; font-size: 15px; display: flex;
+  align-items: center; gap: 10px; width: 100%;
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+  padding: 10px 14px; border-radius: 10px;
+  font-weight: 600; justify-content: center;
+  box-shadow: 0 2px 12px rgba(243,156,18,0.3);
+  transition: all 0.2s;
+}
+.sidebar-user .login-prompt:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(243,156,18,0.45); }
+.sidebar-avatar {
+  width: 36px; height: 36px; border-radius: 50%; background: #f39c12;
+  color: #fff; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px; flex-shrink: 0;
+}
+.sidebar-user-info { flex: 1; min-width: 0; display: none; }
+.sidebar-user-info.show { display: block; }
+.sidebar-user-name { font-size: 13px; font-weight: 600; color: #fff; }
+.sidebar-user-email { font-size: 11px; color: rgba(255,255,255,0.4); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ===== Main Content ===== */
+.main-content { margin-left: 220px; }
+.main-content > * {
+  animation: pageIn 0.5s ease both;
+}
+.main-content > *:nth-child(1) { animation-delay: 0.05s; }
+.main-content > *:nth-child(2) { animation-delay: 0.1s; }
+.main-content > *:nth-child(3) { animation-delay: 0.15s; }
+.main-content > *:nth-child(4) { animation-delay: 0.2s; }
+.main-content > *:nth-child(5) { animation-delay: 0.25s; }
+.main-content > *:nth-child(6) { animation-delay: 0.3s; }
+.main-content > *:nth-child(7) { animation-delay: 0.35s; }
+.main-content > *:nth-child(8) { animation-delay: 0.4s; }
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Search bar */
+.hero-search {
+  display: flex; background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(12px); border-radius: 50px;
+  border: 1px solid rgba(255,255,255,0.2); overflow: hidden;
+}
+.hero-search input {
+  padding: 12px 20px; border: none; background: transparent;
+  color: #fff; font-size: 14px; outline: none; width: 200px;
+}
+.hero-search input::placeholder { color: rgba(255,255,255,0.6); }
+.hero-search button {
+  padding: 12px 20px; background: #f39c12; color: #fff; border: none;
+  font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.3s;
+}
+.hero-search button:hover { background: #e67e22; }
+
+/* Quick services bar */
+.quick-services {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  padding: 32px 40px; background: #fff; margin: -20px 40px 0;
+  border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  position: relative; z-index: 5;
+}
+.qs-card {
+  text-align: center; padding: 24px 16px; border-radius: 12px;
+  cursor: pointer; transition: all 0.3s; border: 1px solid transparent;
+}
+.qs-card:hover { background: #f8f9fc; border-color: #eee; transform: translateY(-2px); }
+.qs-card .qs-icon { font-size: 32px; margin-bottom: 10px; }
+.qs-card h3 { font-size: 16px; font-weight: 700; color: #2c3e50; margin-bottom: 4px; }
+.qs-card p { font-size: 12px; color: #999; }
+
+/* ===== Sections Common ===== */
+.section { padding: 64px 40px; }
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 36px; }
+.section-header h2 { font-size: 26px; font-weight: 800; color: #2c3e50; }
+.section-header h2 span { border-bottom: 3px solid #f39c12; padding-bottom: 4px; }
+.section-header .more { font-size: 14px; color: #f39c12; font-weight: 600; }
+.section-header .more:hover { text-decoration: underline; }
+
+/* ===== Destinations Grid ===== */
+.dest-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.dest-card {
+  position: relative; height: 320px; border-radius: 16px; overflow: hidden;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.05); cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.dest-card:hover { transform: translateY(-6px); box-shadow: 0 12px 32px rgba(0,0,0,0.1); }
+.dest-card img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+}
+.dest-card::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(transparent 40%, rgba(0,0,0,0.55));
+  z-index: 1;
+}
+.dest-info {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+  padding: 24px 20px 20px; color: #fff;
+}
+.dest-info h3 { font-size: 20px; margin-bottom: 2px; font-weight: 700; }
+.dest-info .stars { color: #f39c12; font-size: 12px; margin-bottom: 4px; }
+.dest-info .desc { color: rgba(255,255,255,0.8); font-size: 13px; line-height: 1.4; }
+
+/* ===== Hotels / Flights / Cars Grid ===== */
+.service-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.service-card {
+  position: relative; height: 280px; border-radius: 16px; overflow: hidden;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.05); cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.service-card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,0.1); }
+.service-card img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+}
+.service-card::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(transparent 35%, rgba(0,0,0,0.55));
+  z-index: 1;
+}
+.service-card-body {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+  padding: 24px 20px 20px; color: #fff;
+}
+.service-card-body h3 { font-size: 18px; font-weight: 700; margin-bottom: 2px; }
+.service-card-body .meta { font-size: 12px; color: rgba(255,255,255,0.75); margin-bottom: 6px; }
+.service-card-body .price { font-size: 22px; font-weight: 800; color: #fff; }
+.service-card-body .price small { font-size: 12px; color: rgba(255,255,255,0.65); font-weight: 400; }
+.service-tag {
+  display: inline-block; padding: 3px 8px; border-radius: 4px;
+  font-size: 10px; font-weight: 600; margin-left: 4px; vertical-align: middle;
+}
+.tag-deal { background: rgba(243,156,18,0.85); color: #fff; }
+.tag-hot { background: rgba(231,76,60,0.85); color: #fff; }
+
+/* ===== Guides ===== */
+.guide-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.guide-card {
+  background: #fff; border-radius: 16px; padding: 32px 24px; text-align: center;
+  border: 1px solid #eee; cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.guide-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.08); }
+.guide-icon { width: 64px; height: 64px; margin: 0 auto 16px; background: #fff8e7; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; }
+.guide-card h3 { font-size: 17px; margin-bottom: 8px; color: #2c3e50; }
+.guide-card p { color: #888; font-size: 13px; line-height: 1.5; }
+
+/* ===== Footer ===== */
+.footer { background: #1a1d28; color: rgba(255,255,255,0.5); padding: 32px 40px; text-align: center; font-size: 13px; }
+.footer .social { display: flex; justify-content: center; gap: 16px; margin-bottom: 14px; }
+.footer .social a { width: 38px; height: 38px; background: rgba(255,255,255,0.08); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: background 0.3s; }
+.footer .social a:hover { background: #f39c12; }
+
+/* ===== Detail Overlay ===== */
+.detail-overlay { position: fixed; inset: 0; z-index: 3000; background: #fff; overflow-y: auto; display: none; }
+.detail-overlay.show { display: block; animation: detailIn 0.35s ease; }
+@keyframes detailIn { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+.detail-back { position: fixed; top: 20px; left: 20px; z-index: 3001; width: 44px; height: 44px; border-radius: 50%; background: rgba(0,0,0,0.5); color: #fff; border: none; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.detail-back:hover { background: rgba(0,0,0,0.7); transform: scale(1.08); }
+.detail-hero { height: 400px; background-size: cover; background-position: center; position: relative; display: flex; align-items: flex-end; }
+.detail-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(transparent 50%, rgba(0,0,0,0.55)); }
+.detail-hero-content { position: relative; z-index: 1; padding: 40px 48px; color: #fff; }
+.detail-hero-content h2 { font-size: 34px; font-weight: 800; }
+.detail-hero-content .stars { font-size: 16px; color: #f39c12; }
+.detail-body { max-width: 900px; margin: 0 auto; padding: 36px 24px 80px; }
+.detail-body h3 { font-size: 20px; color: #2c3e50; margin: 28px 0 12px; padding-bottom: 6px; border-bottom: 3px solid #f39c12; display: inline-block; }
+.detail-body .intro { font-size: 16px; color: #555; line-height: 1.8; }
+.attraction-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.attraction-item { display: flex; align-items: center; gap: 10px; background: #f8f9fa; padding: 14px 16px; border-radius: 10px; font-size: 14px; }
+.attraction-item .icon { font-size: 22px; flex-shrink: 0; }
+.info-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+.info-tag { background: #fff8e7; color: #c0780a; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 500; }
+.tip-list { list-style: none; }
+.tip-list li { padding: 10px 0; border-bottom: 1px solid #eee; font-size: 14px; color: #555; display: flex; gap: 8px; }
+.tip-list li::before { content: '•'; color: #f39c12; font-weight: bold; }
+.guide-detail-body { max-width: 800px; margin: 0 auto; padding: 36px 24px 80px; }
+.guide-detail-body h3 { font-size: 20px; color: #2c3e50; margin: 28px 0 10px; padding-bottom: 6px; border-bottom: 3px solid #f39c12; display: inline-block; }
+.guide-detail-body p { font-size: 15px; color: #555; line-height: 1.8; }
+.detail-book-section { text-align: center; padding: 32px 0 12px; margin-top: 16px; border-top: 1px solid #eee; }
+.detail-book-btn { display: inline-block; padding: 14px 44px; background: linear-gradient(135deg, #f39c12, #e67e22); color: #fff; border: none; border-radius: 50px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 24px rgba(243,156,18,0.4); transition: all 0.3s; }
+.detail-book-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(243,156,18,0.5); }
+
+/* ===== Service Overlay (Hotels/Flights/Cars) ===== */
+.svc-overlay { position: fixed; inset: 0; z-index: 3000; background: #f5f6fa; overflow-y: auto; display: none; }
+.svc-overlay.show { display: block; animation: detailIn 0.35s ease; }
+.svc-header { background: linear-gradient(135deg, #1a1d28, #252a3a); color: #fff; padding: 48px 24px 32px; text-align: center; }
+.svc-header h2 { font-size: 26px; font-weight: 800; }
+.svc-header p { font-size: 13px; opacity: 0.6; margin-top: 4px; }
+.svc-search { max-width: 760px; margin: -20px auto 0; padding: 0 24px; position: relative; z-index: 5; }
+.svc-search-row {
+  background: #fff; border-radius: 14px; padding: 20px 24px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08); display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;
+}
+.svc-search-row .s-field { display: flex; flex-direction: column; flex: 1; min-width: 120px; }
+.svc-search-row .s-field label { font-size: 11px; font-weight: 600; color: #999; text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px; }
+.svc-search-row .s-field select,
+.svc-search-row .s-field input {
+  padding: 10px 12px; border: 2px solid #e0e0e0; border-radius: 8px;
+  font-size: 14px; outline: none; font-family: inherit;
+}
+.svc-search-row .s-field select:focus,
+.svc-search-row .s-field input:focus { border-color: #f39c12; }
+.svc-search-btn {
+  padding: 10px 28px; background: #f39c12; color: #fff; border: none;
+  border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap;
+}
+.svc-search-btn:hover { background: #e67e22; }
+.svc-results { max-width: 900px; margin: 0 auto; padding: 28px 24px 80px; }
+.svc-result-card {
+  background: #fff; border-radius: 14px; padding: 20px 24px; margin-bottom: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04); display: flex; gap: 18px; align-items: center;
+  transition: transform 0.2s;
+}
+.svc-result-card:hover { transform: translateY(-2px); }
+.svc-result-card img { width: 160px; height: 120px; object-fit: cover; border-radius: 10px; flex-shrink: 0; }
+.svc-result-info { flex: 1; }
+.svc-result-info h3 { font-size: 18px; color: #2c3e50; margin-bottom: 4px; }
+.svc-result-info .meta-row { font-size: 13px; color: #888; margin-bottom: 6px; display: flex; gap: 16px; flex-wrap: wrap; }
+.svc-result-info .features { display: flex; gap: 8px; flex-wrap: wrap; }
+.svc-feature { font-size: 11px; padding: 3px 10px; border-radius: 12px; background: #f0f2f5; color: #666; }
+.svc-result-price { text-align: right; flex-shrink: 0; }
+.svc-result-price .amount { font-size: 24px; font-weight: 800; color: #e74c3c; }
+.svc-result-price .unit { font-size: 12px; color: #999; }
+.svc-result-price .svc-book-btn {
+  margin-top: 8px; padding: 10px 24px;
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+  color: #fff; border: none; border-radius: 50px;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  box-shadow: 0 4px 16px rgba(243,156,18,0.35);
+  transition: all 0.3s;
+}
+.svc-result-price .svc-book-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(243,156,18,0.5); }
+.svc-empty { text-align: center; padding: 60px 20px; color: #999; }
+
+@media (max-width: 767px) {
+  .svc-result-card { flex-direction: column; }
+  .svc-result-card img { width: 100%; height: 180px; }
+  .svc-result-price { text-align: left; display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+}
+
+/* ===== Booking Center ===== */
+.booking-center { position: fixed; inset: 0; z-index: 3000; background: #f5f6fa; overflow-y: auto; display: none; }
+.booking-center.show { display: block; animation: detailIn 0.35s ease; }
+.bc-header { background: linear-gradient(135deg, #1a1d28, #252a3a); color: #fff; padding: 48px 24px 0; text-align: center; }
+.bc-header h2 { font-size: 26px; font-weight: 800; margin-bottom: 20px; }
+.bc-tabs { display: flex; justify-content: center; gap: 0; }
+.bc-tab { padding: 14px 36px; background: none; border: none; color: rgba(255,255,255,0.6); font-size: 15px; font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+.bc-tab:hover { color: rgba(255,255,255,0.9); }
+.bc-tab.active { color: #fff; border-bottom-color: #f39c12; }
+.bc-tab-content { display: none; }
+.bc-tab-content.active { display: block; }
+.bc-body { max-width: 760px; margin: 0 auto; padding: 28px 24px 80px; }
+.bc-body .booking-form { background: #fff; border-radius: 20px; padding: 36px; box-shadow: 0 8px 40px rgba(0,0,0,0.08); }
+.booking-card { background: #fff; border-radius: 14px; padding: 24px; margin-bottom: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.booking-card:hover { transform: translateY(-2px); }
+.booking-card .bc-info { flex: 1; }
+.booking-card .bc-dest { font-size: 18px; font-weight: 700; color: #2c3e50; }
+.booking-card .bc-name { font-size: 13px; color: #888; margin-bottom: 8px; }
+.booking-card .bc-dates { display: flex; gap: 20px; font-size: 13px; color: #666; }
+.booking-card .bc-guests { display: inline-block; background: #fff8e7; color: #c0780a; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 500; margin-top: 6px; }
+.booking-card .bc-delete { background: none; border: 1px solid #e0e0e0; color: #999; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; transition: all 0.2s; white-space: nowrap; }
+.booking-card .bc-delete:hover { background: #e74c3c; color: #fff; border-color: #e74c3c; }
+.booking-empty { text-align: center; padding: 60px 20px; color: #999; }
+.booking-empty .empty-icon { font-size: 48px; margin-bottom: 12px; }
+.booking-empty button { color: #f39c12; font-weight: 600; background: none; border: none; cursor: pointer; font-size: 15px; }
+
+/* Form styles */
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+.form-group { display: flex; flex-direction: column; }
+.form-group label { font-size: 13px; font-weight: 600; color: #555; margin-bottom: 5px; }
+.form-group input, .form-group select { padding: 12px 14px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 14px; outline: none; font-family: inherit; transition: border-color 0.2s; }
+.form-group input:focus, .form-group select:focus { border-color: #f39c12; }
+.form-group .error { color: #e74c3c; font-size: 11px; margin-top: 3px; display: none; }
+.form-group.error input, .form-group.error select { border-color: #e74c3c; }
+.form-group.error .error { display: block; }
+.submit-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #f39c12, #e67e22); color: #fff; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 6px; transition: all 0.3s; }
+.submit-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(243,156,18,0.35); }
+
+/* ===== User Profile Overlay ===== */
+.profile-overlay { position: fixed; inset: 0; z-index: 3000; background: #f5f6fa; overflow-y: auto; display: none; }
+.profile-overlay.show { display: block; animation: detailIn 0.35s ease; }
+.profile-header {
+  background: linear-gradient(135deg, #1a1d28, #252a3a); color: #fff;
+  padding: 48px 24px 40px; text-align: center;
+}
+.profile-avatar {
+  width: 80px; height: 80px; border-radius: 50%; background: #f39c12;
+  color: #fff; font-size: 32px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px; box-shadow: 0 4px 20px rgba(243,156,18,0.4);
+}
+.profile-header h2 { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
+.profile-header .p-email { font-size: 13px; opacity: 0.6; }
+.profile-body { max-width: 900px; margin: 0 auto; padding: 32px 24px 80px; }
+.profile-section { margin-bottom: 36px; }
+.profile-section h3 {
+  font-size: 18px; color: #2c3e50; margin-bottom: 16px;
+  padding-bottom: 6px; border-bottom: 3px solid #f39c12; display: inline-block;
+}
+.profile-card {
+  background: #fff; border-radius: 14px; padding: 20px 24px; margin-bottom: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04); display: flex; align-items: center; gap: 16px;
+}
+.profile-card .p-icon {
+  font-size: 28px; width: 48px; height: 48px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.p-icon.hotel { background: #e8f4fd; }
+.p-icon.flight { background: #e8f8e8; }
+.p-icon.car { background: #fff3e0; }
+.p-icon.tour { background: #fde8f0; }
+.profile-card .p-info { flex: 1; }
+.profile-card .p-info .p-title { font-size: 16px; font-weight: 700; color: #2c3e50; }
+.profile-card .p-info .p-meta { font-size: 13px; color: #888; margin-top: 2px; }
+.profile-card .p-tag {
+  font-size: 12px; padding: 4px 12px; border-radius: 12px; font-weight: 600; flex-shrink: 0;
+}
+.p-tag.confirmed { background: #e8f8e8; color: #27ae60; }
+.profile-card .p-price { font-size: 18px; font-weight: 800; color: #e74c3c; flex-shrink: 0; }
+.profile-empty { text-align: center; padding: 32px; color: #bbb; font-size: 14px; }
+.profile-logout {
+  display: block; margin: 40px auto 0; padding: 12px 40px;
+  background: none; border: 2px solid #e0e0e0; border-radius: 10px;
+  color: #999; font-size: 14px; cursor: pointer; transition: all 0.2s;
+}
+.profile-logout:hover { border-color: #e74c3c; color: #e74c3c; }
+@media (max-width: 767px) {
+  .profile-card { flex-wrap: wrap; }
+  .profile-card .p-price { width: 100%; text-align: right; }
+}
+
+/* ===== Login Overlay ===== */
+.login-overlay { position: fixed; inset: 0; z-index: 4000; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; }
+.login-overlay.show { display: flex; }
+.login-box { background: #fff; border-radius: 20px; padding: 40px 36px; max-width: 400px; width: 90%; position: relative; animation: fadeInUp 0.3s ease; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+.login-box h2 { text-align: center; font-size: 24px; color: #2c3e50; margin-bottom: 24px; }
+.login-box .close-btn { position: absolute; top: 14px; right: 18px; background: none; border: none; font-size: 22px; cursor: pointer; color: #999; }
+.login-box .lg-group { margin-bottom: 16px; }
+.login-box .lg-group label { display: block; font-size: 13px; font-weight: 600; color: #555; margin-bottom: 5px; }
+.login-box .lg-group input { width: 100%; padding: 12px 14px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 14px; outline: none; }
+.login-box .lg-group input:focus { border-color: #f39c12; }
+.login-box .remember { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #888; margin-bottom: 18px; }
+.login-box .login-btn { width: 100%; padding: 14px; background: #f39c12; color: #fff; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; }
+.login-box .divider { text-align: center; color: #bbb; font-size: 12px; margin: 18px 0; position: relative; }
+.login-box .divider::before, .login-box .divider::after { content: ''; position: absolute; top: 50%; width: 30%; height: 1px; background: #e0e0e0; }
+.login-box .divider::before { left: 0; } .login-box .divider::after { right: 0; }
+.login-box .social-login { display: flex; gap: 10px; margin-bottom: 18px; }
+.login-box .social-login button { flex: 1; padding: 10px; border: 2px solid #e0e0e0; border-radius: 10px; background: #fff; font-size: 13px; cursor: pointer; }
+.login-box .switch { text-align: center; font-size: 13px; color: #888; }
+.login-box .switch a { color: #f39c12; cursor: pointer; font-weight: 600; }
+.login-box .form-msg { text-align: center; font-size: 13px; padding: 8px; border-radius: 6px; margin-bottom: 12px; display: none; }
+.login-box .form-msg.error { display: block; background: #fde8e8; color: #c0392b; }
+.login-box .form-msg.success { display: block; background: #e8f8e8; color: #27ae60; }
+
+/* Toast */
+.app-toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); padding: 14px 28px; border-radius: 12px; font-size: 14px; font-weight: 600; z-index: 5000; box-shadow: 0 8px 28px rgba(0,0,0,0.18); display: none; white-space: nowrap; }
+.app-toast.show { display: block; animation: toastIn 0.35s ease; }
+@keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(-16px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+.app-toast.error { background: #e74c3c; color: #fff; }
+.app-toast.success { background: #27ae60; color: #fff; }
+.app-toast.info { background: #2c3e50; color: #fff; }
+
+/* Modal */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; }
+.modal-overlay.show { display: flex; }
+.modal { background: #fff; border-radius: 20px; padding: 44px 36px; text-align: center; max-width: 400px; width: 90%; animation: fadeInUp 0.3s ease; }
+.modal .check-icon { width: 60px; height: 60px; margin: 0 auto 18px; background: #2ecc71; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; color: #fff; }
+.modal h3 { font-size: 20px; margin-bottom: 8px; }
+.modal p { color: #777; margin-bottom: 22px; font-size: 14px; }
+.modal button { padding: 12px 32px; background: #f39c12; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
+
+/* Reveal */
+.reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ===== Touch & Scroll Optimization ===== */
+.detail-overlay, .svc-overlay, .booking-center, .profile-overlay {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+button, .qs-card, .dest-card, .service-card, .guide-card, .sidebar-nav a, .sidebar-user {
+  touch-action: manipulation;
+}
+/* Touch active feedback (mirrors hover for mobile) */
+.qs-card:active { background: #f8f9fc; border-color: #eee; transform: translateY(-2px); }
+.dest-card:active { transform: translateY(-6px); box-shadow: 0 12px 32px rgba(0,0,0,0.1); }
+.service-card:active { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,0.1); }
+.guide-card:active { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.08); }
+.svc-result-card:active { transform: translateY(-2px); }
+.booking-card:active { transform: translateY(-2px); }
+
+/* ===== Responsive ===== */
+@media (max-width: 1024px) {
+  .dest-grid, .guide-grid, .service-grid { grid-template-columns: repeat(2, 1fr); }
+  .dest-card { height: 280px; }
+  .service-card { height: 250px; }
+  .quick-services { grid-template-columns: repeat(2, 1fr); }
+  .splash-globe-wrap { width: 220px; height: 220px; }
+  .splash-globe-outer { width: 220px; height: 220px; }
+  .splash-globe-icon { font-size: 80px; }
+}
+@media (max-width: 767px) {
+  .sidebar { width: 60px; }
+  .sidebar-logo { font-size: 18px; padding: 20px 10px; text-align: center; }
+  .sidebar-logo span { display: none; }
+  .sidebar-nav a { justify-content: center; padding: 12px 8px; }
+  .sidebar-nav a span:not(.s-icon) { display: none; }
+  .sidebar-badge { position: absolute; top: 2px; right: 6px; font-size: 9px; min-width: 14px; height: 14px; }
+  .sidebar-user { justify-content: center; padding: 12px 8px; }
+  .sidebar-user-info { display: none; }
+  .main-content { margin-left: 60px; }
+  .hero-search { right: 12px; top: 10px; }
+  .hero-search input { width: 100px; }
+  .splash-globe-wrap { width: 180px; height: 180px; }
+  .splash-globe-outer { width: 180px; height: 180px; }
+  .splash-globe-icon { font-size: 64px; }
+  .splash-stats-row { gap: 24px; }
+  .splash-stat-num { font-size: 28px; }
+  .splash-title-desc { font-size: 14px; max-width: 360px; }
+  .quick-services { margin: -16px 16px 0; padding: 20px 16px; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .section { padding: 48px 16px; }
+  .dest-grid, .guide-grid, .service-grid { grid-template-columns: 1fr; }
+  .dest-card { height: 260px; }
+  .service-card { height: 230px; }
+  .form-row { grid-template-columns: 1fr; }
+  .bc-body .booking-form { padding: 24px; }
+  .booking-card { flex-direction: column; align-items: flex-start; }
+  .booking-card .bc-delete { align-self: flex-end; }
+}
+@media (max-width: 360px) {
+  .hero-search { right: 4px; top: 6px; }
+  .hero-search input { width: 70px; padding: 8px 10px; font-size: 11px; }
+  .hero-search button { padding: 8px 12px; font-size: 11px; }
+  .splash-globe-wrap { width: 140px; height: 140px; }
+  .splash-globe-outer { width: 140px; height: 140px; }
+  .splash-globe-icon { font-size: 50px; }
+  .splash-stats-row { gap: 16px; }
+  .splash-stat-num { font-size: 24px; }
+  .splash-stat-label { font-size: 10px; }
+  .splash-title-desc { font-size: 13px; max-width: 280px; }
+  .splash-btn-start { padding: 14px 32px; font-size: 15px; }
+  .quick-services { grid-template-columns: 1fr; margin: -12px 8px 0; padding: 16px 12px; }
+  .section { padding: 36px 10px; }
+  .dest-card { height: 220px; }
+  .service-card { height: 200px; }
+  .section-header h2 { font-size: 20px; }
+}
+@media (min-width: 1600px) {
+  .section { padding: 64px 120px; }
+  .quick-services { margin: -20px 120px 0; padding: 32px 120px; }
 }
 </style>
 </head>
 <body>
 
-<!-- Particle Background -->
-<canvas id="particleCanvas"></canvas>
+<div class="app-layout">
+<!-- ====== Sidebar ====== -->
+<aside class="sidebar">
+  <div class="sidebar-logo">世界<span>之旅</span></div>
+  <nav class="sidebar-nav">
+    <a href="#splashHero" class="active"><span class="s-icon">🏠</span> 首页</a>
+    <a href="#destinations"><span class="s-icon">🌍</span> 目的地</a>
+    <a href="#hotels"><span class="s-icon">🏨</span> 酒店</a>
+    <a href="#flights"><span class="s-icon">✈️</span> 机票</a>
+    <a href="#cars"><span class="s-icon">🚗</span> 租车</a>
+    <a href="#guides"><span class="s-icon">📖</span> 攻略</a>
+    <a href="#" id="bookingNavLink"><span class="s-icon">📋</span> 预订<span class="sidebar-badge" id="navBadge">0</span></a>
+  </nav>
+  <div class="sidebar-user" id="sidebarUser">
+    <span class="login-prompt" id="loginPrompt"><span style="font-size:20px">👤</span> 点击登录</span>
+    <div class="sidebar-avatar" id="sidebarAvatar" style="display:none">U</div>
+    <div class="sidebar-user-info" id="sidebarUserInfo">
+      <div class="sidebar-user-name" id="sidebarName"></div>
+      <div class="sidebar-user-email" id="sidebarEmail"></div>
+    </div>
+  </div>
+</aside>
 
-<!-- Floating Travel Icons -->
-<div class="float-icons">
-  <span class="float-icon" style="left:5%;font-size:36px;animation-duration:18s;animation-delay:0s;">🏝️</span>
-  <span class="float-icon" style="left:12%;font-size:28px;animation-duration:22s;animation-delay:2s;">🗽</span>
-  <span class="float-icon" style="left:25%;font-size:32px;animation-duration:20s;animation-delay:5s;">🏰</span>
-  <span class="float-icon" style="left:38%;font-size:24px;animation-duration:24s;animation-delay:1s;">🌍</span>
-  <span class="float-icon" style="left:50%;font-size:30px;animation-duration:19s;animation-delay:3s;">🏔️</span>
-  <span class="float-icon" style="left:62%;font-size:34px;animation-duration:21s;animation-delay:7s;">🗼</span>
-  <span class="float-icon" style="left:75%;font-size:26px;animation-duration:23s;animation-delay:4s;">🏯</span>
-  <span class="float-icon" style="left:85%;font-size:30px;animation-duration:17s;animation-delay:6s;">🎡</span>
-  <span class="float-icon" style="left:92%;font-size:28px;animation-duration:20s;animation-delay:8s;">🏛️</span>
-  <span class="float-icon" style="left:18%;font-size:22px;animation-duration:25s;animation-delay:9s;">🗿</span>
+<!-- ====== Main Content ====== -->
+<main class="main-content">
+
+<!-- Splash Hero -->
+<section id="splashHero">
+  <canvas id="particleCanvas"></canvas>
+
+  <div class="splash-float-icons">
+    <span class="splash-float-icon" style="left:5%;font-size:36px;animation-duration:18s;animation-delay:0s;">🏝️</span>
+    <span class="splash-float-icon" style="left:12%;font-size:28px;animation-duration:22s;animation-delay:2s;">🗽</span>
+    <span class="splash-float-icon" style="left:25%;font-size:32px;animation-duration:20s;animation-delay:5s;">🏰</span>
+    <span class="splash-float-icon" style="left:38%;font-size:24px;animation-duration:24s;animation-delay:1s;">🌍</span>
+    <span class="splash-float-icon" style="left:50%;font-size:30px;animation-duration:19s;animation-delay:3s;">🏔️</span>
+    <span class="splash-float-icon" style="left:62%;font-size:34px;animation-duration:21s;animation-delay:7s;">🗼</span>
+    <span class="splash-float-icon" style="left:75%;font-size:26px;animation-duration:23s;animation-delay:4s;">🏯</span>
+    <span class="splash-float-icon" style="left:85%;font-size:30px;animation-duration:17s;animation-delay:6s;">🎡</span>
+    <span class="splash-float-icon" style="left:92%;font-size:28px;animation-duration:20s;animation-delay:8s;">🏛️</span>
+    <span class="splash-float-icon" style="left:18%;font-size:22px;animation-duration:25s;animation-delay:9s;">🗿</span>
+  </div>
+
+  <div class="splash-plane" style="top:20%;left:10%;animation-delay:0s;">✈️</div>
+  <div class="splash-plane" style="top:35%;left:5%;animation-delay:3s;animation-duration:7s;">✈️</div>
+  <div class="splash-plane" style="top:55%;left:8%;animation-delay:4.5s;animation-duration:6.5s;">🛩️</div>
+
+  <div class="hero-search" style="position:absolute;top:32px;right:40px;z-index:10;">
+    <input type="text" id="searchInput" placeholder="搜索目的地...">
+    <button id="searchBtn">搜索</button>
+  </div>
+
+  <div class="splash-content">
+    <div class="splash-globe-wrap">
+      <div class="splash-globe-orbit"><div class="splash-orbit-dot dot1"></div></div>
+      <div class="splash-globe-orbit"><div class="splash-orbit-dot dot2"></div></div>
+      <div class="splash-globe-orbit"><div class="splash-orbit-dot dot3"></div></div>
+      <div class="splash-globe-outer">
+        <span class="splash-globe-icon">🌍</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="splash-title-sub">Explore The World</div>
+      <h1 class="splash-title-main">世界之旅</h1>
+    </div>
+    <p class="splash-title-desc">跨越山海，探索未知。从繁华都市到静谧自然，<br>开启属于您的环球旅行。</p>
+
+    <div class="splash-stats-row">
+      <div class="splash-stat-item">
+        <div class="splash-stat-num" data-count="196">0</div>
+        <div class="splash-stat-label">目的地国家</div>
+      </div>
+      <div class="splash-stat-item">
+        <div class="splash-stat-num" data-count="1200">0</div>
+        <div class="splash-stat-label">精选线路</div>
+      </div>
+      <div class="splash-stat-item">
+        <div class="splash-stat-num" data-count="50">0</div>
+        <div class="splash-stat-label">百万旅行者</div>
+      </div>
+    </div>
+
+    <button class="splash-btn-start" id="splashStartBtn">
+      开始您的旅游 <span class="splash-btn-arrow">→</span>
+    </button>
+
+    <div class="splash-scroll-hint">
+      <div class="splash-scroll-mouse"></div>
+      <div class="splash-scroll-text">向下滚动</div>
+    </div>
+  </div>
+</section>
+
+<!-- Quick Services -->
+<div class="quick-services">
+  <div class="qs-card" onclick="document.getElementById('flights').scrollIntoView({behavior:'smooth'})">
+    <div class="qs-icon">✈️</div><h3>特价机票</h3><p>全球航线实时比价</p>
+  </div>
+  <div class="qs-card" onclick="document.getElementById('hotels').scrollIntoView({behavior:'smooth'})">
+    <div class="qs-icon">🏨</div><h3>酒店预订</h3><p>百万酒店随心选</p>
+  </div>
+  <div class="qs-card" onclick="document.getElementById('cars').scrollIntoView({behavior:'smooth'})">
+    <div class="qs-icon">🚗</div><h3>全球租车</h3><p>自驾游更自由</p>
+  </div>
+  <div class="qs-card" onclick="document.getElementById('bookingNavLink').click()">
+    <div class="qs-icon">🎯</div><h3>定制行程</h3><p>专属旅行规划</p>
+  </div>
 </div>
 
-<!-- Airplane -->
-<div class="plane" style="top:20%;left:10%;animation-delay:0s;">✈️</div>
-<div class="plane" style="top:35%;left:5%;animation-delay:3s;animation-duration:7s;">✈️</div>
-<div class="plane" style="top:55%;left:8%;animation-delay:4.5s;animation-duration:6.5s;">🛩️</div>
-
-<!-- Hero Content -->
-<div class="hero">
-  <div class="globe-wrap">
-    <div class="globe-orbit"><div class="orbit-dot dot1"></div></div>
-    <div class="globe-orbit"><div class="orbit-dot dot2"></div></div>
-    <div class="globe-orbit"><div class="orbit-dot dot3"></div></div>
-    <div class="globe-outer">
-      <span class="globe-icon">🌍</span>
-    </div>
+<!-- Destinations -->
+<section class="section" id="destinations">
+  <div class="section-header reveal">
+    <h2><span>热门目的地</span></h2>
+    <a href="#" class="more">查看全部 →</a>
   </div>
+  <div class="dest-grid" id="destGrid"></div>
+</section>
 
-  <div class="title-wrap">
-    <div class="title-sub">Explore The World</div>
-    <h1 class="title-main">世界之旅</h1>
+<!-- Hotels -->
+<section class="section" id="hotels" style="background:#fff">
+  <div class="section-header reveal">
+    <h2><span>精选酒店</span></h2>
+    <a href="#" class="more">更多酒店 →</a>
   </div>
-  <p class="title-desc">
-    跨越山海，探索未知。从繁华都市到静谧自然，<br>开启属于您的环球旅行。
-  </p>
+  <div class="service-grid" id="hotelGrid"></div>
+</section>
 
-  <div class="stats-row">
-    <div class="stat-item">
-      <div class="stat-num" data-count="196">0</div>
-      <div class="stat-label">目的地国家</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num" data-count="1200">0</div>
-      <div class="stat-label">精选线路</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num" data-count="50">0</div>
-      <div class="stat-label">百万旅行者</div>
-    </div>
+<!-- Flights -->
+<section class="section" id="flights">
+  <div class="section-header reveal">
+    <h2><span>特价机票</span></h2>
+    <a href="#" class="more">更多航班 →</a>
   </div>
+  <div class="service-grid" id="flightGrid"></div>
+</section>
 
-  <a href="travel.html" class="btn-start">
-    开始您的旅游 <span class="btn-arrow">→</span>
-  </a>
+<!-- Cars -->
+<section class="section" id="cars" style="background:#fff">
+  <div class="section-header reveal">
+    <h2><span>全球租车</span></h2>
+    <a href="#" class="more">更多车型 →</a>
+  </div>
+  <div class="service-grid" id="carGrid"></div>
+</section>
 
-  <div class="scroll-hint">
-    <div class="scroll-mouse"></div>
-    <div class="scroll-text">向下滚动</div>
+<!-- Guides -->
+<section class="section" id="guides">
+  <div class="section-header reveal">
+    <h2><span>旅行攻略</span></h2>
+    <a href="#" class="more">全部攻略 →</a>
+  </div>
+  <div class="guide-grid" id="guideGrid"></div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="social">
+    <a href="#" title="微信">💬</a><a href="#" title="微博">📢</a><a href="#" title="小红书">📕</a><a href="#" title="抖音">🎵</a>
+  </div>
+  <p>&copy; 2026 世界之旅 TravelWorld. All rights reserved.</p>
+</footer>
+</main>
+</div>
+
+<!-- Success Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="check-icon">✓</div>
+    <h3>预订成功！</h3>
+    <p id="modalMsg"></p>
+    <button id="modalClose">确定</button>
   </div>
 </div>
+
+<!-- Destination Detail Overlay -->
+<div class="detail-overlay" id="detailOverlay">
+  <button class="detail-back" id="detailBack" aria-label="返回">←</button>
+  <div class="detail-hero" id="detailHero"></div>
+  <div class="detail-body" id="detailBody"></div>
+</div>
+
+<!-- Booking Center -->
+<div class="booking-center" id="bookingCenter">
+  <button class="detail-back" id="bcBack" aria-label="返回">←</button>
+  <div class="bc-header">
+    <h2>预订中心</h2>
+    <div class="bc-tabs">
+      <button class="bc-tab active" data-tab="form">在线预订</button>
+      <button class="bc-tab" data-tab="list">我的预订</button>
+    </div>
+  </div>
+  <div class="bc-body">
+    <div class="bc-tab-content active" id="tabForm">
+      <form class="booking-form" id="bookingForm" novalidate>
+        <div class="form-row">
+          <div class="form-group"><label for="dest">目的地</label><select id="dest" required><option value="">请选择</option><option>巴黎，法国</option><option>马尔代夫</option><option>东京，日本</option><option>冰岛</option><option>巴厘岛，印尼</option><option>纽约，美国</option></select><span class="error">请选择目的地</span></div>
+          <div class="form-group"><label for="name">姓名</label><input type="text" id="name" placeholder="请输入姓名" required><span class="error">请输入姓名</span></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label for="checkin">入住日期</label><input type="date" id="checkin" required><span class="error">请选择入住日期</span></div>
+          <div class="form-group"><label for="checkout">离开日期</label><input type="date" id="checkout" required><span class="error">请选择离开日期</span></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label for="guests">人数</label><input type="number" id="guests" min="1" max="20" placeholder="1" required><span class="error">请输入人数（1-20）</span></div>
+          <div class="form-group"><label for="email">邮箱</label><input type="email" id="email" placeholder="example@mail.com" required><span class="error">请输入有效邮箱地址</span></div>
+        </div>
+        <button type="submit" class="submit-btn">确认预订</button>
+      </form>
+    </div>
+    <div class="bc-tab-content" id="tabList"><div id="bookingsContainer"></div></div>
+  </div>
+</div>
+
+<!-- Hotel Overlay -->
+<div class="svc-overlay" id="hotelOverlay">
+  <button class="detail-back" id="hotelBack" aria-label="返回">←</button>
+  <div class="svc-header"><h2>🏨 酒店预订</h2><p>全球百万酒店，随时随地预订</p></div>
+  <div class="svc-search">
+    <div class="svc-search-row">
+      <div class="s-field"><label>目的地</label><select id="hotelDest"><option value="">全部</option><option>巴黎</option><option>马尔代夫</option><option>东京</option><option>纽约</option><option>巴厘岛</option><option>冰岛</option></select></div>
+      <div class="s-field"><label>入住</label><input type="date" id="hotelCheckin"></div>
+      <div class="s-field"><label>离开</label><input type="date" id="hotelCheckout"></div>
+      <button class="svc-search-btn" id="hotelSearch">搜索</button>
+    </div>
+  </div>
+  <div class="svc-results" id="hotelResults"></div>
+</div>
+
+<!-- Flight Overlay -->
+<div class="svc-overlay" id="flightOverlay">
+  <button class="detail-back" id="flightBack" aria-label="返回">←</button>
+  <div class="svc-header"><h2>✈️ 特价机票</h2><p>全球航线实时比价，找到最便宜的航班</p></div>
+  <div class="svc-search">
+    <div class="svc-search-row">
+      <div class="s-field"><label>出发地</label><select id="flightFrom"><option>北京</option><option>上海</option><option>广州</option><option>成都</option><option>香港</option></select></div>
+      <div class="s-field"><label>目的地</label><select id="flightTo"><option>东京</option><option>巴黎</option><option>马尔代夫</option><option>纽约</option><option>巴厘岛</option><option>冰岛</option></select></div>
+      <div class="s-field"><label>出发日期</label><input type="date" id="flightDate"></div>
+      <button class="svc-search-btn" id="flightSearch">搜索</button>
+    </div>
+  </div>
+  <div class="svc-results" id="flightResults"></div>
+</div>
+
+<!-- Car Overlay -->
+<div class="svc-overlay" id="carOverlay">
+  <button class="detail-back" id="carBack" aria-label="返回">←</button>
+  <div class="svc-header"><h2>🚗 全球租车</h2><p>自由探索，从一辆好车开始</p></div>
+  <div class="svc-search">
+    <div class="svc-search-row">
+      <div class="s-field"><label>取车地点</label><select id="carLoc"><option value="">全部</option><option>巴黎</option><option>马尔代夫</option><option>东京</option><option>纽约</option><option>巴厘岛</option><option>冰岛</option></select></div>
+      <div class="s-field"><label>车型</label><select id="carType"><option value="">全部</option><option>经济型</option><option>SUV</option><option>豪华轿车</option><option>电动SUV</option><option>MPV</option><option>个性小车</option></select></div>
+      <div class="s-field"><label>取车日期</label><input type="date" id="carDate"></div>
+      <button class="svc-search-btn" id="carSearch">搜索</button>
+    </div>
+  </div>
+  <div class="svc-results" id="carResults"></div>
+</div>
+
+<!-- User Profile Overlay -->
+<div class="profile-overlay" id="profileOverlay">
+  <button class="detail-back" id="profileBack" aria-label="返回">←</button>
+  <div class="profile-header">
+    <div class="profile-avatar" id="profileAvatar">U</div>
+    <h2 id="profileName">用户名</h2>
+    <p class="p-email" id="profileEmail">email@example.com</p>
+  </div>
+  <div class="profile-body" id="profileBody"></div>
+</div>
+
+<!-- Login Overlay -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-box">
+    <button class="close-btn" id="loginClose">&times;</button>
+    <h2 id="loginTitle">登录</h2>
+    <div class="form-msg" id="formMsg"></div>
+    <form id="loginForm" novalidate>
+      <div class="lg-group" id="loginNameGroup"><label for="loginName">用户名</label><input type="text" id="loginName" placeholder="请输入用户名"></div>
+      <div class="lg-group" id="loginContactGroup" style="display:none"><label for="loginContact">邮箱/手机号</label><input type="text" id="loginContact" placeholder="请输入邮箱或手机号"></div>
+      <div class="lg-group"><label for="loginPassword">密码</label><input type="password" id="loginPassword" placeholder="请输入密码" maxlength="10"></div>
+      <label class="remember"><input type="checkbox"> 记住我</label>
+      <button type="submit" class="login-btn" id="loginSubmit">登 录</button>
+    </form>
+    <div class="divider">或</div>
+    <div class="social-login"><button>💬 微信</button><button>📢 微博</button><button>📱 手机号</button></div>
+    <p class="switch" id="switchText">还没有账号？<a id="switchLink">立即注册</a></p>
+  </div>
+</div>
+<div class="app-toast" id="appToast"></div>
 
 <script>
-// ===== Particle Canvas =====
-const canvas = document.getElementById('particleCanvas');
-const ctx = canvas.getContext('2d');
-let w, h, particles = [];
+// ===== Splash Hero =====
+// Particle Canvas
+const particleCanvas = document.getElementById('particleCanvas');
+const pctx = particleCanvas.getContext('2d');
+let pw, ph, particles = [];
 
-function resize() {
-  w = canvas.width = window.innerWidth;
-  h = canvas.height = window.innerHeight;
+function resizeParticles() {
+  pw = particleCanvas.width = window.innerWidth;
+  ph = particleCanvas.height = window.innerHeight;
 }
-resize();
-window.addEventListener('resize', resize);
+resizeParticles();
+window.addEventListener('resize', resizeParticles);
 
 class Particle {
   constructor() {
     this.reset();
-    this.y = Math.random() * h;
+    this.y = Math.random() * ph;
   }
   reset() {
-    this.x = Math.random() * w;
+    this.x = Math.random() * pw;
     this.y = -10;
     this.size = Math.random() * 2 + 0.5;
     this.speed = Math.random() * 0.6 + 0.2;
@@ -302,31 +976,29 @@ class Particle {
     this.y += this.speed;
     this.x += this.drift + Math.sin(this.y * 0.01) * 0.15;
     this.twinkle += this.twinkleSpeed;
-    if (this.y > h + 10) this.reset();
+    if (this.y > ph + 10) this.reset();
   }
   draw() {
     const alpha = this.opacity * (0.6 + 0.4 * Math.sin(this.twinkle));
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(255,255,255,${alpha})`;
-    ctx.fill();
+    pctx.beginPath();
+    pctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    pctx.fillStyle = `rgba(255,255,255,${alpha})`;
+    pctx.fill();
   }
 }
 
-for (let i = 0; i < 120; i++) {
-  particles.push(new Particle());
-}
+for (let i = 0; i < 120; i++) particles.push(new Particle());
 
-function animate() {
-  ctx.clearRect(0, 0, w, h);
+function animateParticles() {
+  pctx.clearRect(0, 0, pw, ph);
   particles.forEach(p => { p.update(); p.draw(); });
-  requestAnimationFrame(animate);
+  requestAnimationFrame(animateParticles);
 }
-animate();
+animateParticles();
 
-// ===== Counter Animation =====
+// Counter Animation
 function animateCounters() {
-  document.querySelectorAll('.stat-num').forEach(el => {
+  document.querySelectorAll('.splash-stat-num').forEach(el => {
     const target = parseInt(el.dataset.count);
     const duration = 2000;
     const start = performance.now();
@@ -339,22 +1011,731 @@ function animateCounters() {
     requestAnimationFrame(tick);
   });
 }
+setTimeout(animateCounters, 800);
 
-const obs = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) { animateCounters(); obs.disconnect(); } });
-}, { threshold: 0.5 });
-obs.observe(document.querySelector('.stats-row'));
-
-// ===== Mouse Parallax on Globe =====
+// Mouse Parallax on Globe
 document.addEventListener('mousemove', e => {
   const x = (e.clientX / window.innerWidth - 0.5) * 20;
   const y = (e.clientY / window.innerHeight - 0.5) * 20;
-  const wrap = document.querySelector('.globe-wrap');
+  const wrap = document.querySelector('.splash-globe-wrap');
   if (wrap) wrap.style.transform = `translate(${x}px, ${y}px)`;
 });
 
-// Start counter on load too (visible immediately)
-setTimeout(animateCounters, 1200);
+// Start button scrolls to destinations
+document.getElementById('splashStartBtn').addEventListener('click', () => {
+  document.getElementById('destinations').scrollIntoView({ behavior: 'smooth' });
+});
+
+// Search
+document.getElementById('searchBtn').addEventListener('click', () => {
+  const q = document.getElementById('searchInput').value.trim();
+  if (q) document.getElementById('destinations').scrollIntoView({ behavior: 'smooth' });
+});
+document.getElementById('searchInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('searchBtn').click();
+});
+
+// ===== Data =====
+const destData = {
+  paris: { name:'巴黎，法国', stars:'★★★★★ 4.8', heroImg:'https://picsum.photos/seed/paris-eiffel/1200/600', intro:'巴黎，法国的首都，被誉为"光之城"和"浪漫之都"。塞纳河蜿蜒穿城而过，两岸分布着众多世界文化遗产。', attractions:[{icon:'🗼',name:'埃菲尔铁塔',desc:'登上塔顶俯瞰全城'},{icon:'🏛️',name:'卢浮宫',desc:'世界最大艺术博物馆'},{icon:'⛪',name:'巴黎圣母院',desc:'哥特式建筑杰作'},{icon:'🎨',name:'蒙马特高地',desc:'艺术家聚集地'},{icon:'🛍️',name:'香榭丽舍大道',desc:'世界最著名的大街'},{icon:'🏰',name:'凡尔赛宫',desc:'欧洲最宏伟的宫殿'}], bestTime:'春季（4-6月）和秋季（9-10月）', budget:'日均 150-300 欧元', tips:['购买博物馆通票节省排队时间','地铁最便捷，建议买Navigo周卡','餐厅账单已含服务费','注意防范景区小偷'] },
+  maldives: { name:'马尔代夫', stars:'★★★★★ 4.9', heroImg:'https://picsum.photos/seed/maldives-water-villa/1200/600', intro:'印度洋上的珍珠，碧蓝海水、洁白沙滩、奢华水上别墅和丰富的海洋生物。', attractions:[{icon:'🏝️',name:'马累',desc:'世界最小的首都之一'},{icon:'🤿',name:'香蕉礁',desc:'世界级潜水点'},{icon:'🐋',name:'鲸鲨观赏',desc:'与最大鱼类同游'},{icon:'🏡',name:'水上别墅',desc:'开门即可浮潜'},{icon:'🌅',name:'日落巡航',desc:'追逐海豚与日落'},{icon:'💆',name:'水下SPA',desc:'全球首家水下SPA'}], bestTime:'干季（11月-次年4月）', budget:'度假村每晚 500-3000 美元', tips:['居民岛上请穿着保守','提前选择好餐食计划','浮潜时不要触碰珊瑚','比中国晚3小时'] },
+  tokyo: { name:'东京，日本', stars:'★★★★☆ 4.7', heroImg:'https://picsum.photos/seed/tokyo-shibuya-crossing/1200/600', intro:'东京完美融合超现代科技感和深厚传统文化，从涩谷到浅草寺，总有惊喜。', attractions:[{icon:'⛩️',name:'浅草寺',desc:'东京最古老的寺庙'},{icon:'🏙️',name:'涩谷十字路口',desc:'最繁忙的十字路口'},{icon:'🎮',name:'秋叶原',desc:'动漫圣地'},{icon:'🗻',name:'富士山',desc:'日本象征'},{icon:'🌸',name:'上野公园',desc:'赏樱胜地'},{icon:'🍣',name:'筑地市场',desc:'世界最大鱼市'}], bestTime:'春季赏樱（3-4月）和秋季红叶（10-11月）', budget:'日均 12000-20000 日元', tips:['购买Suica/Pasmo交通卡','自备垃圾袋，垃圾桶较少','无需给小费','建议租随身WiFi'] },
+  iceland: { name:'冰岛', stars:'★★★★★ 4.8', heroImg:'https://picsum.photos/seed/iceland-waterfall/1200/600', intro:'冰与火之国，冰川与火山共存，瀑布与地热交织。追逐北极光，体验午夜太阳。', attractions:[{icon:'♨️',name:'蓝湖温泉',desc:'世界闻名地热温泉'},{icon:'🌋',name:'黄金圈',desc:'三大自然奇观'},{icon:'🌌',name:'北极光',desc:'9月至次年3月'},{icon:'🏖️',name:'黑沙滩',desc:'外星般的地貌'},{icon:'🧊',name:'冰河湖',desc:'漂浮的冰山'},{icon:'💧',name:'斯科加瀑布',desc:'彩虹常在瀑布前'}], bestTime:'夏季环岛自驾（6-8月），冬季追极光（10-3月）', budget:'日均 800-1300 人民币', tips:['自驾是最佳旅行方式','务必带防水防风外套','信用卡普及率极高','自来水可直接饮用'] },
+  bali: { name:'巴厘岛，印尼', stars:'★★★★☆ 4.6', heroImg:'https://picsum.photos/seed/bali-rice-terrace/1200/600', intro:'众神之岛，绝美海滩、层层梯田、古老神庙和独特艺术文化。', attractions:[{icon:'🛕',name:'海神庙',desc:'海中巨岩上的神庙'},{icon:'🌾',name:'德格拉朗梯田',desc:'世界遗产级景观'},{icon:'🏄',name:'库塔海滩',desc:'冲浪初学者的天堂'},{icon:'🐒',name:'圣猴森林',desc:'猕猴自由栖息'},{icon:'🧘',name:'乌布',desc:'瑜伽和冥想圣地'},{icon:'🌊',name:'乌鲁瓦图',desc:'悬崖上的神庙'}], bestTime:'干季（4-10月）', budget:'日均 300-800 人民币', tips:['进入寺庙需穿纱笼','租摩托车最灵活','只喝瓶装水','免签政策请提前确认'] },
+  newyork: { name:'纽约，美国', stars:'★★★★☆ 4.7', heroImg:'https://picsum.photos/seed/newyork-skyline/1200/600', intro:'不夜城，世界金融、文化和时尚中心。自由女神像、时代广场、百老汇。', attractions:[{icon:'🗽',name:'自由女神像',desc:'美国自由的象征'},{icon:'🌳',name:'中央公园',desc:'城市中的绿洲'},{icon:'🏢',name:'帝国大厦',desc:'86层观景台'},{icon:'🎭',name:'百老汇',desc:'世界戏剧中心'},{icon:'🖼️',name:'大都会博物馆',desc:'世界三大博物馆之一'},{icon:'🌉',name:'布鲁克林大桥',desc:'步行穿过百年悬索桥'}], bestTime:'春季（4-6月）和秋季（9-10月）', budget:'日均 200-400 美元', tips:['购买CityPASS节省门票','地铁24小时运营','小费为账单的15-20%','时代广场合影大多需付费'] },
+};
+
+const destNames = ['paris','maldives','tokyo','iceland','bali','newyork'];
+const destImages = ['eiffel-tower-paris','maldives-beach','tokyo-shibuya','iceland-aurora','bali-temple','new-york-skyline'];
+const destDescs = [
+  '浪漫之都，埃菲尔铁塔、卢浮宫、塞纳河畔，感受法式优雅与艺术气息。',
+  '印度洋上的珍珠，水屋别墅、珊瑚礁潜水、绝美日落，极致海岛度假。',
+  '传统与现代交融，浅草寺、涩谷、秋叶原，体验独特的日式文化。',
+  '极光之国，蓝湖温泉、黄金圈、黑沙滩，感受大自然的震撼奇观。',
+  '众神之岛，梯田、神庙、冲浪海滩，在热带天堂寻找内心的宁静。',
+  '不夜城，自由女神、时代广场、中央公园，感受世界之都的活力。',
+];
+
+// Render destinations
+document.getElementById('destGrid').innerHTML = destNames.map((id,i) => {
+  const d = destData[id];
+  return `<div class="dest-card reveal" data-dest="${id}">
+    <img src="https://picsum.photos/seed/${destImages[i]}/600/400" alt="${d.name}" loading="lazy">
+    <div class="dest-info"><h3>${d.name}</h3><div class="stars">${d.stars}</div><p class="desc">${destDescs[i]}</p></div>
+  </div>`;
+}).join('');
+
+// Render hotels
+const hotels = [
+  { img:'luxury-hotel-suite', name:'巴黎丽兹酒店', loc:'法国·巴黎', price:4580, tag:'deal', tagText:'限时特惠' },
+  { img:'overwater-villa', name:'马尔代夫W水疗度假村', loc:'马尔代夫·北马累环礁', price:12800, tag:'hot', tagText:'热门' },
+  { img:'japanese-ryokan', name:'东京安缦酒店', loc:'日本·东京', price:6200, tag:'deal', tagText:'含早' },
+  { img:'city-skyscraper-hotel', name:'纽约广场酒店', loc:'美国·纽约', price:3800, tag:'', tagText:'' },
+  { img:'tropical-resort-pool', name:'巴厘岛阿雅娜度假村', loc:'印尼·巴厘岛', price:2200, tag:'hot', tagText:'网红' },
+  { img:'spa-resort-iceland', name:'冰岛蓝湖Silica酒店', loc:'冰岛·格林达维克', price:5600, tag:'deal', tagText:'含温泉' },
+];
+document.getElementById('hotelGrid').innerHTML = hotels.map(h => `
+  <div class="service-card reveal">
+    <img src="https://picsum.photos/seed/${h.img}/600/400" alt="${h.name}" loading="lazy">
+    <div class="service-card-body">
+      <h3>${h.name}</h3>
+      <div class="meta">📍 ${h.loc} ${h.tag ? `<span class="service-tag tag-${h.tag}">${h.tagText}</span>` : ''}</div>
+      <div class="price">¥${h.price.toLocaleString()} <small>/晚起</small></div>
+    </div>
+  </div>
+`).join('');
+
+// Render flights
+const flights = [
+  { img:'airplane-tokyo-sky', route:'北京 → 东京', date:'6月15日 - 6月22日', price:1680, tag:'deal', tagText:'直飞' },
+  { img:'flight-paris-clouds', route:'上海 → 巴黎', date:'7月8日 - 7月18日', price:3280, tag:'hot', tagText:'暑期' },
+  { img:'seaplane-maldives', route:'广州 → 马尔代夫', date:'6月20日 - 6月27日', price:4580, tag:'deal', tagText:'含税' },
+  { img:'jfk-airport-terminal', route:'北京 → 纽约', date:'8月1日 - 8月12日', price:5200, tag:'', tagText:'' },
+  { img:'tropical-island-aerial', route:'成都 → 巴厘岛', date:'7月15日 - 7月22日', price:2350, tag:'deal', tagText:'特价' },
+  { img:'iceland-aerial-view', route:'香港 → 冰岛', date:'9月5日 - 9月16日', price:6800, tag:'hot', tagText:'极光季' },
+];
+document.getElementById('flightGrid').innerHTML = flights.map(f => `
+  <div class="service-card reveal">
+    <img src="https://picsum.photos/seed/${f.img}/600/400" alt="${f.route}" loading="lazy">
+    <div class="service-card-body">
+      <h3>${f.route}</h3>
+      <div class="meta">📅 ${f.date} ${f.tag ? `<span class="service-tag tag-${f.tag}">${f.tagText}</span>` : ''}</div>
+      <div class="price">¥${f.price.toLocaleString()} <small>/人起</small></div>
+    </div>
+  </div>
+`).join('');
+
+// Render cars
+const cars = [
+  { img:'compact-sedan-white', name:'丰田卡罗拉', type:'经济型', price:180, tag:'', tagText:'' },
+  { img:'offroad-jeep-suv', name:'Jeep牧马人', type:'SUV', price:420, tag:'hot', tagText:'推荐' },
+  { img:'luxury-sedan-bmw', name:'宝马3系', type:'豪华轿车', price:560, tag:'deal', tagText:'8折' },
+  { img:'electric-tesla-road', name:'特斯拉Model Y', type:'电动SUV', price:480, tag:'hot', tagText:'环保' },
+  { img:'van-road-trip', name:'奔驰V-Class', type:'MPV', price:650, tag:'', tagText:'' },
+  { img:'mini-cooper-street', name:'MINI Cooper', type:'个性小车', price:260, tag:'deal', tagText:'免押' },
+];
+document.getElementById('carGrid').innerHTML = cars.map(c => `
+  <div class="service-card reveal">
+    <img src="https://picsum.photos/seed/${c.img}/600/400" alt="${c.name}" loading="lazy">
+    <div class="service-card-body">
+      <h3>${c.name}</h3>
+      <div class="meta">🚘 ${c.type} ${c.tag ? `<span class="service-tag tag-${c.tag}">${c.tagText}</span>` : ''}</div>
+      <div class="price">¥${c.price.toLocaleString()} <small>/天起</small></div>
+    </div>
+  </div>
+`).join('');
+
+// Render guides
+const guides = [
+  { icon:'📋', title:'签证指南', desc:'各国签证政策、材料清单、办理流程详解，助你顺利出签。' },
+  { icon:'📅', title:'最佳旅行时间', desc:'全球目的地气候分析、旺季淡季对比，选对时间事半功倍。' },
+  { icon:'🎒', title:'行李清单', desc:'目的地和季节定制的打包清单，轻装上阵不遗漏。' },
+  { icon:'🚌', title:'当地交通', desc:'地铁、巴士、租车、轮渡全攻略，出行无忧。' },
+  { icon:'🍜', title:'美食推荐', desc:'不可错过的地道美食、网红餐厅与街头小吃全收录。' },
+  { icon:'🛡️', title:'安全提示', desc:'旅行保险、紧急联系方式、当地法律法规与安全注意事项。' },
+];
+document.getElementById('guideGrid').innerHTML = guides.map((g,i) => {
+  const ids = ['visa','besttime','packing','transport','food','safety'];
+  return `<div class="guide-card reveal" data-guide="${ids[i]}"><div class="guide-icon">${g.icon}</div><h3>${g.title}</h3><p>${g.desc}</p></div>`;
+}).join('');
+
+// ===== Service Overlays (Hotels / Flights / Cars) =====
+// --- Hotels ---
+const hotelData = [
+  { img:'luxury-hotel-suite', name:'巴黎丽兹酒店', loc:'法国·巴黎', price:4580, stars:5, features:['免费WiFi','含早餐','SPA','泳池'], rating:'4.9' },
+  { img:'overwater-villa', name:'马尔代夫W水疗度假村', loc:'马尔代夫·北马累环礁', price:12800, stars:5, features:['水上别墅','全包餐饮','潜水中心','私人管家'], rating:'5.0' },
+  { img:'japanese-ryokan', name:'东京安缦酒店', loc:'日本·东京', price:6200, stars:5, features:['日式庭院','温泉浴场','米其林餐厅','茶道体验'], rating:'4.8' },
+  { img:'city-skyscraper-hotel', name:'纽约广场酒店', loc:'美国·纽约', price:3800, stars:5, features:['中央公园景观','行政酒廊','健身中心','管家服务'], rating:'4.7' },
+  { img:'tropical-resort-pool', name:'巴厘岛阿雅娜度假村', loc:'印尼·巴厘岛', price:2200, stars:5, features:['悬崖泳池','私人海滩','瑜伽课程','烧烤晚餐'], rating:'4.8' },
+  { img:'spa-resort-iceland', name:'冰岛蓝湖Silica酒店', loc:'冰岛·格林达维克', price:5600, stars:4, features:['蓝湖温泉','极光叫醒','地热SPA','熔岩景观'], rating:'4.7' },
+  { img:'boutique-hotel-room', name:'巴黎香格里拉酒店', loc:'法国·巴黎', price:5200, stars:5, features:['埃菲尔铁塔景观','法式餐厅','私人阳台','古董装饰'], rating:'4.9' },
+  { img:'beachfront-resort', name:'马尔代夫瑞吉度假村', loc:'马尔代夫·达鲁环礁', price:15600, stars:5, features:['私人泳池','水上餐厅','鲸鲨浮潜','日落酒吧'], rating:'4.9' },
+  { img:'modern-hotel-lobby', name:'东京柏悦酒店', loc:'日本·东京', price:4800, stars:5, features:['新宿天际线','室内泳池','铁板烧','爵士酒吧'], rating:'4.8' },
+  { img:'garden-resort-bali', name:'巴厘岛丽思卡尔顿', loc:'印尼·巴厘岛', price:3200, stars:5, features:['海景套房','热带花园','儿童俱乐部','海鲜烧烤'], rating:'4.7' },
+];
+
+function renderHotelResults(data) {
+  const c = document.getElementById('hotelResults');
+  if (!data.length) { c.innerHTML = '<div class="svc-empty"><p>没有找到匹配的酒店</p></div>'; return; }
+  c.innerHTML = data.map(h => `
+    <div class="svc-result-card">
+      <img src="https://picsum.photos/seed/${h.img}/320/240" alt="${h.name}" loading="lazy">
+      <div class="svc-result-info">
+        <h3>${h.name} <span style="color:#f39c12;font-size:14px">${'★'.repeat(h.stars)}</span></h3>
+        <div class="meta-row"><span>📍 ${h.loc}</span><span>⭐ ${h.rating} 分</span></div>
+        <div class="features">${h.features.map(f => `<span class="svc-feature">${f}</span>`).join('')}</div>
+      </div>
+      <div class="svc-result-price">
+        <div class="amount">¥${h.price.toLocaleString()}</div>
+        <div class="unit">/晚起</div>
+        <button class="svc-book-btn" onclick="bookHotel('${h.name.replace(/'/g, "\\'")}','${h.loc.replace(/'/g, "\\'")}',${h.price})">预订</button>
+      </div>
+    </div>`).join('');
+}
+
+function openHotelOverlay() {
+  document.getElementById('hotelOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+  renderHotelResults(hotelData);
+}
+document.getElementById('hotelBack').addEventListener('click', () => { document.getElementById('hotelOverlay').classList.remove('show'); document.body.style.overflow = ''; });
+document.getElementById('hotelSearch').addEventListener('click', () => {
+  const dest = document.getElementById('hotelDest').value;
+  const checkin = document.getElementById('hotelCheckin').value;
+  const checkout = document.getElementById('hotelCheckout').value;
+  let filtered = hotelData;
+  if (dest) filtered = filtered.filter(h => h.loc.includes(dest));
+  renderHotelResults(filtered);
+});
+
+// --- Flights ---
+const flightData = [
+  { img:'airplane-tokyo-sky', from:'北京', to:'东京', date:'6月15日', time:'08:30-12:45', airline:'中国国航 CA925', price:1680, direct:true, duration:'3h15m' },
+  { img:'flight-paris-clouds', from:'上海', to:'巴黎', date:'7月8日', time:'23:20-05:40+1', airline:'东方航空 MU553', price:3280, direct:true, duration:'12h20m' },
+  { img:'seaplane-maldives', from:'广州', to:'马尔代夫', date:'6月20日', time:'10:00-18:30', airline:'南方航空 CZ3059', price:4580, direct:false, duration:'11h30m' },
+  { img:'jfk-airport-terminal', from:'北京', to:'纽约', date:'8月1日', time:'13:00-14:30', airline:'国航 CA981', price:5200, direct:true, duration:'13h30m' },
+  { img:'tropical-island-aerial', from:'成都', to:'巴厘岛', date:'7月15日', time:'02:30-12:00', airline:'川航 3U3960', price:2350, direct:false, duration:'9h30m' },
+  { img:'iceland-aerial-view', from:'香港', to:'冰岛', date:'9月5日', time:'08:00-18:30', airline:'国泰 CX261', price:6800, direct:false, duration:'16h30m' },
+  { img:'airport-runway', from:'上海', to:'东京', date:'6月18日', time:'09:15-12:30', airline:'全日空 NH972', price:1980, direct:true, duration:'2h15m' },
+  { img:'clouds-from-plane', from:'北京', to:'巴黎', date:'7月1日', time:'01:00-06:20', airline:'法航 AF381', price:3680, direct:true, duration:'11h20m' },
+  { img:'terminal-departure', from:'广州', to:'纽约', date:'8月10日', time:'19:00-22:30', airline:'南航 CZ699', price:4800, direct:true, duration:'15h30m' },
+  { img:'flight-wing-view', from:'香港', to:'东京', date:'6月25日', time:'07:30-12:00', airline:'香港快运 UO622', price:1280, direct:true, duration:'3h30m' },
+];
+
+function renderFlightResults(data) {
+  const c = document.getElementById('flightResults');
+  if (!data.length) { c.innerHTML = '<div class="svc-empty"><p>没有找到匹配的航班</p></div>'; return; }
+  c.innerHTML = data.map(f => `
+    <div class="svc-result-card">
+      <img src="https://picsum.photos/seed/${f.img}/320/240" alt="${f.from}→${f.to}" loading="lazy">
+      <div class="svc-result-info">
+        <h3>${f.from} → ${f.to}</h3>
+        <div class="meta-row"><span>🛫 ${f.airline}</span><span>📅 ${f.date}</span><span>🕐 ${f.time}</span></div>
+        <div class="features">
+          <span class="svc-feature">⏱ ${f.duration}</span>
+          <span class="svc-feature" style="color:${f.direct?'#27ae60':'#e67e22'}">${f.direct?'直飞':'中转'}</span>
+        </div>
+      </div>
+      <div class="svc-result-price">
+        <div class="amount">¥${f.price.toLocaleString()}</div>
+        <div class="unit">/人起</div>
+        <button class="svc-book-btn" onclick="bookFlight('${f.from.replace(/'/g, "\\'")}','${f.to.replace(/'/g, "\\'")}','${f.airline.replace(/'/g, "\\'")}','${f.date}','${f.time}',${f.price},'${f.duration}')">预订</button>
+      </div>
+    </div>`).join('');
+}
+
+function openFlightOverlay() {
+  document.getElementById('flightOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+  renderFlightResults(flightData);
+}
+document.getElementById('flightBack').addEventListener('click', () => { document.getElementById('flightOverlay').classList.remove('show'); document.body.style.overflow = ''; });
+document.getElementById('flightSearch').addEventListener('click', () => {
+  const from = document.getElementById('flightFrom').value;
+  const to = document.getElementById('flightTo').value;
+  const date = document.getElementById('flightDate').value;
+  let filtered = flightData;
+  if (from) filtered = filtered.filter(f => f.from === from);
+  if (to) filtered = filtered.filter(f => f.to === to);
+  if (date) filtered = filtered.filter(f => f.date.includes(date.slice(5)));
+  renderFlightResults(filtered);
+});
+
+// --- Cars ---
+const carData = [
+  { img:'compact-sedan-white', name:'丰田卡罗拉', type:'经济型', price:180, seats:5, trans:'自动', features:['省油','倒车影像','蓝牙'] },
+  { img:'offroad-jeep-suv', name:'Jeep牧马人', type:'SUV', price:420, seats:5, trans:'自动', features:['四驱','越野胎','导航'] },
+  { img:'luxury-sedan-bmw', name:'宝马3系', type:'豪华轿车', price:560, seats:5, trans:'自动', features:['天窗','真皮座椅','驾驶辅助'] },
+  { img:'electric-tesla-road', name:'特斯拉Model Y', type:'电动SUV', price:480, seats:5, trans:'自动', features:['自动驾驶','超级充电','全景天窗'] },
+  { img:'van-road-trip', name:'奔驰V-Class', type:'MPV', price:650, seats:7, trans:'自动', features:['大空间','航空座椅','家庭首选'] },
+  { img:'mini-cooper-street', name:'MINI Cooper', type:'个性小车', price:260, seats:4, trans:'自动', features:['灵活好停','复古造型','无钥匙启动'] },
+  { img:'suv-mountain-road', name:'丰田RAV4', type:'SUV', price:320, seats:5, trans:'自动', features:['自适应巡航','车道保持','大后备箱'] },
+  { img:'sedan-city-drive', name:'大众帕萨特', type:'经济型', price:200, seats:5, trans:'自动', features:['乘坐舒适','后排大空间','定速巡航'] },
+  { img:'sports-car-red', name:'保时捷911', type:'豪华轿车', price:1800, seats:2, trans:'自动', features:['敞篷','运动排气','弹射起步'] },
+  { img:'family-suv-white', name:'沃尔沃XC90', type:'SUV', price:520, seats:7, trans:'自动', features:['极致安全','空气净化','儿童座椅接口'] },
+];
+
+function renderCarResults(data) {
+  const c = document.getElementById('carResults');
+  if (!data.length) { c.innerHTML = '<div class="svc-empty"><p>没有找到匹配的车型</p></div>'; return; }
+  c.innerHTML = data.map(cr => `
+    <div class="svc-result-card">
+      <img src="https://picsum.photos/seed/${cr.img}/320/240" alt="${cr.name}" loading="lazy">
+      <div class="svc-result-info">
+        <h3>${cr.name}</h3>
+        <div class="meta-row"><span>🚘 ${cr.type}</span><span>🪑 ${cr.seats}座</span><span>⚙ ${cr.trans}</span></div>
+        <div class="features">${cr.features.map(f => `<span class="svc-feature">${f}</span>`).join('')}</div>
+      </div>
+      <div class="svc-result-price">
+        <div class="amount">¥${cr.price.toLocaleString()}</div>
+        <div class="unit">/天起</div>
+        <button class="svc-book-btn" onclick="bookCar('${cr.name.replace(/'/g, "\\'")}','${cr.type.replace(/'/g, "\\'")}',${cr.seats},${cr.price})">预订</button>
+      </div>
+    </div>`).join('');
+}
+
+function openCarOverlay() {
+  document.getElementById('carOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+  renderCarResults(carData);
+}
+document.getElementById('carBack').addEventListener('click', () => { document.getElementById('carOverlay').classList.remove('show'); document.body.style.overflow = ''; });
+document.getElementById('carSearch').addEventListener('click', () => {
+  const loc = document.getElementById('carLoc').value;
+  const type = document.getElementById('carType').value;
+  let filtered = carData;
+  if (type) filtered = filtered.filter(c => c.type === type);
+  renderCarResults(filtered);
+});
+
+// Click hotel cards → specific hotel detail
+document.getElementById('hotelGrid').addEventListener('click', e => {
+  const card = e.target.closest('.service-card');
+  if (!card) return;
+  const name = card.querySelector('h3').textContent;
+  const item = hotelData.find(h => h.name === name);
+  if (item) showItemDetail('hotel', item);
+});
+// Click flight cards → specific flight detail
+document.getElementById('flightGrid').addEventListener('click', e => {
+  const card = e.target.closest('.service-card');
+  if (!card) return;
+  const route = card.querySelector('h3').textContent;
+  const item = flightData.find(f => f.from + ' → ' + f.to === route);
+  if (item) showItemDetail('flight', item);
+});
+// Click car cards → specific car detail
+document.getElementById('carGrid').addEventListener('click', e => {
+  const card = e.target.closest('.service-card');
+  if (!card) return;
+  const name = card.querySelector('h3').textContent;
+  const item = carData.find(c => c.name === name);
+  if (item) showItemDetail('car', item);
+});
+
+// Sidebar: 酒店/机票/租车 open search overlay
+document.querySelector('.sidebar-nav a[href="#hotels"]').addEventListener('click', e => { e.preventDefault(); openHotelOverlay(); });
+document.querySelector('.sidebar-nav a[href="#flights"]').addEventListener('click', e => { e.preventDefault(); openFlightOverlay(); });
+document.querySelector('.sidebar-nav a[href="#cars"]').addEventListener('click', e => { e.preventDefault(); openCarOverlay(); });
+
+// Quick service cards also open search overlays
+document.querySelector('.qs-card:nth-child(1)').onclick = () => openFlightOverlay();
+document.querySelector('.qs-card:nth-child(2)').onclick = () => openHotelOverlay();
+document.querySelector('.qs-card:nth-child(3)').onclick = () => openCarOverlay();
+
+// ===== Item Detail Overlay (hotel/flight/car single item) =====
+function showItemDetail(type, item) {
+  const hero = document.getElementById('detailHero');
+  const body = document.getElementById('detailBody');
+  body.className = 'detail-body';
+
+  let heroImg, title, subtitle, infoHtml;
+
+  if (type === 'hotel') {
+    heroImg = `https://picsum.photos/seed/${item.img}/1200/600`;
+    title = item.name;
+    subtitle = `📍 ${item.loc} · ⭐ ${item.rating} 分 · ${'★'.repeat(item.stars)}`;
+    infoHtml = `
+      <div class="info-tags" style="margin-bottom:20px">${item.features.map(f => `<div class="info-tag">${f}</div>`).join('')}</div>
+      <div style="background:#fff8e7;border-radius:12px;padding:20px 24px;text-align:center;margin:20px 0">
+        <span style="font-size:36px;font-weight:800;color:#e74c3c">¥${item.price.toLocaleString()}</span>
+        <span style="color:#999;font-size:15px"> /晚起</span>
+      </div>
+      <p style="color:#555;line-height:1.8">${item.name}位于${item.loc}，提供世界级的住宿体验。${item.features.slice(0,3).join('、')}等设施一应俱全。评分 ${item.rating} 分，深受旅客好评。无论是商务出行还是休闲度假，这里都是你的理想之选。</p>
+      <div style="text-align:center;margin-top:24px"><button class="detail-book-btn" onclick="bookHotel('${item.name.replace(/'/g, "\\'")}','${item.loc.replace(/'/g, "\\'")}',${item.price})">预订酒店</button></div>`;
+  } else if (type === 'flight') {
+    heroImg = `https://picsum.photos/seed/${item.img}/1200/600`;
+    title = `${item.from} → ${item.to}`;
+    subtitle = `${item.airline} · ${item.date} · ${item.time}`;
+    infoHtml = `
+      <div class="info-tags" style="margin-bottom:20px">
+        <div class="info-tag">⏱ 飞行时长 ${item.duration}</div>
+        <div class="info-tag">${item.direct ? '🟢 直飞' : '🟡 中转'}</div>
+        <div class="info-tag">🛫 ${item.airline}</div>
+      </div>
+      <div style="background:#fff8e7;border-radius:12px;padding:20px 24px;text-align:center;margin:20px 0">
+        <span style="font-size:36px;font-weight:800;color:#e74c3c">¥${item.price.toLocaleString()}</span>
+        <span style="color:#999;font-size:15px"> /人起</span>
+      </div>
+      <p style="color:#555;line-height:1.8">${item.airline} ${item.from}→${item.to} 航线，${item.date}出发，${item.time}起降。${item.direct ? '直飞' : '经停中转'}，飞行时长约${item.duration}。含行李额${item.direct ? '23kg' : '20kg'}托运行李。</p>
+      <div style="text-align:center;margin-top:24px"><button class="detail-book-btn" onclick="bookFlight('${item.from.replace(/'/g, "\\'")}','${item.to.replace(/'/g, "\\'")}','${item.airline.replace(/'/g, "\\'")}','${item.date}','${item.time}',${item.price},'${item.duration}')">预订机票</button></div>`;
+  } else if (type === 'car') {
+    heroImg = `https://picsum.photos/seed/${item.img}/1200/600`;
+    title = item.name;
+    subtitle = `${item.type} · ${item.seats}座 · ${item.trans}`;
+    infoHtml = `
+      <div class="info-tags" style="margin-bottom:20px">${item.features.map(f => `<div class="info-tag">${f}</div>`).join('')}</div>
+      <div style="background:#fff8e7;border-radius:12px;padding:20px 24px;text-align:center;margin:20px 0">
+        <span style="font-size:36px;font-weight:800;color:#e74c3c">¥${item.price.toLocaleString()}</span>
+        <span style="color:#999;font-size:15px"> /天起</span>
+      </div>
+      <p style="color:#555;line-height:1.8">${item.name}（${item.type}），${item.seats}座${item.trans}档。${item.features.join('、')}。不限里程，基础保险已含，满油取还。适合${item.seats >= 7 ? '家庭出游' : item.type === 'SUV' ? '自驾越野' : '城市出行'}。</p>
+      <div style="text-align:center;margin-top:24px"><button class="detail-book-btn" onclick="bookCar('${item.name.replace(/'/g, "\\'")}','${item.type.replace(/'/g, "\\'")}',${item.seats},${item.price})">预订租车</button></div>`;
+  }
+
+  hero.style.backgroundImage = `linear-gradient(transparent 50%, rgba(0,0,0,0.55)), url(${heroImg})`;
+  hero.style.backgroundSize = 'cover'; hero.style.backgroundPosition = 'center';
+  hero.innerHTML = `<div class="detail-hero-content"><h2>${title}</h2><div style="color:rgba(255,255,255,0.8);font-size:15px">${subtitle}</div></div>`;
+  body.innerHTML = infoHtml;
+  detailOverlay.classList.add('show'); document.body.style.overflow = 'hidden'; detailOverlay.scrollTop = 0;
+}
+
+// ESC to close service overlays
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    ['hotelOverlay','flightOverlay','carOverlay'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el.classList.contains('show')) { el.classList.remove('show'); document.body.style.overflow = ''; }
+    });
+  }
+});
+
+// ===== Detail Overlay =====
+const detailOverlay = document.getElementById('detailOverlay');
+const detailHero = document.getElementById('detailHero');
+const detailBody = document.getElementById('detailBody');
+const detailBack = document.getElementById('detailBack');
+
+function showDetail(id) {
+  const d = destData[id]; if (!d) return;
+  detailBody.className = 'detail-body';
+  detailHero.style.backgroundImage = `linear-gradient(transparent 50%, rgba(0,0,0,0.55)), url(${d.heroImg})`;
+  detailHero.style.backgroundSize = 'cover'; detailHero.style.backgroundPosition = 'center';
+  detailHero.innerHTML = `<div class="detail-hero-content"><h2>${d.name}</h2><div class="stars">${d.stars}</div></div>`;
+  detailBody.innerHTML = `
+    <p class="intro">${d.intro}</p><h3>热门景点</h3>
+    <div class="attraction-list">${d.attractions.map(a => `<div class="attraction-item"><span class="icon">${a.icon}</span><div><strong>${a.name}</strong><br><small style="color:#888">${a.desc}</small></div></div>`).join('')}</div>
+    <h3>旅行贴士</h3>
+    <div class="info-tags"><div class="info-tag">最佳季节：${d.bestTime}</div><div class="info-tag">预算参考：${d.budget}</div></div>
+    <ul class="tip-list" style="margin-top:16px">${d.tips.map(t => `<li>${t}</li>`).join('')}</ul>
+    <div class="detail-book-section"><p style="color:#888;font-size:13px;margin-bottom:12px">心动了？现在即可快速预订</p><button class="detail-book-btn" onclick="quickBook('${d.name}')">预订此目的地</button></div>`;
+  detailOverlay.classList.add('show'); document.body.style.overflow = 'hidden'; detailOverlay.scrollTop = 0;
+}
+function hideDetail() { detailOverlay.classList.remove('show'); document.body.style.overflow = ''; }
+detailBack.addEventListener('click', hideDetail);
+document.addEventListener('click', e => { if (e.target.closest('.dest-card')) showDetail(e.target.closest('.dest-card').dataset.dest); });
+document.addEventListener('keydown', e => { if (e.key==='Escape' && detailOverlay.classList.contains('show')) hideDetail(); });
+
+// ===== Guide Detail =====
+const guideData = {
+  visa: { title:'签证指南', icon:'📋', heroImg:'https://picsum.photos/seed/visa/1200/600', intro:'出国旅行，签证是关键的第一步。掌握各国签证政策，提前规划办理时间。', content:[{subtitle:'常见签证类型',text:'旅游签证（L签）、商务签证（M签）、过境签证（G签）、电子签证（e-Visa）、落地签。泰国、印尼对中国公民实行落地签或免签，日本、韩国需提前办理。'},{subtitle:'材料准备清单',text:'护照原件（有效期6个月以上）、2寸白底照片、身份证复印件、户口本复印件、在职证明或学生证明、近6个月银行流水（余额建议3万以上）、往返机票行程单、酒店预订单。'},{subtitle:'办理流程',text:'确定目的地→查询签证要求→准备材料→填写申请表→预约递交（部分需面签）→缴费→等待审批（5-15个工作日）→领取护照。申根签证建议提前3个月预约。'},{subtitle:'注意事项',text:'提供真实材料，虚假材料可能导致拒签甚至被列入黑名单。电子签证打印纸质备份随身携带。面签时从容回答，不要说与实际行程不符的内容。'}] },
+  besttime: { title:'最佳旅行时间', icon:'📅', heroImg:'https://picsum.photos/seed/seasons/1200/600', intro:'选对旅行时间，看到最美的风景，避开人潮、节省开支。', content:[{subtitle:'欧洲',text:'最佳5-9月，天气温暖。7-8月旺季人最多。4月和10月肩季性价比最佳。冬季（11-2月）适合北欧追极光，或南欧享受温暖气候。圣诞集市是冬季亮点。'},{subtitle:'亚洲',text:'东南亚最佳干季（11月-次年2月）。日本春季赏樱（3-4月）、秋季赏枫（10-11月）。中国云南四季如春，新疆夏季最美。韩国4月樱花和10月红叶季最美。'},{subtitle:'大洋洲',text:'季节与北半球相反。12-2月夏季适合海滩和户外。6-8月冬季适合滑雪。3-5月和9-11月肩季温度适中，游客较少，性价比最高。'},{subtitle:'北美',text:'纽约和华盛顿春季（4-6月）和秋季（9-10月）最佳。美西国家公园夏季最佳。加拿大赏枫季9月下旬-10月中旬。冬季适合夏威夷或迈阿密避寒。'}] },
+  packing: { title:'行李清单', icon:'🎒', heroImg:'https://picsum.photos/seed/packing/1200/600', intro:'合理打包是愉快旅途的基础。记住黄金法则：打包好后再取出三分之一。', content:[{subtitle:'证件类',text:'护照及签证页复印件（与原件分开放）、身份证、机票行程单、酒店预订单、旅行保险单、驾照及国际驾照翻译件、2张备用证件照、紧急联系人卡片。手机也存电子版备份。'},{subtitle:'衣物类',text:'贴身衣物（按天数+1准备）、速干T恤2-3件、长裤1-2条、外套（冲锋衣/轻薄羽绒服）、舒适运动鞋、拖鞋/凉鞋、泳衣、墨镜、遮阳帽。原则：分层穿搭，选快干面料。'},{subtitle:'电子设备',text:'手机及充电器、充电宝（不超过20000mAh）、转换插头（全球通用款）、耳机、相机及备用电池。所有设备提前下载离线地图和翻译包。'},{subtitle:'日用品与药品',text:'洗漱用品旅行装、防晒霜、纸巾/湿巾、U型枕、眼罩耳塞。常用药：感冒药、肠胃药、晕车药、创可贴、防蚊液、过敏药、个人处方药（带处方复印件）。'}] },
+  transport: { title:'当地交通', icon:'🚌', heroImg:'https://picsum.photos/seed/transport/1200/600', intro:'了解目的地的交通系统能让旅程事半功倍。', content:[{subtitle:'公共交通',text:'大城市首选地铁/轻轨——东京地铁覆盖全城、伦敦Oyster卡出行必备。欧洲城市多有一日/多日通票。Google Maps和Citymapper是查线路的好帮手。'},{subtitle:'租车自驾',text:'美国、新西兰、冰岛等自驾最佳。中国驾照需搭配国际驾照翻译件。租车平台：租租车、Hertz、Avis。右舵国家（英、日、澳、新）需适应。'},{subtitle:'网约车与出租车',text:'Uber覆盖全球700+城市，Grab用于东南亚。出租车：东京贵但服务好、纽约黄色出租是标志。上车前确认是否打表，备好零钱。'},{subtitle:'城际交通',text:'欧洲火车通票（Eurail Pass）串联多国，日本JR PASS全国通用。廉价航空（Ryanair、AirAsia）适合跨区域长途，注意行李额限制。'}] },
+  food: { title:'美食推荐', icon:'🍜', heroImg:'https://picsum.photos/seed/food/1200/600', intro:'从米其林星级餐厅到街头小吃摊，每一种味道都是当地文化的缩影。', content:[{subtitle:'如何找到地道美食',text:'避开景区附近的餐厅，往居民区小巷里走。Google Maps评分4.3以上且评价过百的通常不错。问酒店/民宿老板推荐，他们最了解当地。'},{subtitle:'亚洲美食地图',text:'东京筑地市场海鲜丼、曼谷街头冬阴功和芒果糯米饭、首尔烤肉和炸鸡啤酒、河内牛肉河粉、新加坡海南鸡饭和辣椒螃蟹。日本便利店食物品质极高。'},{subtitle:'欧洲美食地图',text:'巴黎可颂和法式洋葱汤、罗马Carbonara和Gelato冰淇淋、巴塞罗那Tapas和海鲜饭。注意：意大利的Cappuccino只在早餐喝。'},{subtitle:'用餐礼仪与小费',text:'日本吃面发出声音表示好吃。美国小费15-20%。意大利Coperto（桌布费）是正常收费。点餐前确认是否有服务费。'}] },
+  safety: { title:'安全提示', icon:'🛡️', heroImg:'https://picsum.photos/seed/safety/1200/600', intro:'安全是旅行的底线。做好准备，但不必过度焦虑。', content:[{subtitle:'行前安全准备',text:'购买旅行保险（医疗+财物+行程取消）、复印所有重要证件并分开存放、查询中国驻当地使领馆地址和电话、将行程分享给家人朋友。'},{subtitle:'常见骗局防范',text:'免费赠送后索要高价、出租车绕路或换假钞、假装警察查护照偷钱、ATM诈骗（使用银行内ATM，遮挡密码）。保持礼貌但坚定的拒绝态度。'},{subtitle:'财物与人身安全',text:'使用酒店保险箱存放贵重物品、随身携带少量现金分散放置、人多地方背包背前面、避免深夜独自在偏僻区域行走、不要露富。护照被偷立即联系使领馆。'},{subtitle:'紧急情况应对',text:'中国外交部全球领事保护热线：+86-10-12308。微信小程序"外交部12308"可一键求助。遇到抢劫不要反抗，人身安全第一，事后报警。'}] },
+};
+
+function showGuideDetail(id) {
+  const d = guideData[id]; if (!d) return;
+  detailHero.style.backgroundImage = `linear-gradient(transparent 40%, rgba(0,0,0,0.6)), url(${d.heroImg})`;
+  detailHero.style.backgroundSize = 'cover'; detailHero.style.backgroundPosition = 'center';
+  detailHero.innerHTML = `<div class="detail-hero-content"><h2>${d.icon} ${d.title}</h2></div>`;
+  detailBody.className = 'guide-detail-body';
+  detailBody.innerHTML = `<p class="intro" style="font-size:16px;line-height:1.8">${d.intro}</p>${d.content.map(c => `<h3>${c.subtitle}</h3><p>${c.text}</p>`).join('')}`;
+  detailOverlay.classList.add('show'); document.body.style.overflow = 'hidden'; detailOverlay.scrollTop = 0;
+}
+document.addEventListener('click', e => { if (e.target.closest('.guide-card')) showGuideDetail(e.target.closest('.guide-card').dataset.guide); });
+
+// ===== Login & Register =====
+let isLoggedIn = false, loggedInUser = '', pendingBookingDest = null, loginMode = 'login';
+const loginOverlay = document.getElementById('loginOverlay'), loginTitle = document.getElementById('loginTitle');
+const loginSubmit = document.getElementById('loginSubmit'), loginNameGroup = document.getElementById('loginNameGroup');
+const switchLink = document.getElementById('switchLink'), formMsg = document.getElementById('formMsg');
+const loginForm = document.getElementById('loginForm');
+const sidebarUser = document.getElementById('sidebarUser'), sidebarAvatar = document.getElementById('sidebarAvatar');
+const sidebarName = document.getElementById('sidebarName'), sidebarEmail = document.getElementById('sidebarEmail');
+const loginPrompt = document.getElementById('loginPrompt'), sidebarUserInfo = document.getElementById('sidebarUserInfo');
+
+sidebarUser.addEventListener('click', () => {
+  if (isLoggedIn) {
+    openProfile();
+  } else {
+    setLoginMode('login');
+    loginOverlay.classList.add('show'); document.body.style.overflow = 'hidden';
+  }
+});
+
+// ===== User Profile =====
+let hotelBookings = JSON.parse(localStorage.getItem('hotelBookings') || '[]');
+let flightBookings = JSON.parse(localStorage.getItem('flightBookings') || '[]');
+let carBookings = JSON.parse(localStorage.getItem('carBookings') || '[]');
+
+function saveAllBookings() { localStorage.setItem('hotelBookings', JSON.stringify(hotelBookings)); localStorage.setItem('flightBookings', JSON.stringify(flightBookings)); localStorage.setItem('carBookings', JSON.stringify(carBookings)); }
+
+function openProfile() {
+  document.getElementById('profileAvatar').textContent = loggedInUser[0].toUpperCase();
+  document.getElementById('profileName').textContent = loggedInUser;
+  document.getElementById('profileEmail').textContent = sidebarEmail.textContent;
+  renderProfile();
+  document.getElementById('profileOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+document.getElementById('profileBack').addEventListener('click', () => { document.getElementById('profileOverlay').classList.remove('show'); document.body.style.overflow = ''; });
+
+function renderProfile() {
+  const body = document.getElementById('profileBody');
+  const sections = [];
+
+  // Tours (from booking center)
+  const tours = JSON.parse(localStorage.getItem('bookings') || '[]');
+  if (tours.length > 0) {
+    sections.push(`<div class="profile-section"><h3>🌍 旅行套餐</h3>${tours.map(t => `
+      <div class="profile-card">
+        <div class="p-icon tour">🌍</div>
+        <div class="p-info"><div class="p-title">${escapeHtml(t.dest)}</div><div class="p-meta">${t.checkin} → ${t.checkout} · ${t.guests}人 · ${escapeHtml(t.name)}</div></div>
+        <span class="p-tag confirmed">已确认</span>
+      </div>`).join('')}</div>`);
+  }
+
+  // Hotels
+  if (hotelBookings.length > 0) {
+    sections.push(`<div class="profile-section"><h3>🏨 酒店预订</h3>${hotelBookings.map((h,i) => `
+      <div class="profile-card">
+        <div class="p-icon hotel">🏨</div>
+        <div class="p-info"><div class="p-title">${escapeHtml(h.name)}</div><div class="p-meta">📍 ${escapeHtml(h.loc)} · ${h.time}</div></div>
+        <div class="p-price">¥${h.price.toLocaleString()}<small style="font-size:11px;color:#999">/晚</small></div>
+        <button class="bc-delete" onclick="const n=hotelBookings[${i}].name;hotelBookings.splice(${i},1);saveAllBookings();renderProfile();showToast('已取消「'+n+'」','info')">取消</button>
+      </div>`).join('')}</div>`);
+  }
+
+  // Flights
+  if (flightBookings.length > 0) {
+    sections.push(`<div class="profile-section"><h3>✈️ 机票订单</h3>${flightBookings.map((f,i) => `
+      <div class="profile-card">
+        <div class="p-icon flight">✈️</div>
+        <div class="p-info"><div class="p-title">${escapeHtml(f.from)} → ${escapeHtml(f.to)}</div><div class="p-meta">${f.airline} · ${f.date} · ${f.time} · ${f.time2 || ''}</div></div>
+        <div class="p-price">¥${f.price.toLocaleString()}<small style="font-size:11px;color:#999">/人</small></div>
+        <button class="bc-delete" onclick="const n=flightBookings[${i}].from+'→'+flightBookings[${i}].to;flightBookings.splice(${i},1);saveAllBookings();renderProfile();showToast('已取消「'+n+'」','info')">取消</button>
+      </div>`).join('')}</div>`);
+  }
+
+  // Cars
+  if (carBookings.length > 0) {
+    sections.push(`<div class="profile-section"><h3>🚗 租车订单</h3>${carBookings.map((c,i) => `
+      <div class="profile-card">
+        <div class="p-icon car">🚗</div>
+        <div class="p-info"><div class="p-title">${escapeHtml(c.name)}</div><div class="p-meta">${c.type} · ${c.seats}座 · ${c.time || ''}</div></div>
+        <div class="p-price">¥${c.price.toLocaleString()}<small style="font-size:11px;color:#999">/天</small></div>
+        <button class="bc-delete" onclick="const n=carBookings[${i}].name;carBookings.splice(${i},1);saveAllBookings();renderProfile();showToast('已取消「'+n+'」','info')">取消</button>
+      </div>`).join('')}</div>`);
+  }
+
+  if (sections.length === 0) {
+    body.innerHTML = '<div style="text-align:center;padding:60px 20px;color:#bbb"><div style="font-size:48px;margin-bottom:12px">📭</div><p>暂无预订记录</p></div>';
+  } else {
+    body.innerHTML = sections.join('');
+  }
+  // Always show logout
+  body.innerHTML += '<button class="profile-logout" id="profileLogout">退出登录</button>';
+  document.getElementById('profileLogout').addEventListener('click', () => {
+    isLoggedIn = false; loggedInUser = '';
+    loginPrompt.style.display = 'flex'; sidebarAvatar.style.display = 'none'; sidebarUserInfo.classList.remove('show');
+    sidebarName.textContent = ''; sidebarEmail.textContent = '';
+    document.getElementById('profileOverlay').classList.remove('show');
+    document.body.style.overflow = '';
+  });
+}
+
+// Toast
+function showToast(msg, type) {
+  const t = document.getElementById('appToast');
+  t.textContent = msg; t.className = 'app-toast ' + type + ' show';
+  clearTimeout(t._tid); t._tid = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// Update service booking buttons to save to profile
+function bookHotel(name, loc, price) {
+  if (!isLoggedIn) { showToast('请先登录', 'error'); return; }
+  hotelBookings.unshift({ name, loc, price, time: new Date().toLocaleString('zh-CN') });
+  saveAllBookings();
+  showToast('已预订「' + name + '」，可在个人中心查看', 'success');
+}
+function bookFlight(from, to, airline, date, time, price, duration) {
+  if (!isLoggedIn) { showToast('请先登录', 'error'); return; }
+  flightBookings.unshift({ from, to, airline, date, time, price, duration, time2: new Date().toLocaleString('zh-CN') });
+  saveAllBookings();
+  showToast('已预订「' + from + '→' + to + '」，可在个人中心查看', 'success');
+}
+function bookCar(name, type, seats, price) {
+  if (!isLoggedIn) { showToast('请先登录', 'error'); return; }
+  carBookings.unshift({ name, type, seats, price, time: new Date().toLocaleString('zh-CN') });
+  saveAllBookings();
+  showToast('已预订「' + name + '」，可在个人中心查看', 'success');
+}
+
+document.getElementById('loginClose').addEventListener('click', () => { loginOverlay.classList.remove('show'); document.body.style.overflow = ''; });
+loginOverlay.addEventListener('click', e => { if (e.target === loginOverlay) { loginOverlay.classList.remove('show'); document.body.style.overflow = ''; } });
+
+const loginContactGroup = document.getElementById('loginContactGroup'), loginContact = document.getElementById('loginContact');
+
+function setLoginMode(mode) {
+  loginMode = mode; formMsg.className = 'form-msg'; formMsg.textContent = ''; loginForm.reset();
+  if (mode === 'login') {
+    loginTitle.textContent = '登录';
+    loginSubmit.textContent = '登 录';
+    loginNameGroup.style.display = 'block';
+    loginContactGroup.style.display = 'none';
+    switchText.innerHTML = '还没有账号？<a id="switchLink">立即注册</a>';
+  } else {
+    loginTitle.textContent = '注册';
+    loginSubmit.textContent = '注 册';
+    loginNameGroup.style.display = 'block';
+    loginContactGroup.style.display = 'block';
+    switchText.innerHTML = '已有账号？<a id="switchLink">立即登录</a>';
+  }
+  document.getElementById('switchLink').addEventListener('click', () => { setLoginMode(loginMode === 'login' ? 'register' : 'login'); });
+}
+switchLink.addEventListener('click', () => { setLoginMode(loginMode === 'login' ? 'register' : 'login'); });
+
+// Simulated user database
+let usersDB = JSON.parse(localStorage.getItem('usersDB') || '[]');
+
+loginForm.addEventListener('submit', e => {
+  e.preventDefault();
+  const username = document.getElementById('loginName').value.trim();
+  const contact = loginContact.value.trim();
+  const password = document.getElementById('loginPassword').value.trim();
+
+  if (!username) { formMsg.className = 'form-msg error'; formMsg.textContent = '请输入用户名'; return; }
+  if (loginMode === 'register' && !contact) { formMsg.className = 'form-msg error'; formMsg.textContent = '请输入邮箱或手机号'; return; }
+  if (password.length < 4) { formMsg.className = 'form-msg error'; formMsg.textContent = '密码至少4位字符'; return; }
+
+  if (loginMode === 'register') {
+    // Check duplicate
+    if (usersDB.find(u => u.username === username)) { formMsg.className = 'form-msg error'; formMsg.textContent = '用户名已存在'; return; }
+    usersDB.push({ username, contact, password });
+    localStorage.setItem('usersDB', JSON.stringify(usersDB));
+    formMsg.className = 'form-msg success';
+    formMsg.textContent = '注册成功！请登录';
+    setTimeout(() => setLoginMode('login'), 1200);
+    return;
+  }
+
+  // Login
+  const user = usersDB.find(u => u.username === username && u.password === password);
+  if (!user) { formMsg.className = 'form-msg error'; formMsg.textContent = '用户名或密码错误'; return; }
+  formMsg.className = 'form-msg success';
+  formMsg.textContent = '登录成功！欢迎，' + username;
+  isLoggedIn = true; loggedInUser = username;
+  setTimeout(() => {
+    loginPrompt.style.display = 'none'; sidebarAvatar.style.display = 'flex'; sidebarUserInfo.classList.add('show');
+    sidebarName.textContent = username; sidebarEmail.textContent = user.contact; sidebarAvatar.textContent = username[0].toUpperCase();
+    loginOverlay.classList.remove('show'); document.body.style.overflow = ''; formMsg.className = 'form-msg';
+    if (pendingBookingDest) { document.getElementById('dest').value = pendingBookingDest; switchBcTab('form'); bookingCenter.classList.add('show'); document.body.style.overflow = 'hidden'; pendingBookingDest = null; }
+  }, 1000);
+});
+
+// ===== Booking Center =====
+const bookingCenter = document.getElementById('bookingCenter');
+let bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+
+function saveBookings() { localStorage.setItem('bookings', JSON.stringify(bookings)); updateBadge(); }
+function updateBadge() {
+  const badge = document.getElementById('navBadge');
+  if (bookings.length > 0) { badge.classList.add('show'); badge.textContent = bookings.length; }
+  else { badge.classList.remove('show'); }
+}
+
+function switchBcTab(name) {
+  document.querySelectorAll('.bc-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.bc-tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelector(`.bc-tab[data-tab="${name}"]`).classList.add('active');
+  document.getElementById('tab' + (name === 'form' ? 'Form' : 'List')).classList.add('active');
+  if (name === 'list') renderBookings();
+}
+document.querySelectorAll('.bc-tab').forEach(tab => { tab.addEventListener('click', () => switchBcTab(tab.dataset.tab)); });
+
+document.getElementById('bookingNavLink').addEventListener('click', e => {
+  e.preventDefault(); switchBcTab('form'); bookingCenter.classList.add('show');
+  document.body.style.overflow = 'hidden'; bookingCenter.scrollTop = 0;
+});
+document.getElementById('bcBack').addEventListener('click', () => { bookingCenter.classList.remove('show'); document.body.style.overflow = ''; });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (bookingCenter.classList.contains('show')) { bookingCenter.classList.remove('show'); document.body.style.overflow = ''; }
+  }
+});
+
+function escapeHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+const form = document.getElementById('bookingForm');
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  if (!isLoggedIn) {
+    pendingBookingDest = document.getElementById('dest').value;
+    showToast('请先登录后再进行预订', 'error');
+    setLoginMode('login'); loginOverlay.classList.add('show'); document.body.style.overflow = 'hidden'; return;
+  }
+  let valid = true;
+  const fields = [
+    { id:'dest', test:v => v!=='' },{ id:'name', test:v => v.trim()!=='' },
+    { id:'checkin', test:v => v!=='' },{ id:'checkout', test:v => v!=='' },
+    { id:'guests', test:v => { const n=+v; return n>=1&&n<=20; } },
+    { id:'email', test:v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) },
+  ];
+  fields.forEach(f => {
+    const el = document.getElementById(f.id), group = el.closest('.form-group');
+    if (!f.test(el.value)) { group.classList.add('error'); valid = false; } else { group.classList.remove('error'); }
+  });
+  const checkin = document.getElementById('checkin').value, checkout = document.getElementById('checkout').value;
+  if (checkin && checkout && checkout < checkin) {
+    document.getElementById('checkout').closest('.form-group').classList.add('error');
+    document.getElementById('checkout').closest('.form-group').querySelector('.error').textContent = '离开日期不能早于入住日期'; valid = false;
+  }
+  if (valid) {
+    bookings.unshift({ dest:document.getElementById('dest').value, name:document.getElementById('name').value.trim(), checkin:document.getElementById('checkin').value, checkout:document.getElementById('checkout').value, guests:document.getElementById('guests').value, email:document.getElementById('email').value.trim(), time:new Date().toLocaleString('zh-CN') });
+    saveBookings();
+    document.getElementById('modalMsg').textContent = `您的「${bookings[0].dest}」之旅已预订成功！可在"预订中心-我的预订"中查看。`;
+    document.getElementById('modalOverlay').classList.add('show');
+    form.reset(); document.querySelectorAll('.form-group.error').forEach(g => g.classList.remove('error'));
+  }
+});
+document.getElementById('modalClose').addEventListener('click', () => document.getElementById('modalOverlay').classList.remove('show'));
+document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) e.currentTarget.classList.remove('show'); });
+
+function renderBookings() {
+  const container = document.getElementById('bookingsContainer'); if (!container) return;
+  if (bookings.length === 0) { container.innerHTML = '<div class="booking-empty"><div class="empty-icon">📋</div><p>暂无预订记录</p><p style="margin-top:8px"><button onclick="switchBcTab(\'form\')">去预订一趟旅行</button></p></div>'; return; }
+  container.innerHTML = bookings.map((b,i) => `
+    <div class="booking-card"><div class="bc-info"><div class="bc-dest">${escapeHtml(b.dest)}</div><div class="bc-name">预订人：${escapeHtml(b.name)} · ${escapeHtml(b.email)}</div><div class="bc-dates"><span>入住：${b.checkin}</span><span>离开：${b.checkout}</span></div><div class="bc-guests">${b.guests} 位旅客</div></div><button class="bc-delete" data-index="${i}">取消预订</button></div>`).join('');
+  container.querySelectorAll('.bc-delete').forEach(btn => { btn.addEventListener('click', () => { const idx=+btn.dataset.index; const name = bookings[idx].dest; bookings.splice(idx,1); saveBookings(); renderBookings(); showToast('已取消「' + name + '」的预订', 'info'); }); });
+}
+
+function quickBook(destName) { hideDetail(); document.getElementById('dest').value = destName; switchBcTab('form'); bookingCenter.classList.add('show'); document.body.style.overflow = 'hidden'; bookingCenter.scrollTop = 0; }
+
+// ===== Scroll Reveal =====
+const observer = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ===== Sidebar nav active =====
+document.querySelectorAll('.sidebar-nav a[href^="#"]').forEach(link => {
+  link.addEventListener('click', () => { document.querySelectorAll('.sidebar-nav a').forEach(l => l.classList.remove('active')); link.classList.add('active'); });
+});
+
+// ===== Swipe-down to close overlays =====
+const swipeCloseEls = [
+  document.getElementById('detailOverlay'),
+  document.getElementById('hotelOverlay'),
+  document.getElementById('flightOverlay'),
+  document.getElementById('carOverlay'),
+  document.getElementById('bookingCenter'),
+  document.getElementById('profileOverlay'),
+];
+let swipeStartY = 0;
+swipeCloseEls.forEach(el => {
+  if (!el) return;
+  el.addEventListener('touchstart', e => { swipeStartY = e.changedTouches[0].screenY; }, { passive: true });
+  el.addEventListener('touchend', e => {
+    const diff = e.changedTouches[0].screenY - swipeStartY;
+    if (diff > 100 && el.scrollTop <= 0) {
+      el.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+  }, { passive: true });
+});
+
+updateBadge();
 </script>
 </body>
 </html>
