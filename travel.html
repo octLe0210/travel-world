@@ -1518,6 +1518,20 @@ document.addEventListener('click', e => { if (e.target.closest('.guide-card')) s
 
 // ===== Login & Register =====
 let isLoggedIn = false, loggedInUser = '', pendingBookingDest = null, loginMode = 'login';
+// 页面加载时恢复登录状态
+(function restoreLogin() {
+  const savedUser = localStorage.getItem('loggedInUser');
+  if (savedUser) {
+    isLoggedIn = true; loggedInUser = savedUser;
+    setTimeout(() => {
+      loginPrompt.style.display = 'none'; sidebarAvatar.style.display = 'flex'; sidebarUserInfo.classList.add('show');
+      sidebarName.textContent = savedUser; sidebarAvatar.textContent = savedUser[0].toUpperCase();
+      const db = JSON.parse(localStorage.getItem('usersDB') || '[]');
+      const user = db.find(u => u.username === savedUser);
+      if (user) sidebarEmail.textContent = user.contact;
+    }, 300);
+  }
+})();
 const loginOverlay = document.getElementById('loginOverlay'), loginTitle = document.getElementById('loginTitle');
 const loginSubmit = document.getElementById('loginSubmit'), loginNameGroup = document.getElementById('loginNameGroup');
 const switchLink = document.getElementById('switchLink'), formMsg = document.getElementById('formMsg');
@@ -1609,6 +1623,7 @@ function renderProfile() {
   body.innerHTML += '<button class="profile-logout" id="profileLogout">退出登录</button>';
   document.getElementById('profileLogout').addEventListener('click', () => {
     isLoggedIn = false; loggedInUser = '';
+    localStorage.removeItem('loggedInUser');
     loginPrompt.style.display = 'flex'; sidebarAvatar.style.display = 'none'; sidebarUserInfo.classList.remove('show');
     sidebarName.textContent = ''; sidebarEmail.textContent = '';
     document.getElementById('profileOverlay').classList.remove('show');
@@ -1697,6 +1712,7 @@ loginForm.addEventListener('submit', e => {
   formMsg.className = 'form-msg success';
   formMsg.textContent = '登录成功！欢迎，' + username;
   isLoggedIn = true; loggedInUser = username;
+  localStorage.setItem('loggedInUser', username);
   setTimeout(() => {
     loginPrompt.style.display = 'none'; sidebarAvatar.style.display = 'flex'; sidebarUserInfo.classList.add('show');
     sidebarName.textContent = username; sidebarEmail.textContent = user.contact; sidebarAvatar.textContent = username[0].toUpperCase();

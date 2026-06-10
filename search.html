@@ -147,7 +147,7 @@ function showToast(msg, type) {
 }
 
 function isLoggedIn() {
-  return localStorage.getItem('usersDB') !== null;
+  return localStorage.getItem('loggedInUser') !== null;
 }
 
 function requireLogin(callback) {
