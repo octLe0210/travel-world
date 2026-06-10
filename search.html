@@ -100,6 +100,19 @@ body {
 .empty-state { text-align: center; padding: 80px 20px; color: #bbb; }
 .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
 
+/* Toast */
+.search-toast {
+  position: fixed; top: 24px; left: 50%; transform: translateX(-50%);
+  padding: 14px 28px; border-radius: 12px; font-size: 14px; font-weight: 600;
+  z-index: 9999; box-shadow: 0 8px 28px rgba(0,0,0,0.18);
+  display: none; white-space: nowrap; animation: toastIn 0.35s ease;
+}
+.search-toast.show { display: block; }
+.search-toast.error { background: #e74c3c; color: #fff; }
+.search-toast.success { background: #27ae60; color: #fff; }
+.search-toast.info { background: #2c3e50; color: #fff; }
+@keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(-16px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+
 /* Responsive */
 @media (max-width: 767px) {
   .card-grid { grid-template-columns: 1fr; }
@@ -118,10 +131,28 @@ body {
   <p id="listSubtitle"></p>
 </div>
 
+<div class="search-toast" id="searchToast"></div>
+
 <div class="filters-bar" id="filtersBar"></div>
 <div class="list-container" id="listContainer"></div>
 
 <script>
+// ===== Toast & Login =====
+function showToast(msg, type) {
+  const t = document.getElementById('searchToast');
+  t.textContent = msg; t.className = 'search-toast ' + type + ' show';
+  clearTimeout(t._tid); t._tid = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function isLoggedIn() {
+  return localStorage.getItem('usersDB') !== null;
+}
+
+function requireLogin(callback) {
+  if (isLoggedIn()) { callback(); return; }
+  showToast('请先登录', 'error');
+}
+
 // ===== Data =====
 const allData = {
   hotels: {
@@ -331,7 +362,7 @@ function render() {
           <div class="meta">${h.features.map(f => `<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:#f0f2f5;color:#666;">${f}</span>`).join(' ')}</div>
           <div class="list-card-footer">
             <div class="price">¥${h.price.toLocaleString()} <small>${data.unit}</small></div>
-            <button class="btn" onclick="alert('已选择「${h.name}」')">预订</button>
+            <button class="btn" onclick="requireLogin(() => showToast('已选择「${h.name}」', 'success'))">预订</button>
           </div>
         </div>
       </div>
@@ -378,7 +409,7 @@ function render() {
         <div class="meta">${c.features.map(f => `<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:#f0f2f5;color:#666;">${f}</span>`).join(' ')}</div>
         <div class="list-card-footer">
           <div class="price">¥${c.price.toLocaleString()} <small>${data.unit}</small></div>
-          <button class="btn" onclick="alert('已选择「${c.name}」')">预订</button>
+          <button class="btn" onclick="requireLogin(() => showToast('已选择「${c.name}」', 'success'))">预订</button>
         </div>
       </div>
     </div>
