@@ -3,192 +3,390 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>旅游产品搜索 - 世界之旅</title>
-<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<title>世界之旅 - 产品列表</title>
+<link rel="preconnect" href="https://picsum.photos">
+<link rel="dns-prefetch" href="https://picsum.photos">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif; background: #f0f2f5; color: #333; min-height: 100vh; }
-.app-header { background: linear-gradient(135deg, #2c3e50, #34495e); color: #fff; padding: 28px 24px; text-align: center; }
-.app-header h1 { font-size: 26px; font-weight: 800; }
-.app-header p { font-size: 14px; opacity: 0.7; margin-top: 4px; }
-.layout { max-width: 1200px; margin: 0 auto; padding: 28px 24px; display: grid; grid-template-columns: 260px 1fr; gap: 28px; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif;
+  background: #f5f6fa; color: #333; min-height: 100vh;
+}
+
+/* Header */
+.list-header {
+  background: linear-gradient(135deg, #1a1d28, #252a3a);
+  color: #fff; padding: 32px 24px 28px; text-align: center;
+  position: sticky; top: 0; z-index: 100;
+}
+.list-header h1 { font-size: 26px; font-weight: 800; }
+.list-header p { font-size: 13px; opacity: 0.5; margin-top: 4px; }
+.back-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: rgba(255,255,255,0.6); font-size: 13px; margin-bottom: 12px;
+  text-decoration: none; transition: color 0.2s;
+}
+.back-link:hover { color: #f39c12; }
 
 /* Filters */
-.filters { background: #fff; border-radius: 14px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); height: fit-content; position: sticky; top: 24px; }
-.filters h3 { font-size: 16px; font-weight: 700; color: #2c3e50; margin-bottom: 20px; }
-.filter-group { margin-bottom: 22px; }
-.filter-group label { display: block; font-size: 13px; font-weight: 600; color: #666; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-.filter-group select, .filter-group input { width: 100%; padding: 10px 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; outline: none; }
-.filter-group select:focus, .filter-group input:focus { border-color: #f39c12; }
-.price-range { display: flex; gap: 10px; align-items: center; }
-.price-range input { flex: 1; }
-.price-range span { color: #999; font-size: 13px; }
-.checkbox-group { display: flex; flex-direction: column; gap: 8px; }
-.checkbox-group label { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #555; cursor: pointer; text-transform: none; letter-spacing: 0; font-weight: 400; }
-.checkbox-group input { width: auto; }
-.filter-btn { width: 100%; padding: 12px; background: #f39c12; color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; }
-.filter-btn:hover { background: #e67e22; }
+.filters-bar {
+  max-width: 1200px; margin: 24px auto 0; padding: 0 24px;
+  display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+}
+.filters-bar select, .filters-bar input {
+  padding: 10px 14px; border: 2px solid #e0e0e0; border-radius: 8px;
+  font-size: 14px; outline: none; font-family: inherit; background: #fff;
+}
+.filters-bar select:focus, .filters-bar input:focus { border-color: #f39c12; }
+.filters-bar .result-count { margin-left: auto; font-size: 14px; color: #888; }
 
-/* Results */
-.results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
-.results-header .count { font-size: 15px; color: #888; }
-.results-header .sort select { padding: 8px 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 13px; outline: none; }
-.result-list { display: flex; flex-direction: column; gap: 14px; }
-.result-card { background: #fff; border-radius: 14px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); display: flex; gap: 18px; transition: transform 0.2s; }
-.result-card:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-.result-card img { width: 200px; height: 150px; object-fit: cover; border-radius: 10px; flex-shrink: 0; }
-.result-info { flex: 1; display: flex; flex-direction: column; }
-.result-info h3 { font-size: 19px; color: #2c3e50; margin-bottom: 4px; }
-.result-info .desc { font-size: 13px; color: #888; margin-bottom: 10px; line-height: 1.5; }
-.result-meta { display: flex; gap: 16px; margin-top: auto; font-size: 13px; color: #999; }
-.result-meta span { display: flex; align-items: center; gap: 4px; }
-.result-price { text-align: right; display: flex; flex-direction: column; justify-content: flex-end; }
-.result-price .price { font-size: 26px; font-weight: 800; color: #e74c3c; }
-.result-price .unit { font-size: 12px; color: #999; }
-.result-price button { margin-top: 8px; padding: 10px 20px; background: #f39c12; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
-.result-price button:hover { background: #e67e22; }
-.no-results { text-align: center; padding: 60px 20px; color: #999; }
+/* Grid */
+.list-container {
+  max-width: 1200px; margin: 0 auto; padding: 28px 24px 80px;
+}
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 20px;
+}
 
+/* Card */
+.list-card {
+  background: #fff; border-radius: 14px; overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04); transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+.list-card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,0.1); }
+.list-card:active { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,0.1); }
+.list-card img {
+  width: 100%; height: 220px; object-fit: cover; display: block;
+}
+.list-card-body { padding: 20px 24px 24px; }
+.list-card-body h3 { font-size: 18px; font-weight: 700; color: #2c3e50; margin-bottom: 6px; }
+.list-card-body .meta { font-size: 13px; color: #888; margin-bottom: 8px; display: flex; gap: 16px; flex-wrap: wrap; }
+.list-card-body .desc { font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 12px; }
+.list-card-footer { display: flex; justify-content: space-between; align-items: center; }
+.list-card-footer .price { font-size: 22px; font-weight: 800; color: #e74c3c; }
+.list-card-footer .price small { font-size: 12px; color: #999; font-weight: 400; }
+.list-card-footer .btn {
+  padding: 10px 24px; background: linear-gradient(135deg, #f39c12, #e67e22);
+  color: #fff; border: none; border-radius: 50px; font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all 0.2s;
+}
+.list-card-footer .btn:hover { transform: scale(1.04); box-shadow: 0 4px 16px rgba(243,156,18,0.4); }
+
+/* Guide card variant */
+.guide-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+.guide-list-card {
+  background: #fff; border-radius: 16px; padding: 32px 24px; text-align: center;
+  border: 1px solid #eee; cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.guide-list-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.08); }
+.guide-list-card:active { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.08); }
+.guide-list-card .guide-icon {
+  width: 64px; height: 64px; margin: 0 auto 16px; background: #fff8e7;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px;
+}
+.guide-list-card h3 { font-size: 17px; margin-bottom: 8px; color: #2c3e50; }
+.guide-list-card p { color: #888; font-size: 13px; line-height: 1.5; }
+
+/* Empty */
+.empty-state { text-align: center; padding: 80px 20px; color: #bbb; }
+.empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+
+/* Responsive */
 @media (max-width: 767px) {
-  .layout { grid-template-columns: 1fr; }
-  .filters { position: static; }
-  .result-card { flex-direction: column; }
-  .result-card img { width: 100%; height: 200px; }
-  .result-price { flex-direction: row; align-items: center; justify-content: space-between; margin-top: 12px; }
+  .card-grid { grid-template-columns: 1fr; }
+  .guide-grid { grid-template-columns: 1fr; }
+  .list-card img { height: 180px; }
+  .filters-bar { flex-direction: column; }
+  .filters-bar .result-count { margin-left: 0; }
 }
 </style>
 </head>
 <body>
-<div id="root"></div>
 
-<script type="text/babel">
-const { useState, useMemo } = React;
+<div class="list-header" id="listHeader">
+  <a href="index.html" class="back-link">← 返回首页</a>
+  <h1 id="listTitle">产品列表</h1>
+  <p id="listSubtitle"></p>
+</div>
 
-const destinations = ['全部', '巴黎，法国', '马尔代夫', '东京，日本', '冰岛', '巴厘岛，印尼', '纽约，美国'];
-const dayOptions = [3, 5, 7, 10, 14];
+<div class="filters-bar" id="filtersBar"></div>
+<div class="list-container" id="listContainer"></div>
 
-const mockData = [
-  { id: 1, img: 'https://picsum.photos/seed/pkg1/400/300', title: '巴黎浪漫之旅', desc: '埃菲尔铁塔登顶 + 卢浮宫深度游 + 塞纳河晚宴', dest: '巴黎，法国', days: 7, price: 12999 },
-  { id: 2, img: 'https://picsum.photos/seed/pkg2/400/300', title: '马尔代夫蜜月套餐', desc: '水上别墅4晚 + 全包餐饮 + 浮潜出海 + SPA体验', dest: '马尔代夫', days: 5, price: 25999 },
-  { id: 3, img: 'https://picsum.photos/seed/pkg3/400/300', title: '东京深度自由行', desc: '浅草寺 + 秋叶原 + 迪士尼 + 箱根温泉一日游', dest: '东京，日本', days: 7, price: 8999 },
-  { id: 4, img: 'https://picsum.photos/seed/pkg4/400/300', title: '冰岛环岛自驾', desc: '蓝湖温泉 + 黄金圈 + 冰河湖 + 极光追猎', dest: '冰岛', days: 10, price: 32999 },
-  { id: 5, img: 'https://picsum.photos/seed/pkg5/400/300', title: '巴厘岛瑜伽静修', desc: '乌布山谷酒店 + 每日瑜伽课 + 梯田徒步 + 精油SPA', dest: '巴厘岛，印尼', days: 7, price: 6999 },
-  { id: 6, img: 'https://picsum.photos/seed/pkg6/400/300', title: '纽约城市漫游', desc: '自由女神 + 帝国大厦 + 百老汇 + 中央公园骑行', dest: '纽约，美国', days: 5, price: 15999 },
-  { id: 7, img: 'https://picsum.photos/seed/pkg7/400/300', title: '巴黎艺术之旅', desc: '奥赛博物馆 + 橘园美术馆 + 蒙马特艺术区探访', dest: '巴黎，法国', days: 5, price: 10999 },
-  { id: 8, img: 'https://picsum.photos/seed/pkg8/400/300', title: '东京美食之旅', desc: '筑地市场 + 米其林餐厅 + 居酒屋体验 + 寿司制作课', dest: '东京，日本', days: 5, price: 7999 },
-  { id: 9, img: 'https://picsum.photos/seed/pkg9/400/300', title: '马尔代夫家庭度假', desc: '家庭双卧别墅 + 儿童俱乐部 + 海豚巡航 + 无人岛野餐', dest: '马尔代夫', days: 7, price: 35999 },
-  { id: 10, img: 'https://picsum.photos/seed/pkg10/400/300', title: '纽约+华盛顿联游', desc: '双城连线 + 博物馆深度 + 名校探访 + 购物之旅', dest: '纽约，美国', days: 10, price: 21999 },
-];
+<script>
+// ===== Data =====
+const allData = {
+  hotels: {
+    title: '精选酒店',
+    subtitle: '全球百万酒店，随时随地预订',
+    items: [
+      { img:'luxury-hotel-suite', name:'巴黎丽兹酒店', loc:'法国·巴黎', price:4580, stars:5, features:['免费WiFi','含早餐','SPA','泳池'], rating:'4.9' },
+      { img:'overwater-villa', name:'马尔代夫W水疗度假村', loc:'马尔代夫·北马累环礁', price:12800, stars:5, features:['水上别墅','全包餐饮','潜水中心','私人管家'], rating:'5.0' },
+      { img:'japanese-ryokan', name:'东京安缦酒店', loc:'日本·东京', price:6200, stars:5, features:['日式庭院','温泉浴场','米其林餐厅','茶道体验'], rating:'4.8' },
+      { img:'city-skyscraper-hotel', name:'纽约广场酒店', loc:'美国·纽约', price:3800, stars:5, features:['中央公园景观','行政酒廊','健身中心','管家服务'], rating:'4.7' },
+      { img:'tropical-resort-pool', name:'巴厘岛阿雅娜度假村', loc:'印尼·巴厘岛', price:2200, stars:5, features:['悬崖泳池','私人海滩','瑜伽课程','烧烤晚餐'], rating:'4.8' },
+      { img:'spa-resort-iceland', name:'冰岛蓝湖Silica酒店', loc:'冰岛·格林达维克', price:5600, stars:4, features:['蓝湖温泉','极光叫醒','地热SPA','熔岩景观'], rating:'4.7' },
+      { img:'boutique-hotel-room', name:'巴黎香格里拉酒店', loc:'法国·巴黎', price:5200, stars:5, features:['埃菲尔铁塔景观','法式餐厅','私人阳台','古董装饰'], rating:'4.9' },
+      { img:'beachfront-resort', name:'马尔代夫瑞吉度假村', loc:'马尔代夫·达鲁环礁', price:15600, stars:5, features:['私人泳池','水上餐厅','鲸鲨浮潜','日落酒吧'], rating:'4.9' },
+      { img:'modern-hotel-lobby', name:'东京柏悦酒店', loc:'日本·东京', price:4800, stars:5, features:['新宿天际线','室内泳池','铁板烧','爵士酒吧'], rating:'4.8' },
+      { img:'garden-resort-bali', name:'巴厘岛丽思卡尔顿', loc:'印尼·巴厘岛', price:3200, stars:5, features:['海景套房','热带花园','儿童俱乐部','海鲜烧烤'], rating:'4.7' },
+    ],
+    filterFields: ['location'],
+    locations: ['全部','法国·巴黎','马尔代夫','日本·东京','美国·纽约','印尼·巴厘岛','冰岛'],
+    unit: '/晚起'
+  },
+  flights: {
+    title: '特价机票',
+    subtitle: '全球航线实时比价，找到最便宜的航班',
+    items: [
+      { img:'airplane-tokyo-sky', from:'北京', to:'东京', date:'6月15日', time:'08:30-12:45', airline:'中国国航 CA925', price:1680, direct:true, duration:'3h15m' },
+      { img:'flight-paris-clouds', from:'上海', to:'巴黎', date:'7月8日', time:'23:20-05:40+1', airline:'东方航空 MU553', price:3280, direct:true, duration:'12h20m' },
+      { img:'seaplane-maldives', from:'广州', to:'马尔代夫', date:'6月20日', time:'10:00-18:30', airline:'南方航空 CZ3059', price:4580, direct:false, duration:'11h30m' },
+      { img:'jfk-airport-terminal', from:'北京', to:'纽约', date:'8月1日', time:'13:00-14:30', airline:'国航 CA981', price:5200, direct:true, duration:'13h30m' },
+      { img:'tropical-island-aerial', from:'成都', to:'巴厘岛', date:'7月15日', time:'02:30-12:00', airline:'川航 3U3960', price:2350, direct:false, duration:'9h30m' },
+      { img:'iceland-aerial-view', from:'香港', to:'冰岛', date:'9月5日', time:'08:00-18:30', airline:'国泰 CX261', price:6800, direct:false, duration:'16h30m' },
+      { img:'airport-runway', from:'上海', to:'东京', date:'6月18日', time:'09:15-12:30', airline:'全日空 NH972', price:1980, direct:true, duration:'2h15m' },
+      { img:'clouds-from-plane', from:'北京', to:'巴黎', date:'7月1日', time:'01:00-06:20', airline:'法航 AF381', price:3680, direct:true, duration:'11h20m' },
+      { img:'terminal-departure', from:'广州', to:'纽约', date:'8月10日', time:'19:00-22:30', airline:'南航 CZ699', price:4800, direct:true, duration:'15h30m' },
+      { img:'flight-wing-view', from:'香港', to:'东京', date:'6月25日', time:'07:30-12:00', airline:'香港快运 UO622', price:1280, direct:true, duration:'3h30m' },
+    ],
+    filterFields: ['from','to'],
+    fromOptions: ['全部','北京','上海','广州','成都','香港'],
+    toOptions: ['全部','东京','巴黎','马尔代夫','纽约','巴厘岛','冰岛'],
+    unit: '/人起'
+  },
+  cars: {
+    title: '全球租车',
+    subtitle: '自由探索，从一辆好车开始',
+    items: [
+      { img:'compact-sedan-white', name:'丰田卡罗拉', type:'经济型', price:180, seats:5, trans:'自动', features:['省油','倒车影像','蓝牙'] },
+      { img:'offroad-jeep-suv', name:'Jeep牧马人', type:'SUV', price:420, seats:5, trans:'自动', features:['四驱','越野胎','导航'] },
+      { img:'luxury-sedan-bmw', name:'宝马3系', type:'豪华轿车', price:560, seats:5, trans:'自动', features:['天窗','真皮座椅','驾驶辅助'] },
+      { img:'electric-tesla-road', name:'特斯拉Model Y', type:'电动SUV', price:480, seats:5, trans:'自动', features:['自动驾驶','超级充电','全景天窗'] },
+      { img:'van-road-trip', name:'奔驰V-Class', type:'MPV', price:650, seats:7, trans:'自动', features:['大空间','航空座椅','家庭首选'] },
+      { img:'mini-cooper-street', name:'MINI Cooper', type:'个性小车', price:260, seats:4, trans:'自动', features:['灵活好停','复古造型','无钥匙启动'] },
+      { img:'suv-mountain-road', name:'丰田RAV4', type:'SUV', price:320, seats:5, trans:'自动', features:['自适应巡航','车道保持','大后备箱'] },
+      { img:'sedan-city-drive', name:'大众帕萨特', type:'经济型', price:200, seats:5, trans:'自动', features:['乘坐舒适','后排大空间','定速巡航'] },
+      { img:'sports-car-red', name:'保时捷911', type:'豪华轿车', price:1800, seats:2, trans:'自动', features:['敞篷','运动排气','弹射起步'] },
+      { img:'family-suv-white', name:'沃尔沃XC90', type:'SUV', price:520, seats:7, trans:'自动', features:['极致安全','空气净化','儿童座椅接口'] },
+    ],
+    filterFields: ['type'],
+    typeOptions: ['全部','经济型','SUV','豪华轿车','电动SUV','MPV','个性小车'],
+    unit: '/天起'
+  },
+  destinations: {
+    title: '热门目的地',
+    subtitle: '发现全球最美景点，获取专业旅行攻略',
+    items: [
+      { img:'eiffel-tower-paris', name:'巴黎，法国', desc:'浪漫之都，埃菲尔铁塔、卢浮宫、塞纳河畔，感受法式优雅与艺术气息。', stars:'★★★★★ 4.8' },
+      { img:'maldives-beach', name:'马尔代夫', desc:'印度洋上的珍珠，水屋别墅、珊瑚礁潜水、绝美日落，极致海岛度假。', stars:'★★★★★ 4.9' },
+      { img:'tokyo-shibuya', name:'东京，日本', desc:'传统与现代交融，浅草寺、涩谷、秋叶原，体验独特的日式文化。', stars:'★★★★☆ 4.7' },
+      { img:'iceland-aurora', name:'冰岛', desc:'极光之国，蓝湖温泉、黄金圈、黑沙滩，感受大自然的震撼奇观。', stars:'★★★★★ 4.8' },
+      { img:'bali-temple', name:'巴厘岛，印尼', desc:'众神之岛，梯田、神庙、冲浪海滩，在热带天堂寻找内心的宁静。', stars:'★★★★☆ 4.6' },
+      { img:'new-york-skyline', name:'纽约，美国', desc:'不夜城，自由女神、时代广场、中央公园，感受世界之都的活力。', stars:'★★★★☆ 4.7' },
+    ],
+    unit: ''
+  },
+  guides: {
+    title: '旅行攻略',
+    subtitle: '从签证到美食，一站式旅行指南',
+    items: [
+      { icon:'📋', name:'签证指南', desc:'各国签证政策、材料清单、办理流程详解，助你顺利出签。' },
+      { icon:'📅', name:'最佳旅行时间', desc:'全球目的地气候分析、旺季淡季对比，选对时间事半功倍。' },
+      { icon:'🎒', name:'行李清单', desc:'目的地和季节定制的打包清单，轻装上阵不遗漏。' },
+      { icon:'🚌', name:'当地交通', desc:'地铁、巴士、租车、轮渡全攻略，出行无忧。' },
+      { icon:'🍜', name:'美食推荐', desc:'不可错过的地道美食、网红餐厅与街头小吃全收录。' },
+      { icon:'🛡️', name:'安全提示', desc:'旅行保险、紧急联系方式、当地法律法规与安全注意事项。' },
+    ],
+    unit: ''
+  }
+};
 
-function App() {
-  const [dest, setDest] = useState('全部');
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(50000);
-  const [selDays, setSelDays] = useState([]);
-  const [sort, setSort] = useState('default');
+// ===== Router =====
+const params = new URLSearchParams(window.location.search);
+const type = params.get('type') || 'destinations';
+const data = allData[type] || allData.destinations;
 
-  const toggleDay = (d) => {
-    setSelDays(prev => prev.includes(d) ? prev.filter(x => x !== d) : [...prev, d]);
-  };
+document.getElementById('listTitle').textContent = data.title;
+document.getElementById('listSubtitle').textContent = data.subtitle;
 
-  const reset = () => {
-    setDest('全部'); setMinPrice(0); setMaxPrice(50000); setSelDays([]); setSort('default');
-  };
+// ===== Render filters =====
+let activeFilter = '全部';
+const filtersBar = document.getElementById('filtersBar');
 
-  const results = useMemo(() => {
-    let list = mockData.filter(item => {
-      if (dest !== '全部' && item.dest !== dest) return false;
-      if (item.price < minPrice || item.price > maxPrice) return false;
-      if (selDays.length > 0 && !selDays.includes(item.days)) return false;
-      return true;
-    });
-    if (sort === 'price-asc') list.sort((a, b) => a.price - b.price);
-    else if (sort === 'price-desc') list.sort((a, b) => b.price - a.price);
-    else if (sort === 'days') list.sort((a, b) => a.days - b.days);
-    return list;
-  }, [dest, minPrice, maxPrice, selDays, sort]);
-
-  return (
-    <div>
-      <div className="app-header">
-        <h1>发现你的旅行</h1>
-        <p>搜索并筛选最适合你的旅游产品</p>
-      </div>
-      <div className="layout">
-        {/* Filters */}
-        <aside className="filters">
-          <h3>筛选条件</h3>
-          <div className="filter-group">
-            <label>目的地</label>
-            <select value={dest} onChange={e => setDest(e.target.value)}>
-              {destinations.map(d => <option key={d} value={d}>{d}</option>)}
-            </select>
-          </div>
-          <div className="filter-group">
-            <label>价格区间（元）</label>
-            <div className="price-range">
-              <input type="number" value={minPrice} onChange={e => setMinPrice(+e.target.value)} min={0} />
-              <span>—</span>
-              <input type="number" value={maxPrice} onChange={e => setMaxPrice(+e.target.value)} min={0} />
-            </div>
-          </div>
-          <div className="filter-group">
-            <label>出行天数</label>
-            <div className="checkbox-group">
-              {dayOptions.map(d => (
-                <label key={d}><input type="checkbox" checked={selDays.includes(d)} onChange={() => toggleDay(d)} /> {d} 天</label>
-              ))}
-            </div>
-          </div>
-          <button className="filter-btn" onClick={reset}>重置筛选</button>
-        </aside>
-
-        {/* Results */}
-        <main>
-          <div className="results-header">
-            <span className="count">共 {results.length} 个产品</span>
-            <div className="sort">
-              <select value={sort} onChange={e => setSort(e.target.value)}>
-                <option value="default">默认排序</option>
-                <option value="price-asc">价格从低到高</option>
-                <option value="price-desc">价格从高到低</option>
-                <option value="days">天数从少到多</option>
-              </select>
-            </div>
-          </div>
-          {results.length === 0 ? (
-            <div className="no-results"><p>没有匹配的旅游产品，试试调整筛选条件</p></div>
-          ) : (
-            <div className="result-list">
-              {results.map(item => (
-                <div className="result-card" key={item.id}>
-                  <img src={item.img} alt={item.title} />
-                  <div className="result-info">
-                    <h3>{item.title}</h3>
-                    <p className="desc">{item.desc}</p>
-                    <div className="result-meta">
-                      <span>📍 {item.dest}</span>
-                      <span>📅 {item.days} 天</span>
-                    </div>
-                  </div>
-                  <div className="result-price">
-                    <div className="price">¥{item.price.toLocaleString()}</div>
-                    <div className="unit">起/人</div>
-                    <button onClick={() => alert(`已选择「${item.title}」，即将跳转预订页面`)}>立即预订</button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </main>
-      </div>
-    </div>
-  );
+if (type === 'hotels' && data.locations) {
+  filtersBar.innerHTML = `
+    <select id="filterSelect">
+      ${data.locations.map(l => `<option>${l}</option>`).join('')}
+    </select>
+    <span class="result-count" id="resultCount"></span>
+  `;
+  document.getElementById('filterSelect').addEventListener('change', e => {
+    activeFilter = e.target.value;
+    render();
+  });
+} else if (type === 'flights' && data.fromOptions) {
+  filtersBar.innerHTML = `
+    <select id="filterFrom">
+      ${data.fromOptions.map(o => `<option>${o}</option>`).join('')}
+    </select>
+    <select id="filterTo">
+      ${data.toOptions.map(o => `<option>${o}</option>`).join('')}
+    </select>
+    <span class="result-count" id="resultCount"></span>
+  `;
+  document.getElementById('filterFrom').addEventListener('change', () => {
+    render();
+  });
+  document.getElementById('filterTo').addEventListener('change', () => {
+    render();
+  });
+} else if (type === 'cars' && data.typeOptions) {
+  filtersBar.innerHTML = `
+    <select id="filterSelect">
+      ${data.typeOptions.map(o => `<option>${o}</option>`).join('')}
+    </select>
+    <span class="result-count" id="resultCount"></span>
+  `;
+  document.getElementById('filterSelect').addEventListener('change', e => {
+    activeFilter = e.target.value;
+    render();
+  });
+} else {
+  filtersBar.innerHTML = `<span class="result-count" id="resultCount"></span>`;
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+// ===== Render =====
+function render() {
+  const container = document.getElementById('listContainer');
+  let list = data.items;
+
+  // Apply filters
+  if (type === 'hotels') {
+    if (activeFilter && activeFilter !== '全部') list = list.filter(h => h.loc.includes(activeFilter));
+  } else if (type === 'flights') {
+    const fromVal = document.getElementById('filterFrom')?.value;
+    const toVal = document.getElementById('filterTo')?.value;
+    if (fromVal && fromVal !== '全部') list = list.filter(f => f.from === fromVal);
+    if (toVal && toVal !== '全部') list = list.filter(f => f.to === toVal);
+  } else if (type === 'cars') {
+    if (activeFilter && activeFilter !== '全部') list = list.filter(c => c.type === activeFilter);
+  }
+
+  // Update count
+  const countEl = document.getElementById('resultCount');
+  if (countEl) countEl.textContent = `共 ${list.length} 条`;
+
+  if (!list.length) {
+    container.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>没有匹配的结果</p></div>';
+    return;
+  }
+
+  // Guides use a different layout
+  if (type === 'guides') {
+    container.innerHTML = `<div class="guide-grid">${list.map(g => `
+      <div class="guide-list-card">
+        <div class="guide-icon">${g.icon}</div>
+        <h3>${g.name}</h3>
+        <p>${g.desc}</p>
+      </div>
+    `).join('')}</div>`;
+    return;
+  }
+
+  // Destinations use a specific layout
+  if (type === 'destinations') {
+    container.innerHTML = `<div class="card-grid">${list.map(d => `
+      <div class="list-card">
+        <img src="https://picsum.photos/seed/${d.img}/600/400" alt="${d.name}" loading="lazy">
+        <div class="list-card-body">
+          <h3>${d.name}</h3>
+          <div class="meta"><span style="color:#f39c12">${d.stars}</span></div>
+          <p class="desc">${d.desc}</p>
+        </div>
+      </div>
+    `).join('')}</div>`;
+    return;
+  }
+
+  // Hotels
+  if (type === 'hotels') {
+    container.innerHTML = `<div class="card-grid">${list.map(h => `
+      <div class="list-card">
+        <img src="https://picsum.photos/seed/${h.img}/600/400" alt="${h.name}" loading="lazy">
+        <div class="list-card-body">
+          <h3>${h.name} <span style="color:#f39c12;font-size:14px">${'★'.repeat(h.stars)}</span></h3>
+          <div class="meta">
+            <span>📍 ${h.loc}</span>
+            <span>⭐ ${h.rating} 分</span>
+          </div>
+          <div class="meta">${h.features.map(f => `<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:#f0f2f5;color:#666;">${f}</span>`).join(' ')}</div>
+          <div class="list-card-footer">
+            <div class="price">¥${h.price.toLocaleString()} <small>${data.unit}</small></div>
+            <button class="btn" onclick="alert('已选择「${h.name}」')">预订</button>
+          </div>
+        </div>
+      </div>
+    `).join('')}</div>`;
+    return;
+  }
+
+  // Flights
+  if (type === 'flights') {
+    container.innerHTML = `<div class="card-grid">${list.map(f => `
+      <div class="list-card">
+        <img src="https://picsum.photos/seed/${f.img}/600/400" alt="${f.from}→${f.to}" loading="lazy">
+        <div class="list-card-body">
+          <h3>${f.from} → ${f.to}</h3>
+          <div class="meta">
+            <span>🛫 ${f.airline}</span>
+            <span>📅 ${f.date}</span>
+            <span>🕐 ${f.time}</span>
+          </div>
+          <div class="meta">
+            <span style="font-size:11px;padding:2px 8px;border-radius:10px;background:#f0f2f5;color:#666;">⏱ ${f.duration}</span>
+            <span style="font-size:11px;padding:2px 8px;border-radius:10px;background:${f.direct?'#e8f8e8':'#fff3e0'};color:${f.direct?'#27ae60':'#e67e22'};">${f.direct?'直飞':'中转'}</span>
+          </div>
+          <div class="list-card-footer">
+            <div class="price">¥${f.price.toLocaleString()} <small>${data.unit}</small></div>
+            <button class="btn" onclick="alert('已选择「${f.from}→${f.to}」')">预订</button>
+          </div>
+        </div>
+      </div>
+    `).join('')}</div>`;
+    return;
+  }
+
+  // Cars (default)
+  container.innerHTML = `<div class="card-grid">${list.map(c => `
+    <div class="list-card">
+      <img src="https://picsum.photos/seed/${c.img}/600/400" alt="${c.name}" loading="lazy">
+      <div class="list-card-body">
+        <h3>${c.name}</h3>
+        <div class="meta">
+          <span>🚘 ${c.type}</span>
+          <span>🪑 ${c.seats}座</span>
+          <span>⚙ ${c.trans}</span>
+        </div>
+        <div class="meta">${c.features.map(f => `<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:#f0f2f5;color:#666;">${f}</span>`).join(' ')}</div>
+        <div class="list-card-footer">
+          <div class="price">¥${c.price.toLocaleString()} <small>${data.unit}</small></div>
+          <button class="btn" onclick="alert('已选择「${c.name}」')">预订</button>
+        </div>
+      </div>
+    </div>
+  `).join('')}</div>`;
+}
+
+render();
 </script>
 </body>
 </html>
