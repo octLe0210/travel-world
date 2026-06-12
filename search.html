@@ -117,6 +117,33 @@ body {
 .search-toast.info { background: #2c3e50; color: #fff; }
 @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(-16px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
 
+/* Sort tabs */
+.sort-tabs {
+  max-width: 1200px; margin: 0 auto; padding: 0 24px;
+  display: flex; gap: 0; position: relative;
+  border-bottom: 2px solid #e8e0d5;
+}
+.sort-tab {
+  padding: 10px 20px; font-size: 14px; font-weight: 600; color: #8b7e6a;
+  cursor: pointer; border: none; background: none;
+  transition: color 0.25s;
+}
+.sort-tab:hover, .sort-tab.active { color: #c67b4b; }
+
+/* Pagination */
+.pagination {
+  max-width: 1200px; margin: 0 auto; padding: 0 24px 60px;
+  display: flex; justify-content: center; align-items: center; gap: 6px;
+}
+.page-btn {
+  min-width: 36px; height: 36px; padding: 0 10px; line-height: 36px; text-align: center;
+  border: 1px solid #e0d5c5; background: #fffdf9; color: #8b7e6a;
+  border-radius: 4px; font-size: 14px; cursor: pointer; transition: all 0.2s;
+}
+.page-btn:hover { border-color: #c67b4b; color: #c67b4b; }
+.page-btn.active { background: #c67b4b; color: #fff; border-color: #c67b4b; }
+.page-btn.disabled { opacity: 0.3; pointer-events: none; }
+
 /* Region tags */
 .region-tags {
   display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px;
@@ -128,38 +155,6 @@ body {
 }
 .region-tag:hover { border-color: #f39c12; color: #f39c12; }
 .region-tag.active { background: #f39c12; color: #fff; border-color: #f39c12; }
-
-/* Sort tabs with animated underline */
-.sort-tabs {
-  display: flex; gap: 0; position: relative;
-  border-bottom: 2px solid #e8e0d5; margin-bottom: 24px;
-}
-.sort-tab {
-  padding: 10px 20px; font-size: 14px; font-weight: 600; color: #8b7e6a;
-  cursor: pointer; border: none; background: none; position: relative;
-  transition: color 0.25s;
-}
-.sort-tab:hover { color: #c67b4b; }
-.sort-tab.active { color: #c67b4b; }
-.sort-tab-underline {
-  position: absolute; bottom: -2px; height: 2px; background: #c67b4b;
-  transition: left 0.3s ease, width 0.3s ease; border-radius: 1px;
-}
-
-/* Pagination */
-.pagination {
-  display: flex; justify-content: center; align-items: center; gap: 6px;
-  margin-top: 32px; padding-top: 24px; border-top: 1px solid #e8e0d5;
-}
-.page-btn {
-  min-width: 36px; height: 36px; padding: 0 10px;
-  border: 1px solid #e0d5c5; background: #fffdf9; color: #8b7e6a;
-  border-radius: 4px; font-size: 14px; cursor: pointer; transition: all 0.2s;
-}
-.page-btn:hover { border-color: #c67b4b; color: #c67b4b; }
-.page-btn.active { background: #c67b4b; color: #fff; border-color: #c67b4b; }
-.page-btn:disabled { opacity: 0.3; cursor: default; }
-.page-info { font-size: 13px; color: #8b7e6a; margin: 0 12px; }
 
 /* Responsive */
 @media (max-width: 767px) {
@@ -350,41 +345,7 @@ const regionMap = {
   '夏威夷，美国': '美洲', '巴塞罗那，西班牙': '欧洲', '布拉格，捷克': '欧洲',
   '清迈，泰国': '亚洲', '洛杉矶，美国': '美洲',
 };
-var activeRegion = '全部';
-var sortMode = 'default';
-var currentPage = 1;
-const pageSize = 6;
-
-// Render sort tabs
-(function renderSortTabs() {
-  const tabs = ['最新', '最热', '推荐'];
-  const container = document.getElementById('sortTabs');
-  container.innerHTML = tabs.map((t, i) =>
-    `<button class="sort-tab${i === 0 ? ' active' : ''}" data-sort="${i}">${t}</button>`
-  ).join('') + '<span class="sort-tab-underline"></span>';
-  // Add click handlers
-  container.querySelectorAll('.sort-tab').forEach(btn => {
-    btn.addEventListener('click', () => {
-      container.querySelectorAll('.sort-tab').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      sortMode = ['recent', 'hot', 'recommend'][parseInt(btn.dataset.sort)];
-      // Animate underline
-      const underline = container.querySelector('.sort-tab-underline');
-      gsap.to(underline, { left: btn.offsetLeft, width: btn.offsetWidth, duration: 0.3, ease: 'power2.out' });
-      currentPage = 1;
-      render();
-    });
-  });
-  // Set initial underline position
-  setTimeout(() => {
-    const activeBtn = container.querySelector('.sort-tab.active');
-    const underline = container.querySelector('.sort-tab-underline');
-    if (activeBtn && underline) {
-      underline.style.left = activeBtn.offsetLeft + 'px';
-      underline.style.width = activeBtn.offsetWidth + 'px';
-    }
-  }, 100);
-})();
+let activeRegion = '全部';
 
 document.getElementById('listTitle').textContent = data.title;
 document.getElementById('listSubtitle').textContent = data.subtitle;
@@ -395,19 +356,14 @@ const filtersBar = document.getElementById('filtersBar');
 
 if (type === 'hotels' && data.locations) {
   filtersBar.innerHTML = `
-    <div class="region-tags" id="filterTags">
-      ${data.locations.map(l => `<span class="region-tag${l === '全部' ? ' active' : ''}" data-val="${l}">${l}</span>`).join('')}
-    </div>
+    <select id="filterSelect">
+      ${data.locations.map(l => `<option>${l}</option>`).join('')}
+    </select>
     <span class="result-count" id="resultCount"></span>
   `;
-  document.querySelectorAll('#filterTags .region-tag').forEach(tag => {
-    tag.addEventListener('click', () => {
-      document.querySelectorAll('#filterTags .region-tag').forEach(t => t.classList.remove('active'));
-      tag.classList.add('active');
-      activeFilter = tag.dataset.val;
-      currentPage = 1;
-      render();
-    });
+  document.getElementById('filterSelect').addEventListener('change', e => {
+    activeFilter = e.target.value;
+    render();
   });
 } else if (type === 'flights' && data.fromOptions) {
   filtersBar.innerHTML = `
@@ -427,19 +383,14 @@ if (type === 'hotels' && data.locations) {
   });
 } else if (type === 'cars' && data.typeOptions) {
   filtersBar.innerHTML = `
-    <div class="region-tags" id="filterTags">
-      ${data.typeOptions.map(o => `<span class="region-tag${o === '全部' ? ' active' : ''}" data-val="${o}">${o}</span>`).join('')}
-    </div>
+    <select id="filterSelect">
+      ${data.typeOptions.map(o => `<option>${o}</option>`).join('')}
+    </select>
     <span class="result-count" id="resultCount"></span>
   `;
-  document.querySelectorAll('#filterTags .region-tag').forEach(tag => {
-    tag.addEventListener('click', () => {
-      document.querySelectorAll('#filterTags .region-tag').forEach(t => t.classList.remove('active'));
-      tag.classList.add('active');
-      activeFilter = tag.dataset.val;
-      currentPage = 1;
-      render();
-    });
+  document.getElementById('filterSelect').addEventListener('change', e => {
+    activeFilter = e.target.value;
+    render();
   });
 } else if (type === 'destinations') {
   filtersBar.innerHTML = `
@@ -467,7 +418,22 @@ if (type === 'hotels' && data.locations) {
 // ===== Render =====
 function render() {
   const container = document.getElementById('listContainer');
-  let list = data.items;
+  let list = data.items.slice();
+
+  // Sort
+  if (sortMode === 'hot') { list.sort(function(a, b) { return b.price - a.price; }); }
+  else if (sortMode === 'recommend') {
+    if (type === 'hotels') list.sort(function(a, b) { return parseFloat(b.rating) - parseFloat(a.rating); });
+    else if (type === 'destinations') list.sort(function(a, b) { return parseFloat((b.stars || '').split(' ')[1] || 0) - parseFloat((a.stars || '').split(' ')[1] || 0); });
+    else if (type === 'cars') list.sort(function(a, b) { return b.seats - a.seats; });
+    else list.sort(function(a, b) { return (b.direct ? 1 : 0) - (a.direct ? 1 : 0); });
+  } else if (sortMode === 'recent') { list.reverse(); }
+
+  // Paginate
+  var totalPages = Math.ceil(list.length / pageSize);
+  if (currentPage > totalPages) currentPage = totalPages || 1;
+  var start = (currentPage - 1) * pageSize;
+  var pagedList = list.slice(start, start + pageSize);
 
   // Apply filters
   if (type === 'hotels') {
@@ -481,27 +447,9 @@ function render() {
     if (activeFilter && activeFilter !== '全部') list = list.filter(c => c.type === activeFilter);
   }
 
-  // Sort
-  if (sortMode === 'hot') {
-    list.sort((a, b) => b.price - a.price);
-  } else if (sortMode === 'recommend') {
-    if (type === 'hotels') list.sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating));
-    else if (type === 'destinations') list.sort((a, b) => parseFloat(b.stars.split(' ')[1] || 0) - parseFloat(a.stars.split(' ')[1] || 0));
-    else if (type === 'cars') list.sort((a, b) => b.seats - a.seats);
-    else list.sort((a, b) => (b.direct ? 1 : 0) - (a.direct ? 1 : 0));
-  } else if (sortMode === 'recent') {
-    list.reverse();
-  }
-
-  // Paginate
-  const totalPages = Math.ceil(list.length / pageSize);
-  if (currentPage > totalPages) currentPage = totalPages || 1;
-  const start = (currentPage - 1) * pageSize;
-  const pagedList = list.slice(start, start + pageSize);
-
   // Update count
   const countEl = document.getElementById('resultCount');
-  if (countEl) countEl.textContent = `共 ${list.length} 条，第 ${currentPage}/${totalPages || 1} 页`;
+  if (countEl) countEl.textContent = `共 ${list.length} 条`;
 
   if (!list.length) {
     container.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>没有匹配的结果</p></div>';
@@ -510,13 +458,10 @@ function render() {
 
   // Guides use a different layout
   if (type === 'guides') {
-    container.innerHTML = `<div class="guide-grid">${pagedList.map(g => `
-      <div class="guide-list-card">
-        <div class="guide-icon">${g.icon}</div>
-        <h3>${g.name}</h3>
-        <p>${g.desc}</p>
-      </div>
-    `).join('')}</div>`;
+    container.innerHTML = '<div class="guide-grid">' + pagedList.map(function(g) {
+      return '<div class="guide-list-card"><div class="guide-icon">' + g.icon + '</div><h3>' + g.name + '</h3><p>' + g.desc + '</p></div>';
+    }).join('') + '</div>';
+    renderPagination(list.length);
     return;
   }
 
@@ -527,16 +472,10 @@ function render() {
 
   // Destinations use a specific layout
   if (type === 'destinations') {
-    container.innerHTML = `<div class="card-grid">${pagedList.map(d => `
-      <div class="list-card">
-        <img src="https://picsum.photos/seed/${d.img}/600/400" alt="${d.name}" loading="lazy">
-        <div class="list-card-body">
-          <h3>${d.name}</h3>
-          <div class="meta"><span style="color:#f39c12">${d.stars}</span></div>
-          <p class="desc">${d.desc}</p>
-        </div>
-      </div>
-    `).join('')}</div>`;
+    container.innerHTML = '<div class="card-grid">' + pagedList.map(function(d) {
+      return '<div class="list-card"><img src="https://picsum.photos/seed/' + d.img + '/600/400" alt="' + d.name + '" loading="lazy"><div class="list-card-body"><h3>' + d.name + '</h3><div class="meta"><span style="color:#f39c12">' + d.stars + '</span></div><p class="desc">' + d.desc + '</p></div></div>';
+    }).join('') + '</div>';
+    renderPagination(list.length);
     return;
   }
 
@@ -559,6 +498,7 @@ function render() {
         </div>
       </div>
     `).join('')}</div>`;
+    renderPagination(list.length);
     return;
   }
 
@@ -585,48 +525,70 @@ function render() {
         </div>
       </div>
     `).join('')}</div>`;
+    renderPagination(list.length);
     return;
   }
 
   // Cars (default)
-  container.innerHTML = `<div class="card-grid">${pagedList.map(c => `
-    <div class="list-card">
-      <img src="https://picsum.photos/seed/${c.img}/600/400" alt="${c.name}" loading="lazy">
-      <div class="list-card-body">
-        <h3>${c.name}</h3>
-        <div class="meta">
-          <span>🚘 ${c.type}</span>
-          <span>🪑 ${c.seats}座</span>
-          <span>⚙ ${c.trans}</span>
-        </div>
-        <div class="meta">${c.features.map(f => `<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:#f0f2f5;color:#666;">${f}</span>`).join(' ')}</div>
-        <div class="list-card-footer">
-          <div class="price">¥${c.price.toLocaleString()} <small>${data.unit}</small></div>
-          <button class="btn" onclick="requireLogin(() => showToast('已选择「${c.name}」', 'success'))">预订</button>
-        </div>
-      </div>
-    </div>
-  `).join('')}</div>`;
-  }
+  container.innerHTML = '<div class="card-grid">' + pagedList.map(function(c) {
+    var featuresHtml = c.features.map(function(f) { return '<span style=\"font-size:11px;padding:2px 8px;border-radius:10px;background:#f0f2f5;color:#666;\">' + f + '</span>'; }).join(' ');
+    return '<div class=\"list-card\"><img src=\"https://picsum.photos/seed/' + c.img + '/600/400\" alt=\"' + c.name + '\" loading=\"lazy\"><div class=\"list-card-body\"><h3>' + c.name + '</h3><div class=\"meta\"><span>🚘 ' + c.type + '</span><span>🪑 ' + c.seats + '座</span><span>⚙ ' + c.trans + '</span></div><div class=\"meta\">' + featuresHtml + '</div><div class=\"list-card-footer\"><div class=\"price\">¥' + c.price.toLocaleString() + ' <small>' + data.unit + '</small></div><button class=\"btn\" onclick=\"requireLogin(function() { showToast(\'已选择「' + c.name + '」\', \'success\'); })\">预订</button></div></div></div>';
+  }).join('') + '</div>';
+  renderPagination(list.length);
+}
 
-  // Pagination
-  const pagEl = document.getElementById('pagination');
-  if (totalPages > 1) {
-    let html = `<button class="page-btn" ${currentPage <= 1 ? 'disabled' : ''} onclick="currentPage=1;render();">«</button>`;
-    html += `<button class="page-btn" ${currentPage <= 1 ? 'disabled' : ''} onclick="currentPage--;render();">‹</button>`;
-    for (let p = 1; p <= totalPages; p++) {
-      if (p === 1 || p === totalPages || (p >= currentPage - 2 && p <= currentPage + 2)) {
-        html += `<button class="page-btn${p === currentPage ? ' active' : ''}" onclick="currentPage=${p};render();">${p}</button>`;
-      } else if (p === currentPage - 3 || p === currentPage + 3) {
-        html += '<span style="color:#8b7e6a">…</span>';
-      }
+// ===== Sort + Pagination =====
+var sortMode = 'default';
+var currentPage = 1;
+var pageSize = 6;
+
+(function setupSortTabs() {
+  var tabs = ['最新', '最热', '推荐'];
+  var container = document.getElementById('sortTabs');
+  var html = '';
+  for (var i = 0; i < tabs.length; i++) {
+    html += '<button class="sort-tab' + (i === 0 ? ' active' : '') + '">' + tabs[i] + '</button>';
+  }
+  container.innerHTML = html;
+  var btns = container.querySelectorAll('.sort-tab');
+  for (var j = 0; j < btns.length; j++) {
+    btns[j].addEventListener('click', function(idx) {
+      return function() {
+        for (var k = 0; k < btns.length; k++) { btns[k].classList.remove('active'); }
+        btns[idx].classList.add('active');
+        sortMode = ['recent', 'hot', 'recommend'][idx];
+        currentPage = 1;
+        render();
+      };
+    }(j));
+  }
+})();
+
+function renderPagination(totalItems) {
+  var totalPages = Math.ceil(totalItems / pageSize);
+  if (totalPages < 1) totalPages = 1;
+  if (currentPage > totalPages) currentPage = totalPages;
+  var pagEl = document.getElementById('pagination');
+  if (totalPages <= 1) { pagEl.innerHTML = ''; return; }
+  var h = '';
+  h += '<span class="page-btn' + (currentPage <= 1 ? ' disabled' : '') + '" data-page="1">«</span>';
+  h += '<span class="page-btn' + (currentPage <= 1 ? ' disabled' : '') + '" data-page="' + (currentPage - 1) + '">‹</span>';
+  for (var p = 1; p <= totalPages; p++) {
+    if (p === 1 || p === totalPages || (p >= currentPage - 2 && p <= currentPage + 2)) {
+      h += '<span class="page-btn' + (p === currentPage ? ' active' : '') + '" data-page="' + p + '">' + p + '</span>';
+    } else if (p === currentPage - 3 || p === currentPage + 3) {
+      h += '<span>…</span>';
     }
-    html += `<button class="page-btn" ${currentPage >= totalPages ? 'disabled' : ''} onclick="currentPage++;render();">›</button>`;
-    html += `<button class="page-btn" ${currentPage >= totalPages ? 'disabled' : ''} onclick="currentPage=${totalPages};render();">»</button>`;
-    html += `<span class="page-info">${currentPage}/${totalPages}</span>`;
-    pagEl.innerHTML = html;
-  } else {
-    pagEl.innerHTML = '';
+  }
+  h += '<span class="page-btn' + (currentPage >= totalPages ? ' disabled' : '') + '" data-page="' + (currentPage + 1) + '">›</span>';
+  h += '<span class="page-btn' + (currentPage >= totalPages ? ' disabled' : '') + '" data-page="' + totalPages + '">»</span>';
+  pagEl.innerHTML = h;
+  var btns = pagEl.querySelectorAll('.page-btn');
+  for (var b = 0; b < btns.length; b++) {
+    btns[b].addEventListener('click', function() {
+      var p = parseInt(this.getAttribute('data-page'));
+      if (!isNaN(p) && p >= 1 && p <= totalPages) { currentPage = p; render(); }
+    });
   }
 }
 
@@ -635,23 +597,20 @@ render();
 // ===== GSAP Animations =====
 gsap.registerPlugin(ScrollTrigger);
 
-// Card scroll reveal
+// Card scroll reveal (deferred for dynamically rendered content)
 setTimeout(() => {
   document.querySelectorAll('.card-grid, .guide-grid').forEach(grid => {
-    const cards = Array.from(grid.children);
+    const cards = grid.children;
     if (!cards.length) return;
-    const isInView = grid.getBoundingClientRect().top < window.innerHeight;
-    cards.forEach(card => {
-      ScrollTrigger.create({
-        trigger: card, start: 'top 92%',
-        onEnter: () => { gsap.to(card, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }); },
-        onLeaveBack: () => { gsap.to(card, { opacity: 0, y: 30, duration: 0.3 }); },
-        onEnterBack: () => { gsap.to(card, { opacity: 1, y: 0, duration: 0.3 }); },
-      });
-      if (!isInView) { gsap.set(card, { opacity: 0, y: 30 }); }
-    });
+    gsap.fromTo(cards,
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1, y: 0, duration: 0.4, stagger: 0.06, ease: 'power2.out',
+        scrollTrigger: { trigger: grid, start: 'top 88%', toggleActions: 'play none none reverse' }
+      }
+    );
   });
-}, 300);
+}, 200);
 
 // Button micro-interactions (delegate on body)
 document.body.addEventListener('mouseenter', e => {
