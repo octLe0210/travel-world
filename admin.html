@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>后台管理 - 世界之旅</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif;background:#f7f3ed;color:#3d3628;display:flex;min-height:100vh}
+
+/* Sidebar */
+.admin-sidebar{width:240px;background:#2c2416;color:#fff;display:flex;flex-direction:column;flex-shrink:0}
+.admin-logo{padding:24px 20px;font-family:'Playfair Display',serif;font-size:20px;font-weight:700;border-bottom:1px solid rgba(255,255,255,0.08)}
+.admin-logo span{color:#c67b4b}
+.admin-nav{flex:1;overflow-y:auto;padding:8px 0}
+.admin-nav a{display:flex;align-items:center;gap:10px;padding:12px 20px;color:rgba(255,255,255,0.55);font-size:14px;text-decoration:none;transition:all .2s}
+.admin-nav a:hover,.admin-nav a.active{color:#fff;background:rgba(255,255,255,0.06)}
+.admin-nav a.active{box-shadow:inset 3px 0 0 #c67b4b}
+.admin-nav .nav-icon{font-size:18px;width:24px;text-align:center}
+.admin-user{padding:16px 20px;border-top:1px solid rgba(255,255,255,0.08);font-size:13px;color:rgba(255,255,255,0.5);cursor:pointer;display:flex;align-items:center;gap:10px}
+.admin-user:hover{color:#fff}
+.admin-avatar{width:32px;height:32px;border-radius:50%;background:#c67b4b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff}
+
+/* Main */
+.admin-main{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.admin-header{background:#fffdf9;padding:16px 32px;border-bottom:1px solid #e8e0d5;display:flex;align-items:center;justify-content:space-between}
+.admin-header h2{font-family:'Playfair Display',serif;font-size:22px;font-weight:700}
+.admin-header .breadcrumb{font-size:13px;color:#8b7e6a}
+.admin-body{padding:28px 32px;flex:1}
+
+/* Stats */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:28px}
+.stat-card{background:#fffdf9;border:1px solid #e8e0d5;border-radius:4px;padding:20px 24px}
+.stat-card .stat-num{font-size:32px;font-weight:800;color:#c67b4b;line-height:1}
+.stat-card .stat-label{font-size:13px;color:#8b7e6a;margin-top:6px}
+
+/* Table */
+.panel{background:#fffdf9;border:1px solid #e8e0d5;border-radius:4px;margin-bottom:24px}
+.panel-header{padding:16px 24px;border-bottom:1px solid #e8e0d5;display:flex;justify-content:space-between;align-items:center}
+.panel-header h3{font-family:'Playfair Display',serif;font-size:18px;font-weight:700}
+.panel-body{padding:20px 24px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:12px 16px;text-align:left;border-bottom:1px solid #f0ece4}
+th{font-weight:600;color:#8b7e6a;font-size:12px;text-transform:uppercase;letter-spacing:.5px}
+tr:hover td{background:#faf7f0}
+.badge{padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600}
+.badge-success{background:#e8f5e8;color:#27ae60}
+.badge-warning{background:#fef3e0;color:#c67b4b}
+.badge-info{background:#e8f0f8;color:#2c7be5}
+
+/* Buttons */
+.btn{padding:8px 18px;border-radius:4px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s}
+.btn-primary{background:#c67b4b;color:#fff}.btn-primary:hover{background:#a05a35}
+.btn-outline{background:none;border:1px solid #e0d5c5;color:#8b7e6a}.btn-outline:hover{border-color:#c67b4b;color:#c67b4b}
+.btn-danger{background:none;border:1px solid #e0d5c5;color:#8b5e3c}.btn-danger:hover{background:#8b5e3c;color:#fff;border-color:#8b5e3c}
+.btn-sm{padding:4px 12px;font-size:12px}
+.btn-group{display:flex;gap:8px}
+
+/* Empty */
+.empty-state{text-align:center;padding:40px;color:#bbb;font-size:14px}
+
+/* Login */
+.login-overlay{position:fixed;inset:0;background:#f7f3ed;display:flex;align-items:center;justify-content:center;z-index:999}
+.login-box{background:#fffdf9;border:1px solid #e8e0d5;border-radius:4px;padding:40px 36px;width:360px;text-align:center}
+.login-box h1{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:4px}
+.login-box p{font-size:13px;color:#8b7e6a;margin-bottom:24px}
+.login-box input{width:100%;padding:12px 14px;border:2px solid #e0d5c5;border-radius:4px;font-size:14px;margin-bottom:14px;outline:none;font-family:inherit}
+.login-box input:focus{border-color:#c67b4b}
+.login-box .login-btn{width:100%;padding:12px;background:#c67b4b;color:#fff;border:none;border-radius:4px;font-size:15px;font-weight:700;cursor:pointer}
+.login-box .login-btn:hover{background:#a05a35}
+.login-error{color:#8b5e3c;font-size:12px;margin-top:8px;display:none}
+.login-error.show{display:block}
+
+/* Form */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.form-group label{display:block;font-size:12px;font-weight:600;color:#8b7e6a;margin-bottom:4px}
+.form-group input,.form-group select{padding:10px 12px;border:2px solid #e0d5c5;border-radius:4px;font-size:14px;outline:none;width:100%;font-family:inherit}
+.form-group input:focus,.form-group select:focus{border-color:#c67b4b}
+
+.hidden{display:none}
+
+@media(max-width:768px){
+  .admin-sidebar{width:60px}.admin-logo{font-size:16px;padding:16px 8px;text-align:center}
+  .admin-nav a span:not(.nav-icon){display:none}.admin-nav a{gap:0;justify-content:center;padding:12px}
+  .admin-body{padding:20px 16px}.stats-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Login -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-box">
+    <h1>世界之旅</h1>
+    <p>后台管理系统</p>
+    <input type="text" id="loginUser" placeholder="用户名">
+    <input type="password" id="loginPass" placeholder="密码">
+    <button class="login-btn" id="loginBtn">登 录</button>
+    <div class="login-error" id="loginError">用户名或密码错误</div>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<aside class="admin-sidebar hidden" id="adminSidebar">
+  <div class="admin-logo">世界<span>之旅</span> <span style="font-size:11px;color:rgba(255,255,255,0.4)">后台</span></div>
+  <nav class="admin-nav" id="adminNav">
+    <a href="#" data-page="dashboard" class="active"><span class="nav-icon">📊</span> 仪表盘</a>
+    <a href="#" data-page="destinations"><span class="nav-icon">🌍</span> 目的地管理</a>
+    <a href="#" data-page="hotels"><span class="nav-icon">🏨</span> 酒店管理</a>
+    <a href="#" data-page="flights"><span class="nav-icon">✈️</span> 机票管理</a>
+    <a href="#" data-page="cars"><span class="nav-icon">🚗</span> 租车管理</a>
+    <a href="#" data-page="bookings"><span class="nav-icon">📋</span> 预订管理</a>
+    <a href="#" data-page="users"><span class="nav-icon">👤</span> 用户管理</a>
+  </nav>
+  <div class="admin-user" id="adminUserInfo">
+    <div class="admin-avatar" id="adminAvatar">A</div>
+    <span id="adminName">管理员</span>
+    <span style="margin-left:auto;cursor:pointer" id="logoutBtn">退出</span>
+  </div>
+</aside>
+
+<!-- Main -->
+<main class="admin-main hidden" id="adminMain">
+  <div class="admin-header">
+    <h2 id="pageTitle">仪表盘</h2>
+    <span class="breadcrumb"><a href="../index.html" style="color:#c67b4b">← 前台预览</a></span>
+  </div>
+  <div class="admin-body" id="pageContent"></div>
+</main>
+
+<script>
+// ===== Auth =====
+var ADMIN_USER = 'admin';
+var ADMIN_PASS = 'admin123';
+var loggedIn = false;
+
+document.getElementById('loginBtn').addEventListener('click', function() {
+  var u = document.getElementById('loginUser').value.trim();
+  var p = document.getElementById('loginPass').value.trim();
+  if (u === ADMIN_USER && p === ADMIN_PASS) {
+    loggedIn = true;
+    document.getElementById('loginOverlay').style.display = 'none';
+    document.getElementById('adminSidebar').classList.remove('hidden');
+    document.getElementById('adminMain').classList.remove('hidden');
+    document.getElementById('adminName').textContent = u;
+    document.getElementById('adminAvatar').textContent = u[0].toUpperCase();
+    showPage('dashboard');
+  } else {
+    document.getElementById('loginError').classList.add('show');
+  }
+});
+document.getElementById('loginPass').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') document.getElementById('loginBtn').click();
+});
+
+document.getElementById('logoutBtn').addEventListener('click', function() {
+  loggedIn = false;
+  document.getElementById('loginOverlay').style.display = 'flex';
+  document.getElementById('adminSidebar').classList.add('hidden');
+  document.getElementById('adminMain').classList.add('hidden');
+});
+
+// ===== Data Store =====
+function getStore(key, fallback) {
+  try { var d = localStorage.getItem(key); return d ? JSON.parse(d) : fallback; }
+  catch(e) { return fallback; }
+}
+function setStore(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+
+var storeDestinations = getStore('admin_destinations', [
+  { id:1, name:'巴黎，法国', region:'欧洲', stars:'★★★★★ 4.8', desc:'浪漫之都，埃菲尔铁塔、卢浮宫、塞纳河畔' },
+  { id:2, name:'马尔代夫', region:'亚洲', stars:'★★★★★ 4.9', desc:'印度洋上的珍珠，水屋别墅、珊瑚礁潜水' },
+  { id:3, name:'东京，日本', region:'亚洲', stars:'★★★★☆ 4.7', desc:'传统与现代交融，浅草寺、涩谷、秋叶原' },
+  { id:4, name:'冰岛', region:'欧洲', stars:'★★★★★ 4.8', desc:'极光之国，蓝湖温泉、黄金圈、黑沙滩' },
+  { id:5, name:'巴厘岛，印尼', region:'亚洲', stars:'★★★★☆ 4.6', desc:'众神之岛，梯田、神庙、冲浪海滩' },
+  { id:6, name:'纽约，美国', region:'美洲', stars:'★★★★☆ 4.7', desc:'不夜城，自由女神、时代广场、中央公园' },
+]);
+var storeHotels = getStore('admin_hotels', [
+  { id:1, name:'巴黎丽兹酒店', loc:'法国·巴黎', price:4580, rating:'4.9' },
+  { id:2, name:'马尔代夫W度假村', loc:'马尔代夫', price:12800, rating:'5.0' },
+  { id:3, name:'东京安缦酒店', loc:'日本·东京', price:6200, rating:'4.8' },
+  { id:4, name:'纽约广场酒店', loc:'美国·纽约', price:3800, rating:'4.7' },
+]);
+var storeFlights = getStore('admin_flights', [
+  { id:1, from:'北京', to:'东京', price:1680, airline:'中国国航 CA925', direct:true },
+  { id:2, from:'上海', to:'巴黎', price:3280, airline:'东方航空 MU553', direct:true },
+  { id:3, from:'广州', to:'马尔代夫', price:4580, airline:'南方航空 CZ3059', direct:false },
+]);
+var storeCars = getStore('admin_cars', [
+  { id:1, name:'丰田卡罗拉', type:'经济型', price:180, seats:5 },
+  { id:2, name:'Jeep牧马人', type:'SUV', price:420, seats:5 },
+  { id:3, name:'宝马3系', type:'豪华轿车', price:560, seats:5 },
+  { id:4, name:'特斯拉Model Y', type:'电动SUV', price:480, seats:5 },
+]);
+var storeBookings = getStore('admin_bookings', getStore('bookings', []));
+var storeUsers = getStore('admin_users', getStore('usersDB', []));
+
+// ===== Navigation =====
+document.getElementById('adminNav').addEventListener('click', function(e) {
+  var a = e.target.closest('a');
+  if (!a) return;
+  e.preventDefault();
+  document.querySelectorAll('#adminNav a').forEach(function(l) { l.classList.remove('active'); });
+  a.classList.add('active');
+  showPage(a.dataset.page);
+});
+
+// ===== Page Router =====
+var nextId = 100;
+function genId() { return nextId++; }
+
+function showPage(page) {
+  document.getElementById('pageTitle').textContent = {
+    dashboard:'仪表盘', destinations:'目的地管理', hotels:'酒店管理',
+    flights:'机票管理', cars:'租车管理', bookings:'预订管理', users:'用户管理'
+  }[page] || '仪表盘';
+  var html = '';
+  switch(page) {
+    case 'dashboard': html = renderDashboard(); break;
+    case 'destinations': html = renderTable('destinations', storeDestinations, ['name','region','stars','desc'], ['名称','区域','评分','描述']); break;
+    case 'hotels': html = renderTable('hotels', storeHotels, ['name','loc','price','rating'], ['名称','地点','价格','评分']); break;
+    case 'flights': html = renderTable('flights', storeFlights, ['from','to','price','airline','direct'], ['出发','到达','价格','航司','直飞']); break;
+    case 'cars': html = renderTable('cars', storeCars, ['name','type','price','seats'], ['名称','类型','价格/天','座位']); break;
+    case 'bookings': html = renderBookings(); break;
+    case 'users': html = renderUsers(); break;
+  }
+  document.getElementById('pageContent').innerHTML = html;
+}
+
+function renderDashboard() {
+  return '<div class="stats-grid">' +
+    '<div class="stat-card"><div class="stat-num">' + storeDestinations.length + '</div><div class="stat-label">目的地</div></div>' +
+    '<div class="stat-card"><div class="stat-num">' + storeHotels.length + '</div><div class="stat-label">酒店</div></div>' +
+    '<div class="stat-card"><div class="stat-num">' + storeFlights.length + '</div><div class="stat-label">机票</div></div>' +
+    '<div class="stat-card"><div class="stat-num">' + storeCars.length + '</div><div class="stat-label">租车</div></div>' +
+    '<div class="stat-card"><div class="stat-num">' + storeBookings.length + '</div><div class="stat-label">预订</div></div>' +
+    '<div class="stat-card"><div class="stat-num">' + storeUsers.length + '</div><div class="stat-label">用户</div></div>' +
+    '</div>' +
+    '<div class="panel"><div class="panel-header"><h3>最近预订</h3></div><div class="panel-body">' +
+    (storeBookings.length ? '<table><thead><tr><th>目的地</th><th>姓名</th><th>日期</th><th>人数</th></tr></thead><tbody>' +
+    storeBookings.slice(-5).reverse().map(function(b) {
+      return '<tr><td>' + esc(b.dest) + '</td><td>' + esc(b.name) + '</td><td>' + esc(b.checkin) + ' → ' + esc(b.checkout) + '</td><td>' + b.guests + '人</td></tr>';
+    }).join('') + '</tbody></table>' : '<div class="empty-state">暂无预订记录</div>') +
+    '</div></div>';
+}
+
+function renderTable(key, data, fields, labels) {
+  return '<div class="panel"><div class="panel-header"><h3>共 ' + data.length + ' 条</h3>' +
+    '<button class="btn btn-primary" onclick="editItem(\'' + key + '\')">+ 新增</button></div>' +
+    '<div class="panel-body">' +
+    (data.length ? '<table><thead><tr>' + labels.map(function(l) { return '<th>' + l + '</th>'; }).join('') + '<th>操作</th></tr></thead><tbody>' +
+    data.map(function(item, i) {
+      var row = '<tr>';
+      fields.forEach(function(f) {
+        var v = item[f];
+        if (f === 'price') v = '¥' + Number(v).toLocaleString();
+        if (f === 'direct') v = v ? '<span class="badge badge-success">直飞</span>' : '<span class="badge badge-warning">中转</span>';
+        if (f === 'stars') v = '<span style="color:#c67b4b">' + esc(v) + '</span>';
+        row += '<td>' + (v || '-') + '</td>';
+      });
+      row += '<td><div class="btn-group"><button class="btn btn-outline btn-sm" onclick="editItem(\'' + key + '\',' + i + ')">编辑</button><button class="btn btn-danger btn-sm" onclick="deleteItem(\'' + key + '\',' + i + ')">删除</button></div></td></tr>';
+      return row;
+    }).join('') + '</tbody></table>' : '<div class="empty-state">暂无数据，点击右上角"新增"添加</div>') +
+    '</div></div>';
+}
+
+function renderBookings() {
+  return '<div class="panel"><div class="panel-header"><h3>共 ' + storeBookings.length + ' 条</h3></div><div class="panel-body">' +
+    (storeBookings.length ? '<table><thead><tr><th>目的地</th><th>姓名</th><th>邮箱</th><th>入住</th><th>离开</th><th>人数</th><th>操作</th></tr></thead><tbody>' +
+    storeBookings.map(function(b, i) {
+      return '<tr><td>' + esc(b.dest) + '</td><td>' + esc(b.name) + '</td><td>' + esc(b.email) + '</td><td>' + esc(b.checkin) + '</td><td>' + esc(b.checkout) + '</td><td>' + b.guests + '人</td><td><button class="btn btn-danger btn-sm" onclick="deleteBooking(' + i + ')">删除</button></td></tr>';
+    }).join('') + '</tbody></table>' : '<div class="empty-state">暂无预订记录</div>') +
+    '</div></div>';
+}
+
+function renderUsers() {
+  return '<div class="panel"><div class="panel-header"><h3>共 ' + storeUsers.length + ' 条</h3></div><div class="panel-body">' +
+    (storeUsers.length ? '<table><thead><tr><th>用户名</th><th>联系方式</th><th>操作</th></tr></thead><tbody>' +
+    storeUsers.map(function(u, i) {
+      return '<tr><td><strong>' + esc(u.username) + '</strong></td><td>' + esc(u.contact) + '</td><td><button class="btn btn-danger btn-sm" onclick="deleteUser(' + i + ')">删除</button></td></tr>';
+    }).join('') + '</tbody></table>' : '<div class="empty-state">暂无注册用户</div>') +
+    '</div></div>';
+}
+
+// ===== CRUD =====
+var stores = { destinations:storeDestinations, hotels:storeHotels, flights:storeFlights, cars:storeCars };
+
+function editItem(key, idx) {
+  var data = stores[key];
+  var item = idx !== undefined ? data[idx] : {};
+  var title = idx !== undefined ? '编辑' : '新增';
+  var fields = {
+    destinations: [{k:'name',l:'名称'},{k:'region',l:'区域'},{k:'stars',l:'评分'},{k:'desc',l:'描述'}],
+    hotels: [{k:'name',l:'名称'},{k:'loc',l:'地点'},{k:'price',l:'价格',t:'number'},{k:'rating',l:'评分'}],
+    flights: [{k:'from',l:'出发'},{k:'to',l:'到达'},{k:'price',l:'价格',t:'number'},{k:'airline',l:'航司'},{k:'direct',l:'直飞'}]  ,
+    cars: [{k:'name',l:'名称'},{k:'type',l:'类型'},{k:'price',l:'价格',t:'number'},{k:'seats',l:'座位',t:'number'}],
+  }[key] || [];
+
+  var formHtml = '<div class="panel"><div class="panel-header"><h3>' + title + '</h3><button class="btn btn-outline btn-sm" onclick="showPage(\'' + key + '\')">← 返回</button></div><div class="panel-body"><div class="form-row">';
+  fields.forEach(function(f) {
+    formHtml += '<div class="form-group"><label>' + f.l + '</label><input type="' + (f.t || 'text') + '" id="field_' + f.k + '" value="' + (item[f.k] || '') + '"></div>';
+  });
+  if (key === 'flights') {
+    formHtml += '<div class="form-group"><label>直飞</label><select id="field_direct"><option value="true"' + (item.direct !== false ? ' selected' : '') + '>是</option><option value="false"' + (item.direct === false ? ' selected' : '') + '>否</option></select></div>';
+  }
+  formHtml += '</div><button class="btn btn-primary" onclick="saveItem(\'' + key + '\',' + (idx !== undefined ? idx : -1) + ')">保存</button></div></div>';
+  document.getElementById('pageContent').innerHTML = formHtml;
+}
+
+function saveItem(key, idx) {
+  var data = stores[key];
+  var fieldDefs = {
+    destinations: ['name','region','stars','desc'],
+    hotels: ['name','loc','price','rating'],
+    flights: ['from','to','price','airline','direct'],
+    cars: ['name','type','price','seats'],
+  }[key];
+  var item = {};
+  fieldDefs.forEach(function(f) {
+    var el = document.getElementById('field_' + f);
+    if (!el) return;
+    var v = el.value;
+    if (f === 'price' || f === 'seats') v = Number(v);
+    if (f === 'direct') v = el.value === 'true';
+    item[f] = v;
+  });
+  if (idx >= 0) { data[idx] = item; }
+  else { item.id = genId(); data.push(item); }
+  setStore('admin_' + key, data);
+  showPage(key);
+}
+
+function deleteItem(key, idx) {
+  if (!confirm('确定删除？')) return;
+  stores[key].splice(idx, 1);
+  setStore('admin_' + key, stores[key]);
+  showPage(key);
+}
+
+function deleteBooking(idx) {
+  if (!confirm('确定删除？')) return;
+  storeBookings.splice(idx, 1);
+  setStore('admin_bookings', storeBookings);
+  showPage('bookings');
+}
+
+function deleteUser(idx) {
+  if (!confirm('确定删除？')) return;
+  storeUsers.splice(idx, 1);
+  setStore('admin_users', storeUsers);
+  showPage('users');
+}
+
+function esc(s) {
+  var d = document.createElement('div');
+  d.textContent = s || '';
+  return d.innerHTML;
+}
+</script>
+</body>
+</html>
