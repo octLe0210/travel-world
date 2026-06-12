@@ -635,20 +635,23 @@ render();
 // ===== GSAP Animations =====
 gsap.registerPlugin(ScrollTrigger);
 
-// Card scroll reveal (deferred for dynamically rendered content)
+// Card scroll reveal
 setTimeout(() => {
   document.querySelectorAll('.card-grid, .guide-grid').forEach(grid => {
-    const cards = grid.children;
+    const cards = Array.from(grid.children);
     if (!cards.length) return;
-    gsap.fromTo(cards,
-      { opacity: 0, y: 30 },
-      {
-        opacity: 1, y: 0, duration: 0.4, stagger: 0.06, ease: 'power2.out',
-        scrollTrigger: { trigger: grid, start: 'top 88%', toggleActions: 'play none none reverse' }
-      }
-    );
+    const isInView = grid.getBoundingClientRect().top < window.innerHeight;
+    cards.forEach(card => {
+      ScrollTrigger.create({
+        trigger: card, start: 'top 92%',
+        onEnter: () => { gsap.to(card, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }); },
+        onLeaveBack: () => { gsap.to(card, { opacity: 0, y: 30, duration: 0.3 }); },
+        onEnterBack: () => { gsap.to(card, { opacity: 1, y: 0, duration: 0.3 }); },
+      });
+      if (!isInView) { gsap.set(card, { opacity: 0, y: 30 }); }
+    });
   });
-}, 200);
+}, 300);
 
 // Button micro-interactions (delegate on body)
 document.body.addEventListener('mouseenter', e => {
