@@ -6,6 +6,8 @@
 <title>世界之旅 - 全球旅游信息平台</title>
 <link rel="preconnect" href="https://picsum.photos">
 <link rel="dns-prefetch" href="https://picsum.photos">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <style>
 /* ===== Reset & Base ===== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -399,7 +401,7 @@ ul { list-style: none; }
 
 /* ===== Detail Overlay ===== */
 .detail-overlay { position: fixed; inset: 0; z-index: 3000; background: #fff; overflow-y: auto; display: none; }
-.detail-overlay.show { display: block; animation: overlayIn 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+.detail-overlay.show { display: block; /* animation handled by GSAP */; }
 @keyframes overlayIn { from { opacity: 0; transform: translateY(16px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 .detail-back { position: fixed; top: 20px; left: 20px; z-index: 3001; width: 44px; height: 44px; border-radius: 50%; background: rgba(0,0,0,0.5); color: #fff; border: none; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
 .detail-back:hover { background: rgba(0,0,0,0.7); transform: scale(1.08); }
@@ -428,7 +430,7 @@ ul { list-style: none; }
 
 /* ===== Service Overlay (Hotels/Flights/Cars) ===== */
 .svc-overlay { position: fixed; inset: 0; z-index: 3000; background: #f5f6fa; overflow-y: auto; display: none; }
-.svc-overlay.show { display: block; animation: overlayIn 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+.svc-overlay.show { display: block; /* animation handled by GSAP */; }
 .svc-header { background: linear-gradient(135deg, #1a1d28, #252a3a); color: #fff; padding: 48px 24px 32px; text-align: center; }
 .svc-header h2 { font-size: 26px; font-weight: 800; }
 .svc-header p { font-size: 13px; opacity: 0.6; margin-top: 4px; }
@@ -486,7 +488,7 @@ ul { list-style: none; }
 
 /* ===== Booking Center ===== */
 .booking-center { position: fixed; inset: 0; z-index: 3000; background: #f5f6fa; overflow-y: auto; display: none; }
-.booking-center.show { display: block; animation: overlayIn 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+.booking-center.show { display: block; /* animation handled by GSAP */; }
 .bc-header { background: linear-gradient(135deg, #1a1d28, #252a3a); color: #fff; padding: 48px 24px 0; text-align: center; }
 .bc-header h2 { font-size: 26px; font-weight: 800; margin-bottom: 20px; }
 .bc-tabs { display: flex; justify-content: center; gap: 0; }
@@ -524,7 +526,7 @@ ul { list-style: none; }
 
 /* ===== User Profile Overlay ===== */
 .profile-overlay { position: fixed; inset: 0; z-index: 3000; background: #f5f6fa; overflow-y: auto; display: none; }
-.profile-overlay.show { display: block; animation: overlayIn 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+.profile-overlay.show { display: block; /* animation handled by GSAP */; }
 .profile-header {
   background: linear-gradient(135deg, #1a1d28, #252a3a); color: #fff;
   padding: 48px 24px 40px; text-align: center;
@@ -619,12 +621,7 @@ ul { list-style: none; }
 /* Reveal */
 .reveal {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-.reveal.revealed {
-  opacity: 1;
-  transform: translateY(0);
+  transform: translateY(40px);
 }
 
 /* ===== Touch & Scroll Optimization ===== */
@@ -1016,8 +1013,20 @@ function triggerProgress() {
   }, 500);
 }
 
-// ===== Splash Hero =====
-// Particle Canvas
+// ===== GSAP Overlay Helpers =====
+function openOverlay(el) {
+  el.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+  gsap.fromTo(el, { opacity: 0, y: 20, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.35, ease: 'back.out(1.4)' });
+}
+function closeOverlay(el) {
+  gsap.to(el, { opacity: 0, y: -10, duration: 0.2, ease: 'power2.in', onComplete() { el.style.display = 'none'; document.body.style.overflow = ''; } });
+}
+
+// ===== Splash Hero (GSAP Timeline) =====
+gsap.registerPlugin(ScrollTrigger);
+
+// Particle Canvas (GSAP ticker driven)
 const particleCanvas = document.getElementById('particleCanvas');
 const pctx = particleCanvas.getContext('2d');
 let pw, ph, particles = [];
@@ -1030,13 +1039,9 @@ resizeParticles();
 window.addEventListener('resize', resizeParticles);
 
 class Particle {
-  constructor() {
-    this.reset();
-    this.y = Math.random() * ph;
-  }
+  constructor() { this.reset(); this.y = Math.random() * ph; }
   reset() {
-    this.x = Math.random() * pw;
-    this.y = -10;
+    this.x = Math.random() * pw; this.y = -10;
     this.size = Math.random() * 2 + 0.5;
     this.speed = Math.random() * 0.6 + 0.2;
     this.opacity = Math.random() * 0.5 + 0.1;
@@ -1060,40 +1065,61 @@ class Particle {
 }
 
 for (let i = 0; i < 120; i++) particles.push(new Particle());
+gsap.ticker.add(() => { pctx.clearRect(0, 0, pw, ph); particles.forEach(p => { p.update(); p.draw(); }); });
 
-function animateParticles() {
-  pctx.clearRect(0, 0, pw, ph);
-  particles.forEach(p => { p.update(); p.draw(); });
-  requestAnimationFrame(animateParticles);
-}
-animateParticles();
+// Master Entrance Timeline
+const splashTL = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-// Counter Animation
-function animateCounters() {
-  document.querySelectorAll('.splash-stat-num').forEach(el => {
-    const target = parseInt(el.dataset.count);
-    const duration = 2000;
-    const start = performance.now();
-    function tick(now) {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = progress === 1 ? target.toLocaleString() + (target >= 50 ? '+' : '') : Math.floor(eased * target).toLocaleString();
-      if (progress < 1) requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
+splashTL
+  .from('.splash-globe-wrap', { scale: 0, duration: 0.8, ease: 'back.out(1.7)' }, 0.2)
+  .from('.splash-globe-orbit', { opacity: 0, scale: 0.8, stagger: 0.15, duration: 0.6 }, 0.4)
+  .from('.splash-title-sub', { opacity: 0, y: 30, duration: 0.6 }, 0.8)
+  .from('.splash-title-main', { opacity: 0, y: 40, duration: 0.7 }, 1.0)
+  .from('.splash-title-desc', { opacity: 0, y: 20, duration: 0.5 }, 1.2)
+  .from('.splash-stats-row', { opacity: 0, y: 24, duration: 0.5 }, 1.4)
+  .from('.splash-btn-start', { opacity: 0, scale: 0.8, duration: 0.5, ease: 'back.out(2)' }, 1.6)
+  .from('.splash-scroll-hint', { opacity: 0, duration: 0.5 }, 1.9)
+  .from('.splash-plane', { opacity: 0, x: -60, stagger: 0.2, duration: 0.6 }, 1.0);
+
+// Counter animation via GSAP
+document.querySelectorAll('.splash-stat-num').forEach(el => {
+  const target = parseInt(el.dataset.count);
+  const suffix = target >= 50 ? '+' : '';
+  gsap.fromTo(el, { innerText: '0' }, {
+    innerText: target.toLocaleString() + suffix,
+    duration: 2, delay: 1.5, snap: { innerText: 1 }, ease: 'power2.out',
+    onUpdate() { el.textContent = Math.floor(parseFloat(el.innerText || 0)).toLocaleString() + suffix; },
+    onComplete() { el.textContent = target.toLocaleString() + suffix; }
   });
-}
-setTimeout(animateCounters, 800);
-
-// Mouse Parallax on Globe
-document.addEventListener('mousemove', e => {
-  const x = (e.clientX / window.innerWidth - 0.5) * 20;
-  const y = (e.clientY / window.innerHeight - 0.5) * 20;
-  const wrap = document.querySelector('.splash-globe-wrap');
-  if (wrap) wrap.style.transform = `translate(${x}px, ${y}px)`;
 });
 
-// Start button scrolls to destinations
+// Mouse parallax (GSAP quickTo for performance)
+const globeWrap = document.querySelector('.splash-globe-wrap');
+if (globeWrap) {
+  const qX = gsap.quickTo(globeWrap, 'x', { duration: 0.6, ease: 'power3.out' });
+  const qY = gsap.quickTo(globeWrap, 'y', { duration: 0.6, ease: 'power3.out' });
+  document.addEventListener('mousemove', e => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 22;
+    const y = (e.clientY / window.innerHeight - 0.5) * 22;
+    qX(x); qY(y);
+  });
+}
+
+// Splash fade-out on scroll
+ScrollTrigger.create({
+  trigger: '#splashHero',
+  start: 'top top',
+  end: 'bottom top',
+  scrub: 0.5,
+  onUpdate(self) {
+    const opacity = 1 - self.progress;
+    gsap.to('#splashHero', { opacity: Math.max(opacity, 0), duration: 0.1, overwrite: true });
+  },
+  onLeave() { gsap.set('#splashHero', { opacity: 0 }); },
+  onEnterBack() { gsap.set('#splashHero', { opacity: 1 }); }
+});
+
+// Start button
 document.getElementById('splashStartBtn').addEventListener('click', () => {
   triggerProgress();
   document.getElementById('destinations').scrollIntoView({ behavior: 'smooth' });
@@ -1248,11 +1274,10 @@ function renderHotelResults(data) {
 
 function openHotelOverlay() {
   triggerProgress();
-  document.getElementById('hotelOverlay').classList.add('show');
-  document.body.style.overflow = 'hidden';
+  openOverlay(document.getElementById('hotelOverlay'));
   renderHotelResults(hotelData);
 }
-document.getElementById('hotelBack').addEventListener('click', () => { document.getElementById('hotelOverlay').classList.remove('show'); document.body.style.overflow = ''; });
+document.getElementById('hotelBack').addEventListener('click', () => { closeOverlay(document.getElementById('hotelOverlay')); });
 document.getElementById('hotelSearch').addEventListener('click', () => {
   const dest = document.getElementById('hotelDest').value;
   const checkin = document.getElementById('hotelCheckin').value;
@@ -1300,11 +1325,10 @@ function renderFlightResults(data) {
 
 function openFlightOverlay() {
   triggerProgress();
-  document.getElementById('flightOverlay').classList.add('show');
-  document.body.style.overflow = 'hidden';
+  openOverlay(document.getElementById('flightOverlay'));
   renderFlightResults(flightData);
 }
-document.getElementById('flightBack').addEventListener('click', () => { document.getElementById('flightOverlay').classList.remove('show'); document.body.style.overflow = ''; });
+document.getElementById('flightBack').addEventListener('click', () => { closeOverlay(document.getElementById('flightOverlay')); });
 document.getElementById('flightSearch').addEventListener('click', () => {
   const from = document.getElementById('flightFrom').value;
   const to = document.getElementById('flightTo').value;
@@ -1351,11 +1375,10 @@ function renderCarResults(data) {
 
 function openCarOverlay() {
   triggerProgress();
-  document.getElementById('carOverlay').classList.add('show');
-  document.body.style.overflow = 'hidden';
+  openOverlay(document.getElementById('carOverlay'));
   renderCarResults(carData);
 }
-document.getElementById('carBack').addEventListener('click', () => { document.getElementById('carOverlay').classList.remove('show'); document.body.style.overflow = ''; });
+document.getElementById('carBack').addEventListener('click', () => { closeOverlay(document.getElementById('carOverlay')); });
 document.getElementById('carSearch').addEventListener('click', () => {
   const loc = document.getElementById('carLoc').value;
   const type = document.getElementById('carType').value;
@@ -1454,7 +1477,7 @@ function showItemDetail(type, item) {
   hero.style.backgroundSize = 'cover'; hero.style.backgroundPosition = 'center';
   hero.innerHTML = `<div class="detail-hero-content"><h2>${title}</h2><div style="color:rgba(255,255,255,0.8);font-size:15px">${subtitle}</div></div>`;
   body.innerHTML = infoHtml;
-  detailOverlay.classList.add('show'); document.body.style.overflow = 'hidden'; detailOverlay.scrollTop = 0;
+  openOverlay(detailOverlay); detailOverlay.scrollTop = 0;
 }
 
 // ESC to close service overlays
@@ -1462,7 +1485,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     ['hotelOverlay','flightOverlay','carOverlay'].forEach(id => {
       const el = document.getElementById(id);
-      if (el.classList.contains('show')) { el.classList.remove('show'); document.body.style.overflow = ''; }
+      if (el.style.display === 'block') closeOverlay(el);
     });
   }
 });
@@ -1487,12 +1510,12 @@ function showDetail(id) {
     <div class="info-tags"><div class="info-tag">最佳季节：${d.bestTime}</div><div class="info-tag">预算参考：${d.budget}</div></div>
     <ul class="tip-list" style="margin-top:16px">${d.tips.map(t => `<li>${t}</li>`).join('')}</ul>
     <div class="detail-book-section"><p style="color:#888;font-size:13px;margin-bottom:12px">心动了？现在即可快速预订</p><button class="detail-book-btn" onclick="quickBook('${d.name}')">预订此目的地</button></div>`;
-  detailOverlay.classList.add('show'); document.body.style.overflow = 'hidden'; detailOverlay.scrollTop = 0;
+  openOverlay(detailOverlay); detailOverlay.scrollTop = 0;
 }
-function hideDetail() { detailOverlay.classList.remove('show'); document.body.style.overflow = ''; }
+function hideDetail() { closeOverlay(detailOverlay); }
 detailBack.addEventListener('click', hideDetail);
 document.addEventListener('click', e => { if (e.target.closest('.dest-card')) showDetail(e.target.closest('.dest-card').dataset.dest); });
-document.addEventListener('keydown', e => { if (e.key==='Escape' && detailOverlay.classList.contains('show')) hideDetail(); });
+document.addEventListener('keydown', e => { if (e.key==='Escape' && detailOverlay.style.display === 'block') hideDetail(); });
 
 // ===== Guide Detail =====
 const guideData = {
@@ -1512,7 +1535,7 @@ function showGuideDetail(id) {
   detailHero.innerHTML = `<div class="detail-hero-content"><h2>${d.icon} ${d.title}</h2></div>`;
   detailBody.className = 'guide-detail-body';
   detailBody.innerHTML = `<p class="intro" style="font-size:16px;line-height:1.8">${d.intro}</p>${d.content.map(c => `<h3>${c.subtitle}</h3><p>${c.text}</p>`).join('')}`;
-  detailOverlay.classList.add('show'); document.body.style.overflow = 'hidden'; detailOverlay.scrollTop = 0;
+  openOverlay(detailOverlay); detailOverlay.scrollTop = 0;
 }
 document.addEventListener('click', e => { if (e.target.closest('.guide-card')) showGuideDetail(e.target.closest('.guide-card').dataset.guide); });
 
@@ -1545,7 +1568,7 @@ sidebarUser.addEventListener('click', () => {
     openProfile();
   } else {
     setLoginMode('login');
-    loginOverlay.classList.add('show'); document.body.style.overflow = 'hidden';
+    openOverlay(loginOverlay);
   }
 });
 
@@ -1561,10 +1584,9 @@ function openProfile() {
   document.getElementById('profileName').textContent = loggedInUser;
   document.getElementById('profileEmail').textContent = sidebarEmail.textContent;
   renderProfile();
-  document.getElementById('profileOverlay').classList.add('show');
-  document.body.style.overflow = 'hidden';
+  openOverlay(document.getElementById('profileOverlay'));
 }
-document.getElementById('profileBack').addEventListener('click', () => { document.getElementById('profileOverlay').classList.remove('show'); document.body.style.overflow = ''; });
+document.getElementById('profileBack').addEventListener('click', () => { closeOverlay(document.getElementById('profileOverlay')); });
 
 function renderProfile() {
   const body = document.getElementById('profileBody');
@@ -1626,8 +1648,7 @@ function renderProfile() {
     localStorage.removeItem('loggedInUser');
     loginPrompt.style.display = 'flex'; sidebarAvatar.style.display = 'none'; sidebarUserInfo.classList.remove('show');
     sidebarName.textContent = ''; sidebarEmail.textContent = '';
-    document.getElementById('profileOverlay').classList.remove('show');
-    document.body.style.overflow = '';
+    closeOverlay(document.getElementById('profileOverlay'));
   });
 }
 
@@ -1658,8 +1679,8 @@ function bookCar(name, type, seats, price) {
   showToast('已预订「' + name + '」，可在个人中心查看', 'success');
 }
 
-document.getElementById('loginClose').addEventListener('click', () => { loginOverlay.classList.remove('show'); document.body.style.overflow = ''; });
-loginOverlay.addEventListener('click', e => { if (e.target === loginOverlay) { loginOverlay.classList.remove('show'); document.body.style.overflow = ''; } });
+document.getElementById('loginClose').addEventListener('click', () => { closeOverlay(loginOverlay); });
+loginOverlay.addEventListener('click', e => { if (e.target === loginOverlay) { closeOverlay(loginOverlay); } });
 
 const loginContactGroup = document.getElementById('loginContactGroup'), loginContact = document.getElementById('loginContact');
 
@@ -1716,8 +1737,8 @@ loginForm.addEventListener('submit', e => {
   setTimeout(() => {
     loginPrompt.style.display = 'none'; sidebarAvatar.style.display = 'flex'; sidebarUserInfo.classList.add('show');
     sidebarName.textContent = username; sidebarEmail.textContent = user.contact; sidebarAvatar.textContent = username[0].toUpperCase();
-    loginOverlay.classList.remove('show'); document.body.style.overflow = ''; formMsg.className = 'form-msg';
-    if (pendingBookingDest) { document.getElementById('dest').value = pendingBookingDest; switchBcTab('form'); bookingCenter.classList.add('show'); document.body.style.overflow = 'hidden'; pendingBookingDest = null; }
+    closeOverlay(loginOverlay); formMsg.className = 'form-msg';
+    if (pendingBookingDest) { document.getElementById('dest').value = pendingBookingDest; switchBcTab('form'); openOverlay(bookingCenter); pendingBookingDest = null; }
   }, 1000);
 });
 
@@ -1742,13 +1763,13 @@ function switchBcTab(name) {
 document.querySelectorAll('.bc-tab').forEach(tab => { tab.addEventListener('click', () => switchBcTab(tab.dataset.tab)); });
 
 document.getElementById('bookingNavLink').addEventListener('click', e => {
-  e.preventDefault(); switchBcTab('form'); bookingCenter.classList.add('show');
+  e.preventDefault(); switchBcTab('form'); openOverlay(bookingCenter);
   document.body.style.overflow = 'hidden'; bookingCenter.scrollTop = 0;
 });
-document.getElementById('bcBack').addEventListener('click', () => { bookingCenter.classList.remove('show'); document.body.style.overflow = ''; });
+document.getElementById('bcBack').addEventListener('click', () => { closeOverlay(bookingCenter); });
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
-    if (bookingCenter.classList.contains('show')) { bookingCenter.classList.remove('show'); document.body.style.overflow = ''; }
+    if (bookingCenter.classList.contains('show')) { closeOverlay(bookingCenter); }
   }
 });
 
@@ -1760,7 +1781,7 @@ form.addEventListener('submit', e => {
   if (!isLoggedIn) {
     pendingBookingDest = document.getElementById('dest').value;
     showToast('请先登录后再进行预订', 'error');
-    setLoginMode('login'); loginOverlay.classList.add('show'); document.body.style.overflow = 'hidden'; return;
+    setLoginMode('login'); openOverlay(loginOverlay); return;
   }
   let valid = true;
   const fields = [
@@ -1797,21 +1818,37 @@ function renderBookings() {
   container.querySelectorAll('.bc-delete').forEach(btn => { btn.addEventListener('click', () => { const idx=+btn.dataset.index; const name = bookings[idx].dest; bookings.splice(idx,1); saveBookings(); renderBookings(); showToast('已取消「' + name + '」的预订', 'info'); }); });
 }
 
-function quickBook(destName) { hideDetail(); document.getElementById('dest').value = destName; switchBcTab('form'); bookingCenter.classList.add('show'); document.body.style.overflow = 'hidden'; bookingCenter.scrollTop = 0; }
+function quickBook(destName) { hideDetail(); document.getElementById('dest').value = destName; switchBcTab('form'); openOverlay(bookingCenter); bookingCenter.scrollTop = 0; }
 
-// ===== Scroll Reveal =====
-// 滚动淡入（逐张错开）
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry, i) => {
-    if (entry.isIntersecting) {
-      setTimeout(() => {
-        entry.target.classList.add('revealed');
-      }, i * 80);
-      observer.unobserve(entry.target);
+// ===== Scroll Reveal (GSAP ScrollTrigger) =====
+document.querySelectorAll('.dest-grid, .service-grid, .guide-grid').forEach(grid => {
+  const cards = grid.querySelectorAll('.reveal');
+  if (!cards.length) return;
+  gsap.fromTo(cards,
+    { opacity: 0, y: 40 },
+    {
+      opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out',
+      scrollTrigger: {
+        trigger: grid, start: 'top 85%', end: 'bottom 20%',
+        toggleActions: 'play none none reverse',
+      }
     }
-  });
-}, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  );
+});
+
+// Section headers reveal
+document.querySelectorAll('.section-header.reveal').forEach(header => {
+  gsap.fromTo(header,
+    { opacity: 0, y: 24 },
+    {
+      opacity: 1, y: 0, duration: 0.4, ease: 'power2.out',
+      scrollTrigger: {
+        trigger: header, start: 'top 90%',
+        toggleActions: 'play none none reverse',
+      }
+    }
+  );
+});
 
 // ===== Sidebar nav active =====
 document.querySelectorAll('.sidebar-nav a[href^="#"]').forEach(link => {
@@ -1843,6 +1880,47 @@ swipeCloseEls.forEach(el => {
     }
   }, { passive: true });
 });
+
+// ===== GSAP Micro-interactions =====
+// Sidebar nav hover
+document.querySelectorAll('.sidebar-nav a').forEach(link => {
+  link.addEventListener('mouseenter', () => { gsap.to(link, { x: 4, duration: 0.2, ease: 'power2.out' }); });
+  link.addEventListener('mouseleave', () => { gsap.to(link, { x: 0, duration: 0.2, ease: 'power2.out' }); });
+});
+
+// Search bar focus
+const searchInput = document.getElementById('searchInput');
+if (searchInput) {
+  searchInput.addEventListener('focus', () => {
+    gsap.to(searchInput.closest('.hero-search'), { background: 'rgba(255,255,255,0.22)', borderColor: 'rgba(255,255,255,0.45)', duration: 0.25 });
+    gsap.to(searchInput, { width: 240, duration: 0.3, ease: 'power2.out' });
+  });
+  searchInput.addEventListener('blur', () => {
+    gsap.to(searchInput.closest('.hero-search'), { background: 'rgba(255,255,255,0.12)', borderColor: 'rgba(255,255,255,0.25)', duration: 0.25 });
+    gsap.to(searchInput, { width: 200, duration: 0.3, ease: 'power2.out' });
+  });
+}
+
+// Button hover/click
+document.querySelectorAll('.submit-btn, .detail-book-btn, .svc-book-btn, .splash-btn-start').forEach(btn => {
+  btn.addEventListener('mouseenter', () => { gsap.to(btn, { scale: 1.04, duration: 0.2, ease: 'power2.out' }); });
+  btn.addEventListener('mouseleave', () => { gsap.to(btn, { scale: 1, duration: 0.2, ease: 'power2.out' }); });
+  btn.addEventListener('mousedown', () => { gsap.to(btn, { scale: 0.96, duration: 0.1, ease: 'power2.in' }); });
+  btn.addEventListener('mouseup', () => { gsap.to(btn, { scale: 1.04, duration: 0.15, ease: 'power2.out' }); });
+});
+
+// Toast with GSAP
+const _origShowToast = showToast;
+showToast = function(msg, type) {
+  const t = document.getElementById('appToast');
+  t.textContent = msg; t.className = 'app-toast ' + type;
+  t.style.display = 'block';
+  gsap.fromTo(t, { opacity: 0, y: -16 }, { opacity: 1, y: 0, duration: 0.35, ease: 'back.out(1.7)' });
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() => {
+    gsap.to(t, { opacity: 0, y: -8, duration: 0.2, ease: 'power2.in', onComplete() { t.style.display = 'none'; } });
+  }, 2500);
+};
 
 updateBadge();
 </script>
