@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>世界之旅 - 全球旅游信息平台</title>
-<meta name="description" content="世界之旅——探索全球最美景点，预订酒店、机票、租车一站式服务。覆盖巴黎、马尔代夫、东京、冰岛、巴厘岛、纽约等热门目的地，提供专业旅行攻略。">
 <link rel="preconnect" href="https://picsum.photos">
 <link rel="dns-prefetch" href="https://picsum.photos">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -1404,14 +1403,14 @@ document.getElementById('carGrid').addEventListener('click', e => {
 });
 
 // Sidebar: 酒店/机票/租车 open search overlay
-document.querySelector('.sidebar-nav a[href="#hotels"]').addEventListener('click', e => { e.preventDefault(); triggerProgress(); setTimeout(() => { window.location.href = 'search.html?type=hotels'; }, 150); });
-document.querySelector('.sidebar-nav a[href="#flights"]').addEventListener('click', e => { e.preventDefault(); triggerProgress(); setTimeout(() => { window.location.href = 'search.html?type=flights'; }, 150); });
-document.querySelector('.sidebar-nav a[href="#cars"]').addEventListener('click', e => { e.preventDefault(); triggerProgress(); setTimeout(() => { window.location.href = 'search.html?type=cars'; }, 150); });
+document.querySelector('.sidebar-nav a[href="#hotels"]').addEventListener('click', e => { e.preventDefault(); triggerProgress(); document.getElementById('hotels').scrollIntoView({behavior:'smooth'}); });
+document.querySelector('.sidebar-nav a[href="#flights"]').addEventListener('click', e => { e.preventDefault(); triggerProgress(); document.getElementById('flights').scrollIntoView({behavior:'smooth'}); });
+document.querySelector('.sidebar-nav a[href="#cars"]').addEventListener('click', e => { e.preventDefault(); triggerProgress(); document.getElementById('cars').scrollIntoView({behavior:'smooth'}); });
 
 // Quick service cards also open search overlays
-document.querySelector('.qs-card:nth-child(1)').onclick = () => { triggerProgress(); setTimeout(() => { window.location.href = 'search.html?type=flights'; }, 150); };
-document.querySelector('.qs-card:nth-child(2)').onclick = () => { triggerProgress(); setTimeout(() => { window.location.href = 'search.html?type=hotels'; }, 150); };
-document.querySelector('.qs-card:nth-child(3)').onclick = () => { triggerProgress(); setTimeout(() => { window.location.href = 'search.html?type=cars'; }, 150); };
+document.querySelector('.qs-card:nth-child(1)').onclick = () => { triggerProgress(); document.getElementById('flights').scrollIntoView({behavior:'smooth'}); };
+document.querySelector('.qs-card:nth-child(2)').onclick = () => { triggerProgress(); document.getElementById('hotels').scrollIntoView({behavior:'smooth'}); };
+document.querySelector('.qs-card:nth-child(3)').onclick = () => { triggerProgress(); document.getElementById('cars').scrollIntoView({behavior:'smooth'}); };
 
 // ===== Item Detail Overlay (hotel/flight/car single item) =====
 function showItemDetail(type, item) {

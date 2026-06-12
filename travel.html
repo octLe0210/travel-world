@@ -1403,14 +1403,14 @@ document.getElementById('carGrid').addEventListener('click', e => {
 });
 
 // Sidebar: 酒店/机票/租车 open search overlay
-document.querySelector('.sidebar-nav a[href="#hotels"]').addEventListener('click', e => { e.preventDefault(); triggerProgress(); setTimeout(() => { window.location.href = 'search.html?type=hotels'; }, 150); });
-document.querySelector('.sidebar-nav a[href="#flights"]').addEventListener('click', e => { e.preventDefault(); triggerProgress(); setTimeout(() => { window.location.href = 'search.html?type=flights'; }, 150); });
-document.querySelector('.sidebar-nav a[href="#cars"]').addEventListener('click', e => { e.preventDefault(); triggerProgress(); setTimeout(() => { window.location.href = 'search.html?type=cars'; }, 150); });
+document.querySelector('.sidebar-nav a[href="#hotels"]').addEventListener('click', e => { e.preventDefault(); triggerProgress(); document.getElementById('hotels').scrollIntoView({behavior:'smooth'}); });
+document.querySelector('.sidebar-nav a[href="#flights"]').addEventListener('click', e => { e.preventDefault(); triggerProgress(); document.getElementById('flights').scrollIntoView({behavior:'smooth'}); });
+document.querySelector('.sidebar-nav a[href="#cars"]').addEventListener('click', e => { e.preventDefault(); triggerProgress(); document.getElementById('cars').scrollIntoView({behavior:'smooth'}); });
 
 // Quick service cards also open search overlays
-document.querySelector('.qs-card:nth-child(1)').onclick = () => { triggerProgress(); setTimeout(() => { window.location.href = 'search.html?type=flights'; }, 150); };
-document.querySelector('.qs-card:nth-child(2)').onclick = () => { triggerProgress(); setTimeout(() => { window.location.href = 'search.html?type=hotels'; }, 150); };
-document.querySelector('.qs-card:nth-child(3)').onclick = () => { triggerProgress(); setTimeout(() => { window.location.href = 'search.html?type=cars'; }, 150); };
+document.querySelector('.qs-card:nth-child(1)').onclick = () => { triggerProgress(); document.getElementById('flights').scrollIntoView({behavior:'smooth'}); };
+document.querySelector('.qs-card:nth-child(2)').onclick = () => { triggerProgress(); document.getElementById('hotels').scrollIntoView({behavior:'smooth'}); };
+document.querySelector('.qs-card:nth-child(3)').onclick = () => { triggerProgress(); document.getElementById('cars').scrollIntoView({behavior:'smooth'}); };
 
 // ===== Item Detail Overlay (hotel/flight/car single item) =====
 function showItemDetail(type, item) {
