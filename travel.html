@@ -1185,7 +1185,7 @@ const flights = [
 ];
 document.getElementById('flightGrid').innerHTML = flights.map(f => `
   <div class="service-card reveal">
-    <img src="https://picsum.photos/seed/${f.img}/600/400" alt="${f.route}" loading="lazy">
+    <div class="card-img-wrap"><img src="https://picsum.photos/seed/${f.img}/600/400" alt="${f.route}" loading="lazy"></div>
     <div class="service-card-body">
       <h3>${f.route}</h3>
       <div class="meta">📅 ${f.date} ${f.tag ? `<span class="service-tag tag-${f.tag}">${f.tagText}</span>` : ''}</div>
@@ -1205,7 +1205,7 @@ const cars = [
 ];
 document.getElementById('carGrid').innerHTML = cars.map(c => `
   <div class="service-card reveal">
-    <img src="https://picsum.photos/seed/${c.img}/600/400" alt="${c.name}" loading="lazy">
+    <div class="card-img-wrap"><img src="https://picsum.photos/seed/${c.img}/600/400" alt="${c.name}" loading="lazy"></div>
     <div class="service-card-body">
       <h3>${c.name}</h3>
       <div class="meta">🚘 ${c.type} ${c.tag ? `<span class="service-tag tag-${c.tag}">${c.tagText}</span>` : ''}</div>
