@@ -395,14 +395,19 @@ const filtersBar = document.getElementById('filtersBar');
 
 if (type === 'hotels' && data.locations) {
   filtersBar.innerHTML = `
-    <select id="filterSelect">
-      ${data.locations.map(l => `<option>${l}</option>`).join('')}
-    </select>
+    <div class="region-tags" id="filterTags">
+      ${data.locations.map(l => `<span class="region-tag${l === '全部' ? ' active' : ''}" data-val="${l}">${l}</span>`).join('')}
+    </div>
     <span class="result-count" id="resultCount"></span>
   `;
-  document.getElementById('filterSelect').addEventListener('change', e => {
-    activeFilter = e.target.value;
-    render();
+  document.querySelectorAll('#filterTags .region-tag').forEach(tag => {
+    tag.addEventListener('click', () => {
+      document.querySelectorAll('#filterTags .region-tag').forEach(t => t.classList.remove('active'));
+      tag.classList.add('active');
+      activeFilter = tag.dataset.val;
+      currentPage = 1;
+      render();
+    });
   });
 } else if (type === 'flights' && data.fromOptions) {
   filtersBar.innerHTML = `
@@ -422,14 +427,19 @@ if (type === 'hotels' && data.locations) {
   });
 } else if (type === 'cars' && data.typeOptions) {
   filtersBar.innerHTML = `
-    <select id="filterSelect">
-      ${data.typeOptions.map(o => `<option>${o}</option>`).join('')}
-    </select>
+    <div class="region-tags" id="filterTags">
+      ${data.typeOptions.map(o => `<span class="region-tag${o === '全部' ? ' active' : ''}" data-val="${o}">${o}</span>`).join('')}
+    </div>
     <span class="result-count" id="resultCount"></span>
   `;
-  document.getElementById('filterSelect').addEventListener('change', e => {
-    activeFilter = e.target.value;
-    render();
+  document.querySelectorAll('#filterTags .region-tag').forEach(tag => {
+    tag.addEventListener('click', () => {
+      document.querySelectorAll('#filterTags .region-tag').forEach(t => t.classList.remove('active'));
+      tag.classList.add('active');
+      activeFilter = tag.dataset.val;
+      currentPage = 1;
+      render();
+    });
   });
 } else if (type === 'destinations') {
   filtersBar.innerHTML = `
@@ -472,9 +482,16 @@ function render() {
   }
 
   // Sort
-  if (sortMode === 'hot') list.sort((a, b) => b.price - a.price);
-  else if (sortMode === 'recommend') list.sort((a, b) => (b.stars?.length || b.rating || 0) - (a.stars?.length || a.rating || 0));
-  else if (sortMode === 'recent') list.reverse();
+  if (sortMode === 'hot') {
+    list.sort((a, b) => b.price - a.price);
+  } else if (sortMode === 'recommend') {
+    if (type === 'hotels') list.sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating));
+    else if (type === 'destinations') list.sort((a, b) => parseFloat(b.stars.split(' ')[1] || 0) - parseFloat(a.stars.split(' ')[1] || 0));
+    else if (type === 'cars') list.sort((a, b) => b.seats - a.seats);
+    else list.sort((a, b) => (b.direct ? 1 : 0) - (a.direct ? 1 : 0));
+  } else if (sortMode === 'recent') {
+    list.reverse();
+  }
 
   // Paginate
   const totalPages = Math.ceil(list.length / pageSize);
