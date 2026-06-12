@@ -129,6 +129,38 @@ body {
 .region-tag:hover { border-color: #f39c12; color: #f39c12; }
 .region-tag.active { background: #f39c12; color: #fff; border-color: #f39c12; }
 
+/* Sort tabs with animated underline */
+.sort-tabs {
+  display: flex; gap: 0; position: relative;
+  border-bottom: 2px solid #e8e0d5; margin-bottom: 24px;
+}
+.sort-tab {
+  padding: 10px 20px; font-size: 14px; font-weight: 600; color: #8b7e6a;
+  cursor: pointer; border: none; background: none; position: relative;
+  transition: color 0.25s;
+}
+.sort-tab:hover { color: #c67b4b; }
+.sort-tab.active { color: #c67b4b; }
+.sort-tab-underline {
+  position: absolute; bottom: -2px; height: 2px; background: #c67b4b;
+  transition: left 0.3s ease, width 0.3s ease; border-radius: 1px;
+}
+
+/* Pagination */
+.pagination {
+  display: flex; justify-content: center; align-items: center; gap: 6px;
+  margin-top: 32px; padding-top: 24px; border-top: 1px solid #e8e0d5;
+}
+.page-btn {
+  min-width: 36px; height: 36px; padding: 0 10px;
+  border: 1px solid #e0d5c5; background: #fffdf9; color: #8b7e6a;
+  border-radius: 4px; font-size: 14px; cursor: pointer; transition: all 0.2s;
+}
+.page-btn:hover { border-color: #c67b4b; color: #c67b4b; }
+.page-btn.active { background: #c67b4b; color: #fff; border-color: #c67b4b; }
+.page-btn:disabled { opacity: 0.3; cursor: default; }
+.page-info { font-size: 13px; color: #8b7e6a; margin: 0 12px; }
+
 /* Responsive */
 @media (max-width: 767px) {
   .card-grid { grid-template-columns: 1fr; }
@@ -150,7 +182,9 @@ body {
 <div class="search-toast" id="searchToast"></div>
 
 <div class="filters-bar" id="filtersBar"></div>
+<div class="sort-tabs" id="sortTabs"></div>
 <div class="list-container" id="listContainer"></div>
+<div class="pagination" id="pagination"></div>
 
 <script>
 // ===== Toast & Login =====
@@ -317,6 +351,40 @@ const regionMap = {
   '清迈，泰国': '亚洲', '洛杉矶，美国': '美洲',
 };
 let activeRegion = '全部';
+let sortMode = 'default';
+let currentPage = 1;
+const pageSize = 6;
+
+// Render sort tabs
+(function renderSortTabs() {
+  const tabs = ['最新', '最热', '推荐'];
+  const container = document.getElementById('sortTabs');
+  container.innerHTML = tabs.map((t, i) =>
+    `<button class="sort-tab${i === 0 ? ' active' : ''}" data-sort="${i}">${t}</button>`
+  ).join('') + '<span class="sort-tab-underline"></span>';
+  // Add click handlers
+  container.querySelectorAll('.sort-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      container.querySelectorAll('.sort-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      sortMode = ['recent', 'hot', 'recommend'][parseInt(btn.dataset.sort)];
+      // Animate underline
+      const underline = container.querySelector('.sort-tab-underline');
+      gsap.to(underline, { left: btn.offsetLeft, width: btn.offsetWidth, duration: 0.3, ease: 'power2.out' });
+      currentPage = 1;
+      render();
+    });
+  });
+  // Set initial underline position
+  setTimeout(() => {
+    const activeBtn = container.querySelector('.sort-tab.active');
+    const underline = container.querySelector('.sort-tab-underline');
+    if (activeBtn && underline) {
+      underline.style.left = activeBtn.offsetLeft + 'px';
+      underline.style.width = activeBtn.offsetWidth + 'px';
+    }
+  }, 100);
+})();
 
 document.getElementById('listTitle').textContent = data.title;
 document.getElementById('listSubtitle').textContent = data.subtitle;
@@ -403,9 +471,20 @@ function render() {
     if (activeFilter && activeFilter !== '全部') list = list.filter(c => c.type === activeFilter);
   }
 
+  // Sort
+  if (sortMode === 'hot') list.sort((a, b) => b.price - a.price);
+  else if (sortMode === 'recommend') list.sort((a, b) => (b.stars?.length || b.rating || 0) - (a.stars?.length || a.rating || 0));
+  else if (sortMode === 'recent') list.reverse();
+
+  // Paginate
+  const totalPages = Math.ceil(list.length / pageSize);
+  if (currentPage > totalPages) currentPage = totalPages || 1;
+  const start = (currentPage - 1) * pageSize;
+  const pagedList = list.slice(start, start + pageSize);
+
   // Update count
   const countEl = document.getElementById('resultCount');
-  if (countEl) countEl.textContent = `共 ${list.length} 条`;
+  if (countEl) countEl.textContent = `共 ${list.length} 条，第 ${currentPage}/${totalPages || 1} 页`;
 
   if (!list.length) {
     container.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>没有匹配的结果</p></div>';
@@ -414,7 +493,7 @@ function render() {
 
   // Guides use a different layout
   if (type === 'guides') {
-    container.innerHTML = `<div class="guide-grid">${list.map(g => `
+    container.innerHTML = `<div class="guide-grid">${pagedList.map(g => `
       <div class="guide-list-card">
         <div class="guide-icon">${g.icon}</div>
         <h3>${g.name}</h3>
@@ -431,7 +510,7 @@ function render() {
 
   // Destinations use a specific layout
   if (type === 'destinations') {
-    container.innerHTML = `<div class="card-grid">${list.map(d => `
+    container.innerHTML = `<div class="card-grid">${pagedList.map(d => `
       <div class="list-card">
         <img src="https://picsum.photos/seed/${d.img}/600/400" alt="${d.name}" loading="lazy">
         <div class="list-card-body">
@@ -446,7 +525,7 @@ function render() {
 
   // Hotels
   if (type === 'hotels') {
-    container.innerHTML = `<div class="card-grid">${list.map(h => `
+    container.innerHTML = `<div class="card-grid">${pagedList.map(h => `
       <div class="list-card">
         <img src="https://picsum.photos/seed/${h.img}/600/400" alt="${h.name}" loading="lazy">
         <div class="list-card-body">
@@ -468,7 +547,7 @@ function render() {
 
   // Flights
   if (type === 'flights') {
-    container.innerHTML = `<div class="card-grid">${list.map(f => `
+    container.innerHTML = `<div class="card-grid">${pagedList.map(f => `
       <div class="list-card">
         <img src="https://picsum.photos/seed/${f.img}/600/400" alt="${f.from}→${f.to}" loading="lazy">
         <div class="list-card-body">
@@ -493,7 +572,7 @@ function render() {
   }
 
   // Cars (default)
-  container.innerHTML = `<div class="card-grid">${list.map(c => `
+  container.innerHTML = `<div class="card-grid">${pagedList.map(c => `
     <div class="list-card">
       <img src="https://picsum.photos/seed/${c.img}/600/400" alt="${c.name}" loading="lazy">
       <div class="list-card-body">
@@ -511,6 +590,27 @@ function render() {
       </div>
     </div>
   `).join('')}</div>`;
+}
+
+  // Pagination
+  const pagEl = document.getElementById('pagination');
+  if (totalPages > 1) {
+    let html = `<button class="page-btn" ${currentPage <= 1 ? 'disabled' : ''} onclick="currentPage=1;render();">«</button>`;
+    html += `<button class="page-btn" ${currentPage <= 1 ? 'disabled' : ''} onclick="currentPage--;render();">‹</button>`;
+    for (let p = 1; p <= totalPages; p++) {
+      if (p === 1 || p === totalPages || (p >= currentPage - 2 && p <= currentPage + 2)) {
+        html += `<button class="page-btn${p === currentPage ? ' active' : ''}" onclick="currentPage=${p};render();">${p}</button>`;
+      } else if (p === currentPage - 3 || p === currentPage + 3) {
+        html += '<span style="color:#8b7e6a">…</span>';
+      }
+    }
+    html += `<button class="page-btn" ${currentPage >= totalPages ? 'disabled' : ''} onclick="currentPage++;render();">›</button>`;
+    html += `<button class="page-btn" ${currentPage >= totalPages ? 'disabled' : ''} onclick="currentPage=${totalPages};render();">»</button>`;
+    html += `<span class="page-info">${currentPage}/${totalPages}</span>`;
+    pagEl.innerHTML = html;
+  } else {
+    pagEl.innerHTML = '';
+  }
 }
 
 render();
