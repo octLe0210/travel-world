@@ -109,13 +109,12 @@ body {
   position: fixed; top: 24px; left: 50%; transform: translateX(-50%);
   padding: 14px 28px; border-radius: 12px; font-size: 14px; font-weight: 600;
   z-index: 9999; box-shadow: 0 8px 28px rgba(0,0,0,0.18);
-  display: none; white-space: nowrap; animation: toastIn 0.35s ease;
+  display: none; white-space: nowrap;
 }
 .search-toast.show { display: block; }
 .search-toast.error { background: #e74c3c; color: #fff; }
 .search-toast.success { background: #27ae60; color: #fff; }
 .search-toast.info { background: #2c3e50; color: #fff; }
-@keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(-16px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
 
 /* Sort tabs */
 .sort-tabs {
@@ -634,15 +633,16 @@ document.querySelectorAll('.region-tag').forEach(tag => {
 });
 
 // Toast GSAP override
-const _searchToast = showToast;
+var _origToast = showToast;
 showToast = function(msg, type) {
-  const t = document.getElementById('searchToast');
-  t.textContent = msg; t.className = 'search-toast ' + type;
-  t.style.display = 'block';
-  gsap.fromTo(t, { opacity: 0, y: -16 }, { opacity: 1, y: 0, duration: 0.35, ease: 'back.out(1.7)' });
+  var t = document.getElementById('searchToast');
+  t.textContent = msg;
+  t.className = 'search-toast ' + type + ' show';
+  t.style.display = '';
+  gsap.fromTo(t, { opacity: 0, y: -16 }, { opacity: 1, y: 0, duration: 0.3, ease: 'back.out(1.4)' });
   clearTimeout(t._tid);
-  t._tid = setTimeout(() => {
-    gsap.to(t, { opacity: 0, y: -8, duration: 0.2, ease: 'power2.in', onComplete() { t.style.display = 'none'; } });
+  t._tid = setTimeout(function() {
+    t.classList.remove('show');
   }, 2500);
 };
 </script>
