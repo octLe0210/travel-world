@@ -1834,7 +1834,9 @@ form.addEventListener('submit', e => {
 });
 
 function renderBookings() {
-  const container = document.getElementById('bookingsContainer'); if (!container) return;
+  var container = document.getElementById('bookingsContainer'); if (!container) return;
+  // 每次渲染时从 localStorage 实时读取，保证与后台同步
+  bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
   if (bookings.length === 0) { container.innerHTML = '<div class="booking-empty"><div class="empty-icon">📋</div><p>暂无预订记录</p><p style="margin-top:8px"><button onclick="switchBcTab(\'form\')">去预订一趟旅行</button></p></div>'; return; }
   container.innerHTML = bookings.map((b,i) => `
     <div class="booking-card"><div class="bc-info"><div class="bc-dest">${escapeHtml(b.dest)}</div><div class="bc-name">预订人：${escapeHtml(b.name)} · ${escapeHtml(b.email)}</div><div class="bc-dates"><span>入住：${b.checkin}</span><span>离开：${b.checkout}</span></div><div class="bc-guests">${b.guests} 位旅客</div></div><button class="bc-delete" data-index="${i}">取消预订</button></div>`).join('');
