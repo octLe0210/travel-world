@@ -345,6 +345,12 @@ const regionMap = {
   '夏威夷，美国': '美洲', '巴塞罗那，西班牙': '欧洲', '布拉格，捷克': '欧洲',
   '清迈，泰国': '亚洲', '洛杉矶，美国': '美洲',
 };
+
+// 目的地名称 → 详情页ID映射
+const destNameToId = {
+  '巴黎，法国': 'paris', '马尔代夫': 'maldives', '东京，日本': 'tokyo',
+  '冰岛': 'iceland', '巴厘岛，印尼': 'bali', '纽约，美国': 'newyork',
+};
 let activeRegion = '全部';
 
 document.getElementById('listTitle').textContent = data.title;
@@ -479,7 +485,9 @@ function render() {
   // Destinations use a specific layout
   if (type === 'destinations') {
     container.innerHTML = '<div class="card-grid">' + pagedList.map(function(d) {
-      return '<div class="list-card"><img src="https://picsum.photos/seed/' + d.img + '/600/400" alt="' + d.name + '" loading="lazy"><div class="list-card-body"><h3>' + d.name + '</h3><div class="meta"><span style="color:#f39c12">' + d.stars + '</span></div><p class="desc">' + d.desc + '</p></div></div>';
+      var destId = destNameToId[d.name] || '';
+      var onclick = destId ? ' onclick="window.location.href=\'index.html#detail-' + destId + '\'"' : '';
+      return '<div class="list-card"' + onclick + '><img src="https://picsum.photos/seed/' + d.img + '/600/400" alt="' + d.name + '" loading="lazy"><div class="list-card-body"><h3>' + d.name + '</h3><div class="meta"><span style="color:#f39c12">' + d.stars + '</span></div><p class="desc">' + d.desc + '</p></div></div>';
     }).join('') + '</div>';
     renderPagination(list.length);
     return;

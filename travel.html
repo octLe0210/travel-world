@@ -1116,6 +1116,15 @@ document.getElementById('splashStartBtn').addEventListener('click', () => {
   document.getElementById('destinations').scrollIntoView({ behavior: 'smooth' });
 });
 
+// Hash-based detail: index.html#detail-paris → auto-open
+(function() {
+  var hash = window.location.hash;
+  if (hash && hash.indexOf('detail-') === 0) {
+    var id = hash.replace('#detail-', '');
+    setTimeout(function() { showDetail(id); }, 500);
+  }
+})();
+
 // Search
 document.getElementById('searchBtn').addEventListener('click', () => {
   const q = document.getElementById('searchInput').value.trim();
