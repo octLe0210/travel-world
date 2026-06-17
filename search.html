@@ -332,6 +332,7 @@ const allData = {
 // ===== Router =====
 const params = new URLSearchParams(window.location.search);
 const type = params.get('type') || 'destinations';
+const searchQuery = params.get('search') || '';
 const data = allData[type] || allData.destinations;
 
 // Region mapping for destinations
@@ -418,6 +419,15 @@ if (type === 'hotels' && data.locations) {
 function render() {
   const container = document.getElementById('listContainer');
   let list = data.items.slice();
+
+  // Apply search filter from URL param
+  if (type === 'destinations' && searchQuery) {
+    list = list.filter(function(d) { return d.name.indexOf(searchQuery) !== -1; });
+    activeRegion = '全部';
+    document.querySelectorAll('.region-tag').forEach(function(t) { t.classList.remove('active'); });
+    var allTag = document.querySelector('.region-tag[data-region="全部"]');
+    if (allTag) allTag.classList.add('active');
+  }
 
   // Apply filters first (before sort & pagination)
   if (type === 'destinations' && activeRegion !== '全部') {

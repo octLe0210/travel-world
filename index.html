@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>世界之旅 - 全球旅游信息平台</title>
-<meta name="description" content="世界之旅——探索全球最美景点，预订酒店、机票、租车一站式服务。覆盖巴黎、马尔代夫、东京、冰岛、巴厘岛、纽约等热门目的地，提供专业旅行攻略。">
 <link rel="preconnect" href="https://picsum.photos">
 <link rel="dns-prefetch" href="https://picsum.photos">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -1121,19 +1120,13 @@ document.getElementById('splashStartBtn').addEventListener('click', () => {
 document.getElementById('searchBtn').addEventListener('click', () => {
   const q = document.getElementById('searchInput').value.trim();
   if (!q) return;
-  // 搜索目的地名称匹配
   const ids = Object.keys(destData);
   const found = ids.find(id => destData[id].name.includes(q));
   if (found) {
-    document.getElementById('destinations').scrollIntoView({ behavior: 'smooth' });
-    // 高亮匹配卡片
-    setTimeout(() => {
-      const card = document.querySelector(`.dest-card[data-dest="${found}"]`);
-      if (card) {
-        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        gsap.fromTo(card, { boxShadow: '0 0 0 0 rgba(198,123,75,0.6)' }, { boxShadow: '0 0 0 12px rgba(198,123,75,0)', duration: 1.5, ease: 'power2.out' });
-      }
-    }, 600);
+    triggerProgress();
+    setTimeout(function() {
+      window.location.href = 'search.html?type=destinations&search=' + encodeURIComponent(q);
+    }, 150);
   } else {
     showToast('未找到匹配的目的地「' + q + '」', 'info');
   }
