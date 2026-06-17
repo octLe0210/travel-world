@@ -1826,13 +1826,12 @@ form.addEventListener('submit', e => {
   if (valid) {
     bookings.unshift({ dest:document.getElementById('dest').value, name:document.getElementById('name').value.trim(), checkin:document.getElementById('checkin').value, checkout:document.getElementById('checkout').value, guests:document.getElementById('guests').value, email:document.getElementById('email').value.trim(), time:new Date().toLocaleString('zh-CN') });
     saveBookings();
-    document.getElementById('modalMsg').textContent = `您的「${bookings[0].dest}」之旅已预订成功！可在"预订中心-我的预订"中查看。`;
-    document.getElementById('modalOverlay').classList.add('show');
-    form.reset(); document.querySelectorAll('.form-group.error').forEach(g => g.classList.remove('error'));
+    showToast('「' + bookings[0].dest + '」预订成功！', 'success');
+    form.reset(); document.querySelectorAll('.form-group.error').forEach(function(g) { g.classList.remove('error'); });
+    // 自动切到预订列表
+    setTimeout(function() { switchBcTab('list'); }, 600);
   }
 });
-document.getElementById('modalClose').addEventListener('click', () => document.getElementById('modalOverlay').classList.remove('show'));
-document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) e.currentTarget.classList.remove('show'); });
 
 function renderBookings() {
   const container = document.getElementById('bookingsContainer'); if (!container) return;
