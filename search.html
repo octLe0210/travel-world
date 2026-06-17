@@ -549,59 +549,34 @@ function render() {
 
   // Hotels
   if (type === 'hotels') {
-    container.innerHTML = `<div class="card-grid">${pagedList.map(h => `
-      <div class="list-card">
-        <img src="https://picsum.photos/seed/${h.img}/600/400" alt="${h.name}" loading="lazy">
-        <div class="list-card-body">
-          <h3>${h.name} <span style="color:#f39c12;font-size:14px">${'★'.repeat(h.stars)}</span></h3>
-          <div class="meta">
-            <span>📍 ${h.loc}</span>
-            <span>⭐ ${h.rating} 分</span>
-          </div>
-          <div class="meta">${h.features.map(f => `<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:#f0f2f5;color:#666;">${f}</span>`).join(' ')}</div>
-          <div class="list-card-footer">
-            <div class="price">¥${h.price.toLocaleString()} <small>${data.unit}</small></div>
-            <button class="btn" onclick="requireLogin(() => showToast('已选择「${h.name}」', 'success'))">预订</button>
-          </div>
-        </div>
-      </div>
-    `).join('')}</div>`;
+    container.innerHTML = '<div class="card-grid">' + pagedList.map(function(h, idx) {
+      var starsStr = ''; for (var s = 0; s < h.stars; s++) starsStr += '★';
+      var featuresHtml = h.features.map(function(f) { return '<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:#f0f2f5;color:#666;">' + f + '</span>'; }).join(' ');
+      return '<div class="list-card" onclick="showItemDetail(window._hotelData[' + idx + '],\'hotel\')"><img src="https://picsum.photos/seed/' + h.img + '/600/400" alt="' + h.name + '" loading="lazy"><div class="list-card-body"><h3>' + h.name + ' <span style="color:#f39c12;font-size:14px">' + starsStr + '</span></h3><div class="meta"><span>📍 ' + h.loc + '</span><span>⭐ ' + h.rating + ' 分</span></div><div class="meta">' + featuresHtml + '</div><div class="list-card-footer"><div class="price">¥' + h.price.toLocaleString() + ' <small>' + data.unit + '</small></div><button class="btn" onclick="event.stopPropagation();requireLogin(function(){ showToast(\'已选择「' + h.name + '」\', \'success\'); })">预订</button></div></div></div>';
+    }).join('') + '</div>';
+    window._hotelData = list;
     renderPagination(list.length);
     return;
   }
 
   // Flights
   if (type === 'flights') {
-    container.innerHTML = `<div class="card-grid">${pagedList.map(f => `
-      <div class="list-card">
-        <img src="https://picsum.photos/seed/${f.img}/600/400" alt="${f.from}→${f.to}" loading="lazy">
-        <div class="list-card-body">
-          <h3>${f.from} → ${f.to}</h3>
-          <div class="meta">
-            <span>🛫 ${f.airline}</span>
-            <span>📅 ${f.date}</span>
-            <span>🕐 ${f.time}</span>
-          </div>
-          <div class="meta">
-            <span style="font-size:11px;padding:2px 8px;border-radius:10px;background:#f0f2f5;color:#666;">⏱ ${f.duration}</span>
-            <span style="font-size:11px;padding:2px 8px;border-radius:10px;background:${f.direct?'#e8f8e8':'#fff3e0'};color:${f.direct?'#27ae60':'#e67e22'};">${f.direct?'直飞':'中转'}</span>
-          </div>
-          <div class="list-card-footer">
-            <div class="price">¥${f.price.toLocaleString()} <small>${data.unit}</small></div>
-            <button class="btn" onclick="requireLogin(() => showToast('已选择「${f.from}→${f.to}」', 'success'))">预订</button>
-          </div>
-        </div>
-      </div>
+    container.innerHTML = '<div class="card-grid">' + pagedList.map(function(f, idx) {
+      return '<div class="list-card" onclick="showItemDetail(window._flightData[' + idx + '],\'flight\')"><img src="https://picsum.photos/seed/' + f.img + '/600/400" alt="' + f.from + '→' + f.to + '" loading="lazy"><div class="list-card-body"><h3>' + f.from + ' → ' + f.to + '</h3><div class="meta"><span>🛫 ' + f.airline + '</span><span>📅 ' + f.date + '</span><span>🕐 ' + f.time + '</span></div><div class="meta"><span style="font-size:11px;padding:2px 8px;border-radius:10px;background:#f0f2f5;color:#666;">⏱ ' + f.duration + '</span><span style="font-size:11px;padding:2px 8px;border-radius:10px;background:' + (f.direct ? '#e8f8e8' : '#fff3e0') + ';color:' + (f.direct ? '#27ae60' : '#e67e22') + ';">' + (f.direct ? '直飞' : '中转') + '</span></div><div class="list-card-footer"><div class="price">¥' + f.price.toLocaleString() + ' <small>' + data.unit + '</small></div><button class="btn" onclick="event.stopPropagation();requireLogin(function(){ showToast(\'已选择「' + f.from + '→' + f.to + '」\', \'success\'); })">预订</button></div></div></div>';
+    }).join('') + '</div>';
+    window._flightData = list;
+    renderPagination(list.length);
     `).join('')}</div>`;
     renderPagination(list.length);
     return;
   }
 
   // Cars (default)
-  container.innerHTML = '<div class="card-grid">' + pagedList.map(function(c) {
+  container.innerHTML = '<div class="card-grid">' + pagedList.map(function(c, idx) {
     var featuresHtml = c.features.map(function(f) { return '<span style=\"font-size:11px;padding:2px 8px;border-radius:10px;background:#f0f2f5;color:#666;\">' + f + '</span>'; }).join(' ');
-    return '<div class=\"list-card\"><img src=\"https://picsum.photos/seed/' + c.img + '/600/400\" alt=\"' + c.name + '\" loading=\"lazy\"><div class=\"list-card-body\"><h3>' + c.name + '</h3><div class=\"meta\"><span>🚘 ' + c.type + '</span><span>🪑 ' + c.seats + '座</span><span>⚙ ' + c.trans + '</span></div><div class=\"meta\">' + featuresHtml + '</div><div class=\"list-card-footer\"><div class=\"price\">¥' + c.price.toLocaleString() + ' <small>' + data.unit + '</small></div><button class=\"btn\" onclick=\"requireLogin(function() { showToast(\'已选择「' + c.name + '」\', \'success\'); })\">预订</button></div></div></div>';
+    return '<div class=\"list-card\" onclick="showItemDetail(window._carData[' + idx + '],\'car\')"><img src=\"https://picsum.photos/seed/' + c.img + '/600/400\" alt=\"' + c.name + '\" loading=\"lazy\"><div class=\"list-card-body\"><h3>' + c.name + '</h3><div class=\"meta\"><span>🚘 ' + c.type + '</span><span>🪑 ' + c.seats + '座</span><span>⚙ ' + c.trans + '</span></div><div class=\"meta\">' + featuresHtml + '</div><div class=\"list-card-footer\"><div class=\"price\">¥' + c.price.toLocaleString() + ' <small>' + data.unit + '</small></div><button class=\"btn\" onclick=\"event.stopPropagation();requireLogin(function() { showToast(\'已选择「' + c.name + '」\', \'success\'); })\">预订</button></div></div></div>';
   }).join('') + '</div>';
+  window._carData = list;
   renderPagination(list.length);
 }
 
@@ -658,6 +633,49 @@ function renderPagination(totalItems) {
       if (!isNaN(p) && p >= 1 && p <= totalPages) { currentPage = p; render(); }
     });
   }
+}
+
+// ===== Item Detail Overlay =====
+function showItemDetail(item, category) {
+  var overlay = document.getElementById('detailOverlay');
+  var hero = document.getElementById('detailHero');
+  var body = document.getElementById('detailBody');
+  var img = item.img || '';
+  var html = '';
+
+  if (category === 'hotel') {
+    hero.style.backgroundImage = 'linear-gradient(transparent 40%, rgba(0,0,0,0.6)), url(https://picsum.photos/seed/' + img + '/1200/600)';
+    hero.style.backgroundSize = 'cover'; hero.style.backgroundPosition = 'center';
+    hero.innerHTML = '<div class="detail-hero-content"><h2>' + item.name + '</h2><div style="font-size:16px;color:rgba(255,255,255,0.8)">📍 ' + item.loc + ' · ⭐ ' + item.rating + ' 分 · ' + '★'.repeat(item.stars || 0) + '</div></div>';
+    html += '<div class="info-tags" style="margin-bottom:20px">';
+    (item.features || []).forEach(function(f) { html += '<div class="info-tag">' + f + '</div>'; });
+    html += '</div>';
+    html += '<div style="background:#f5ede0;border-radius:8px;padding:20px 24px;text-align:center;margin:20px 0"><span style="font-size:32px;font-weight:800;color:#8b5e3c">¥' + item.price.toLocaleString() + '</span><span style="color:#8b7e6a;font-size:15px"> /晚起</span></div>';
+    html += '<p style="color:#666;line-height:1.8">' + item.name + '位于' + item.loc + '，提供世界级的住宿体验。评分 ' + item.rating + ' 分，深受旅客好评。</p>';
+    html += '<div style="text-align:center;margin-top:24px"><button class="detail-book-btn" onclick="requireLogin(function(){ showToast(\'已选择「' + item.name + '」\', \'success\'); })">预订酒店</button></div>';
+  } else if (category === 'flight') {
+    hero.style.backgroundImage = 'linear-gradient(transparent 40%, rgba(0,0,0,0.6)), url(https://picsum.photos/seed/' + img + '/1200/600)';
+    hero.style.backgroundSize = 'cover'; hero.style.backgroundPosition = 'center';
+    hero.innerHTML = '<div class="detail-hero-content"><h2>' + item.from + ' → ' + item.to + '</h2><div style="font-size:16px;color:rgba(255,255,255,0.8)">' + item.airline + ' · ' + item.date + ' · ' + item.time + '</div></div>';
+    html += '<div class="info-tags" style="margin-bottom:20px"><div class="info-tag">⏱ ' + item.duration + '</div><div class="info-tag" style="background:' + (item.direct ? '#e8f8e8' : '#fff3e0') + ';color:' + (item.direct ? '#27ae60' : '#e67e22') + '">' + (item.direct ? '🟢 直飞' : '🟡 中转') + '</div><div class="info-tag">🛫 ' + item.airline + '</div></div>';
+    html += '<div style="background:#f5ede0;border-radius:8px;padding:20px 24px;text-align:center;margin:20px 0"><span style="font-size:32px;font-weight:800;color:#8b5e3c">¥' + item.price.toLocaleString() + '</span><span style="color:#8b7e6a;font-size:15px"> /人起</span></div>';
+    html += '<p style="color:#666;line-height:1.8">' + item.airline + ' ' + item.from + '→' + item.to + ' 航线，' + item.date + '出发。飞行时长约' + item.duration + '。含行李额23kg托运行李。</p>';
+    html += '<div style="text-align:center;margin-top:24px"><button class="detail-book-btn" onclick="requireLogin(function(){ showToast(\'已选择「' + item.from + '→' + item.to + '」\', \'success\'); })">预订机票</button></div>';
+  } else if (category === 'car') {
+    hero.style.backgroundImage = 'linear-gradient(transparent 40%, rgba(0,0,0,0.6)), url(https://picsum.photos/seed/' + img + '/1200/600)';
+    hero.style.backgroundSize = 'cover'; hero.style.backgroundPosition = 'center';
+    hero.innerHTML = '<div class="detail-hero-content"><h2>' + item.name + '</h2><div style="font-size:16px;color:rgba(255,255,255,0.8)">' + item.type + ' · ' + item.seats + '座 · ' + item.trans + '</div></div>';
+    html += '<div class="info-tags" style="margin-bottom:20px">';
+    (item.features || []).forEach(function(f) { html += '<div class="info-tag">' + f + '</div>'; });
+    html += '</div>';
+    html += '<div style="background:#f5ede0;border-radius:8px;padding:20px 24px;text-align:center;margin:20px 0"><span style="font-size:32px;font-weight:800;color:#8b5e3c">¥' + item.price.toLocaleString() + '</span><span style="color:#8b7e6a;font-size:15px"> /天起</span></div>';
+    html += '<p style="color:#666;line-height:1.8">' + item.name + '（' + item.type + '），' + item.seats + '座' + item.trans + '档。不限里程，基础保险已含，满油取还。</p>';
+    html += '<div style="text-align:center;margin-top:24px"><button class="detail-book-btn" onclick="requireLogin(function(){ showToast(\'已选择「' + item.name + '」\', \'success\'); })">预订租车</button></div>';
+  }
+
+  body.innerHTML = html;
+  overlay.classList.add('show');
+  overlay.scrollTop = 0;
 }
 
 // ===== Destination Detail Data =====
