@@ -1152,10 +1152,24 @@ const destData = {
   iceland: { name:'冰岛', stars:'★★★★★ 4.8', heroImg:'https://picsum.photos/seed/iceland-waterfall/1200/600', intro:'冰与火之国，冰川与火山共存，瀑布与地热交织。追逐北极光，体验午夜太阳。', attractions:[{icon:'♨️',name:'蓝湖温泉',desc:'世界闻名地热温泉'},{icon:'🌋',name:'黄金圈',desc:'三大自然奇观'},{icon:'🌌',name:'北极光',desc:'9月至次年3月'},{icon:'🏖️',name:'黑沙滩',desc:'外星般的地貌'},{icon:'🧊',name:'冰河湖',desc:'漂浮的冰山'},{icon:'💧',name:'斯科加瀑布',desc:'彩虹常在瀑布前'}], bestTime:'夏季环岛自驾（6-8月），冬季追极光（10-3月）', budget:'日均 800-1300 人民币', tips:['自驾是最佳旅行方式','务必带防水防风外套','信用卡普及率极高','自来水可直接饮用'] },
   bali: { name:'巴厘岛，印尼', stars:'★★★★☆ 4.6', heroImg:'https://picsum.photos/seed/bali-rice-terrace/1200/600', intro:'众神之岛，绝美海滩、层层梯田、古老神庙和独特艺术文化。', attractions:[{icon:'🛕',name:'海神庙',desc:'海中巨岩上的神庙'},{icon:'🌾',name:'德格拉朗梯田',desc:'世界遗产级景观'},{icon:'🏄',name:'库塔海滩',desc:'冲浪初学者的天堂'},{icon:'🐒',name:'圣猴森林',desc:'猕猴自由栖息'},{icon:'🧘',name:'乌布',desc:'瑜伽和冥想圣地'},{icon:'🌊',name:'乌鲁瓦图',desc:'悬崖上的神庙'}], bestTime:'干季（4-10月）', budget:'日均 300-800 人民币', tips:['进入寺庙需穿纱笼','租摩托车最灵活','只喝瓶装水','免签政策请提前确认'] },
   newyork: { name:'纽约，美国', stars:'★★★★☆ 4.7', heroImg:'https://picsum.photos/seed/newyork-skyline/1200/600', intro:'不夜城，世界金融、文化和时尚中心。自由女神像、时代广场、百老汇。', attractions:[{icon:'🗽',name:'自由女神像',desc:'美国自由的象征'},{icon:'🌳',name:'中央公园',desc:'城市中的绿洲'},{icon:'🏢',name:'帝国大厦',desc:'86层观景台'},{icon:'🎭',name:'百老汇',desc:'世界戏剧中心'},{icon:'🖼️',name:'大都会博物馆',desc:'世界三大博物馆之一'},{icon:'🌉',name:'布鲁克林大桥',desc:'步行穿过百年悬索桥'}], bestTime:'春季（4-6月）和秋季（9-10月）', budget:'日均 200-400 美元', tips:['购买CityPASS节省门票','地铁24小时运营','小费为账单的15-20%','时代广场合影大多需付费'] },
+  london: { name:'伦敦，英国', stars:'★★★★★ 4.8', heroImg:'https://picsum.photos/seed/big-ben-london/1200/600', intro:'大本钟、白金汉宫、大英博物馆，体验英伦贵族风范与下午茶文化。', attractions:[{icon:'🏰',name:'大本钟',desc:'伦敦地标钟楼'},{icon:'👑',name:'白金汉宫',desc:'英国皇室官邸'},{icon:'🏛️',name:'大英博物馆',desc:'世界最大博物馆之一'},{icon:'🎡',name:'伦敦眼',desc:'泰晤士河畔巨型摩天轮'}], bestTime:'夏季（6-8月）', budget:'日均 150-250 英镑', tips:['地铁Oyster卡出行最方便','博物馆大多免费','英式下午茶需提前预订','靠左行驶注意安全'] },
+  rome: { name:'罗马，意大利', stars:'★★★★★ 4.7', heroImg:'https://picsum.photos/seed/colosseum-rome/1200/600', intro:'千年古都，斗兽场、许愿池、梵蒂冈，在街头巷尾品尝地道意面和Gelato。', attractions:[{icon:'🏟️',name:'斗兽场',desc:'古罗马帝国遗迹'},{icon:'💒',name:'梵蒂冈',desc:'世界最小国家'},{icon:'⛲',name:'特雷维喷泉',desc:'投硬币许愿之地'},{icon:'🍝',name:'西班牙广场',desc:'罗马假日取景地'}], bestTime:'春季（4-6月）和秋季（9-10月）', budget:'日均 100-200 欧元', tips:['景点之间步行可达','Gelato当饭吃','注意防范小偷','教堂着装需遮肩膝'] },
+  sydney: { name:'悉尼，澳大利亚', stars:'★★★★☆ 4.7', heroImg:'https://picsum.photos/seed/opera-house-sydney/1200/600', intro:'歌剧院、海港大桥、邦迪海滩，南半球的阳光之都等你来探索。', attractions:[{icon:'🎭',name:'悉尼歌剧院',desc:'世界级建筑地标'},{icon:'🌉',name:'海港大桥',desc:'可攀爬的钢铁拱桥'},{icon:'🏖️',name:'邦迪海滩',desc:'冲浪胜地'},{icon:'🐨',name:'塔龙加动物园',desc:'抱考拉看袋鼠'}], bestTime:'春季（9-11月）和秋季（3-5月）', budget:'日均 200-400 澳元', tips:['时差仅2小时','防晒必涂SPF50+','周日交通费封顶','小费非强制'] },
+  dubai: { name:'迪拜，阿联酋', stars:'★★★★★ 4.8', heroImg:'https://picsum.photos/seed/burj-dubai/1200/600', intro:'哈利法塔、棕榈岛、沙漠冲沙，体验极致奢华与现代奇迹的碰撞。', attractions:[{icon:'🏢',name:'哈利法塔',desc:'世界最高建筑'},{icon:'🏝️',name:'棕榈岛',desc:'人工填海奇迹'},{icon:'🏜️',name:'沙漠冲沙',desc:'刺激的沙漠越野'},{icon:'🛍️',name:'迪拜购物中心',desc:'全球最大购物中心'}], bestTime:'冬季（11月-次年3月）', budget:'日均 500-1000 美元', tips:['注意着装保守','斋月期间白天勿公开饮食','地铁有女性专用车厢','周五是休息日'] },
+  bangkok: { name:'曼谷，泰国', stars:'★★★★☆ 4.5', heroImg:'https://picsum.photos/seed/grand-palace-bangkok/1200/600', intro:'大皇宫、水上市场、街头美食，感受东南亚的热情与微笑。', attractions:[{icon:'🏛️',name:'大皇宫',desc:'泰国皇家宫殿'},{icon:'🛶',name:'水上市场',desc:'舟上购物独特体验'},{icon:'🛕',name:'卧佛寺',desc:'46米长金卧佛'},{icon:'🍜',name:'考山路',desc:'背包客美食天堂'}], bestTime:'凉季（11月-次年2月）', budget:'日均 300-600 人民币', tips:['寺庙着装需遮肩膝','突突车记得砍价','只喝瓶装水','按摩每小时约200铢'] },
+  seoul: { name:'首尔，韩国', stars:'★★★★☆ 4.6', heroImg:'https://picsum.photos/seed/gyeongbokgung-seoul/1200/600', intro:'景福宫、明洞、弘大街头，K-pop与传统文化交织的活力之都。', attractions:[{icon:'🏯',name:'景福宫',desc:'朝鲜王朝正宫'},{icon:'🛍️',name:'明洞',desc:'购物美妆天堂'},{icon:'🎤',name:'弘大',desc:'街头表演艺术区'},{icon:'🗼',name:'南山塔',desc:'首尔地标观景台'}], bestTime:'春季赏樱（4月）和秋季红叶（10月）', budget:'日均 500-1000 人民币', tips:['T-money交通卡必备','明洞可退税','汗蒸房必体验','便利店即是食堂'] },
+  singapore: { name:'新加坡', stars:'★★★★★ 4.7', heroImg:'https://picsum.photos/seed/marina-bay-singapore/1200/600', intro:'滨海湾、鱼尾狮、牛车水，花园城市里的多元文化美食之旅。', attractions:[{icon:'🏨',name:'滨海湾金沙',desc:'无边泳池天际线'},{icon:'🦁',name:'鱼尾狮公园',desc:'新加坡象征'},{icon:'🌿',name:'滨海湾花园',desc:'超级树灯光秀'},{icon:'🍜',name:'牛车水',desc:'华人美食聚集区'}], bestTime:'全年皆宜（2-4月最佳）', budget:'日均 500-1000 新币', tips:['地铁EZ-Link卡方便','禁售口香糖','小费非强制','机场可免费市区游'] },
+  phuket: { name:'普吉岛，泰国', stars:'★★★★☆ 4.6', heroImg:'https://picsum.photos/seed/phuket-sunset/1200/600', intro:'碧海蓝天、悬崖日落、浮潜胜地，安达曼海上的度假天堂。', attractions:[{icon:'🏖️',name:'芭东海滩',desc:'最热闹的沙滩'},{icon:'⛰️',name:'攀牙湾',desc:'007电影取景地'},{icon:'🛕',name:'查龙寺',desc:'普吉最大的寺庙'},{icon:'🤿',name:'斯米兰岛',desc:'世界级浮潜点'}], bestTime:'干季（11月-次年4月）', budget:'日均 400-800 人民币', tips:['租摩托车需押护照','出海注意防晒','夜市海鲜砍价','11月-4月最佳'] },
+  osaka: { name:'大阪，日本', stars:'★★★★☆ 4.5', heroImg:'https://picsum.photos/seed/osaka-street-food/1200/600', intro:'道顿堀美食、大阪城、环球影城，关西的热情与美味一网打尽。', attractions:[{icon:'🏯',name:'大阪城',desc:'丰臣秀吉的城堡'},{icon:'🎢',name:'环球影城',desc:'任天堂世界必玩'},{icon:'🍜',name:'道顿堀',desc:'吃倒在大阪'},{icon:'🎡',name:'梅田蓝天大厦',desc:'空中庭园眺望台'}], bestTime:'春季（3-4月）和秋季（10-11月）', budget:'日均 8000-15000 日元', tips:['大阪周游卡超值','章鱼烧路边吃','关西腔很萌','比东京物价低20%'] },
+  hawaii: { name:'夏威夷，美国', stars:'★★★★★ 4.8', heroImg:'https://picsum.photos/seed/waikiki-hawaii/1200/600', intro:'威基基海滩、火山国家公园、草裙舞，太平洋上的热带天堂。', attractions:[{icon:'🏖️',name:'威基基海滩',desc:'冲浪发源地'},{icon:'🌋',name:'火山国家公园',desc:'活火山奇观'},{icon:'🛣️',name:'哈纳公路',desc:'最美海岸公路'},{icon:'💃',name:'波利尼西亚文化中心',desc:'草裙舞表演'}], bestTime:'全年皆宜', budget:'日均 200-400 美元', tips:['租车是必需品','时差18小时','Aloha精神','防晒必涂'] },
+  barcelona: { name:'巴塞罗那，西班牙', stars:'★★★★★ 4.7', heroImg:'https://picsum.photos/seed/sagrada-barcelona/1200/600', intro:'圣家堂、高迪建筑、兰布拉大道，地中海畔的艺术与热情。', attractions:[{icon:'⛪',name:'圣家堂',desc:'高迪未完成的杰作'},{icon:'🏟️',name:'诺坎普球场',desc:'巴萨主场'},{icon:'🌳',name:'桂尔公园',desc:'童话般的园林'},{icon:'🛍️',name:'兰布拉大道',desc:'最热闹的步行街'}], bestTime:'春季（5-6月）和秋季（9-10月）', budget:'日均 100-200 欧元', tips:['景点门票提前网购','午睡时间店铺关门','注意防范小偷','Tapas当饭吃'] },
+  prague: { name:'布拉格，捷克', stars:'★★★★☆ 4.6', heroImg:'https://picsum.photos/seed/charles-prague/1200/600', intro:'查理大桥、老城广场、红瓦屋顶，欧洲最美的童话之城。', attractions:[{icon:'🌉',name:'查理大桥',desc:'600年历史的石桥'},{icon:'🏰',name:'布拉格城堡',desc:'世界最大古堡群'},{icon:'🕰️',name:'天文钟',desc:'600年仍运转'},{icon:'🍺',name:'老城广场',desc:'捷克啤酒发源地'}], bestTime:'春季（5-6月）和秋季（9月）', budget:'日均 60-120 欧元', tips:['捷克啤酒比水便宜','换汇注意汇率','有轨电车最便捷','查理大桥清晨最美'] },
+  chiangmai: { name:'清迈，泰国', stars:'★★★★☆ 4.5', heroImg:'https://picsum.photos/seed/chiang-mai-temple/1200/600', intro:'古城寺庙、夜市手作、大象保护营，泰北玫瑰的慢生活之旅。', attractions:[{icon:'🛕',name:'素贴山双龙寺',desc:'清迈标志性寺庙'},{icon:'🌃',name:'周日夜市',desc:'亚洲最大步行街夜市'},{icon:'🐘',name:'大象保护营',desc:'与大象亲密接触'},{icon:'🧘',name:'古城寺庙',desc:'三步一寺五步一庙'}], bestTime:'凉季（11月-次年2月）', budget:'日均 200-400 人民币', tips:['古城内步行就够了','泰式按摩超值','丛林飞跃必玩','周末夜市别错过'] },
+  losangeles: { name:'洛杉矶，美国', stars:'★★★★☆ 4.6', heroImg:'https://picsum.photos/seed/hollywood-la/1200/600', intro:'好莱坞、环球影城、圣莫尼卡海滩，加州的阳光与梦想之城。', attractions:[{icon:'🎬',name:'好莱坞星光大道',desc:'寻找偶像的星星'},{icon:'🎢',name:'环球影城',desc:'电影主题乐园'},{icon:'🏖️',name:'圣莫尼卡海滩',desc:'66号公路终点'},{icon:'🖼️',name:'盖蒂中心',desc:'免费山顶美术馆'}], bestTime:'全年皆宜（4-10月最佳）', budget:'日均 150-300 美元', tips:['租车是必需品','景点分散需规划','停车费贵','小费15-20%'] },
 };
 
-const destNames = ['paris','maldives','tokyo','iceland','bali','newyork'];
-const destImages = ['eiffel-tower-paris','maldives-beach','tokyo-shibuya','iceland-aurora','bali-temple','new-york-skyline'];
+const destNames = ['paris','maldives','tokyo','iceland','bali','newyork','london','rome','sydney','dubai','bangkok','seoul','singapore','phuket','osaka','hawaii','barcelona','prague','chiangmai','losangeles'];
+const destImages = ['eiffel-tower-paris','maldives-beach','tokyo-shibuya','iceland-aurora','bali-temple','new-york-skyline','big-ben-london','colosseum-rome','opera-house-sydney','burj-dubai','grand-palace-bangkok','gyeongbokgung-seoul','marina-bay-singapore','phuket-sunset','osaka-street-food','waikiki-hawaii','sagrada-barcelona','charles-prague','chiang-mai-temple','hollywood-la'];
 const destDescs = [
   '浪漫之都，埃菲尔铁塔、卢浮宫、塞纳河畔，感受法式优雅与艺术气息。',
   '印度洋上的珍珠，水屋别墅、珊瑚礁潜水、绝美日落，极致海岛度假。',
@@ -1163,6 +1177,20 @@ const destDescs = [
   '极光之国，蓝湖温泉、黄金圈、黑沙滩，感受大自然的震撼奇观。',
   '众神之岛，梯田、神庙、冲浪海滩，在热带天堂寻找内心的宁静。',
   '不夜城，自由女神、时代广场、中央公园，感受世界之都的活力。',
+  '大本钟、白金汉宫、大英博物馆，体验英伦贵族风范与下午茶文化。',
+  '千年古都，斗兽场、许愿池、梵蒂冈，街头巷尾尽是历史与美食。',
+  '歌剧院、海港大桥、邦迪海滩，南半球的阳光之都等你探索。',
+  '哈利法塔、棕榈岛、沙漠冲沙，极致奢华与现代奇迹的碰撞。',
+  '大皇宫、水上市场、街头美食，感受东南亚的热情与微笑。',
+  '景福宫、明洞、弘大街头，K-pop与传统文化交织的活力之都。',
+  '滨海湾、鱼尾狮、牛车水，花园城市里的多元文化美食之旅。',
+  '碧海蓝天、悬崖日落、浮潜胜地，安达曼海上的度假天堂。',
+  '道顿堀美食、大阪城、环球影城，关西的热情与美味一网打尽。',
+  '威基基海滩、火山国家公园、草裙舞，太平洋上的热带天堂。',
+  '圣家堂、高迪建筑、兰布拉大道，地中海畔的艺术与热情。',
+  '查理大桥、老城广场、红瓦屋顶，欧洲最美的童话之城。',
+  '古城寺庙、夜市手作、大象保护营，泰北玫瑰的慢生活之旅。',
+  '好莱坞、环球影城、圣莫尼卡海滩，加州的阳光与梦想之城。',
 ];
 
 // Render destinations
