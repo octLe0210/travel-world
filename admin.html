@@ -132,13 +132,25 @@ tr:hover td{background:#faf7f0}
 // ===== Auth =====
 var ADMIN_USER = 'admin';
 var ADMIN_PASS = 'admin123';
-var loggedIn = false;
+var loggedIn = localStorage.getItem('admin_loggedIn') === '1';
+
+if (loggedIn) {
+  document.getElementById('loginOverlay').style.display = 'none';
+  document.getElementById('adminSidebar').classList.remove('hidden');
+  document.getElementById('adminMain').classList.remove('hidden');
+  var savedUser = localStorage.getItem('admin_user') || 'admin';
+  document.getElementById('adminName').textContent = savedUser;
+  document.getElementById('adminAvatar').textContent = savedUser[0].toUpperCase();
+  showPage('dashboard');
+}
 
 document.getElementById('loginBtn').addEventListener('click', function() {
   var u = document.getElementById('loginUser').value.trim();
   var p = document.getElementById('loginPass').value.trim();
   if (u === ADMIN_USER && p === ADMIN_PASS) {
     loggedIn = true;
+    localStorage.setItem('admin_loggedIn', '1');
+    localStorage.setItem('admin_user', u);
     document.getElementById('loginOverlay').style.display = 'none';
     document.getElementById('adminSidebar').classList.remove('hidden');
     document.getElementById('adminMain').classList.remove('hidden');
@@ -155,6 +167,8 @@ document.getElementById('loginPass').addEventListener('keydown', function(e) {
 
 document.getElementById('logoutBtn').addEventListener('click', function() {
   loggedIn = false;
+  localStorage.removeItem('admin_loggedIn');
+  localStorage.removeItem('admin_user');
   document.getElementById('loginOverlay').style.display = 'flex';
   document.getElementById('adminSidebar').classList.add('hidden');
   document.getElementById('adminMain').classList.add('hidden');
@@ -192,7 +206,7 @@ var storeCars = getStore('admin_cars', [
   { id:3, name:'宝马3系', type:'豪华轿车', price:560, seats:5 },
   { id:4, name:'特斯拉Model Y', type:'电动SUV', price:480, seats:5 },
 ]);
-var storeBookings = getStore('admin_bookings', getStore('bookings', []));
+var storeBookings = getStore('bookings', []);
 var storeUsers = getStore('admin_users', getStore('usersDB', []));
 
 // ===== Navigation =====
@@ -340,7 +354,7 @@ function deleteItem(key, idx) {
 function deleteBooking(idx) {
   if (!confirm('确定删除？')) return;
   storeBookings.splice(idx, 1);
-  setStore('admin_bookings', storeBookings);
+  setStore('bookings', storeBookings);
   showPage('bookings');
 }
 
