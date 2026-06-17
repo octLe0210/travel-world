@@ -141,7 +141,7 @@ if (loggedIn) {
   var savedUser = localStorage.getItem('admin_user') || 'admin';
   document.getElementById('adminName').textContent = savedUser;
   document.getElementById('adminAvatar').textContent = savedUser[0].toUpperCase();
-  showPage('dashboard');
+  setTimeout(function() { showPage('dashboard'); }, 50);
 }
 
 document.getElementById('loginBtn').addEventListener('click', function() {
