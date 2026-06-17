@@ -419,6 +419,20 @@ function render() {
   const container = document.getElementById('listContainer');
   let list = data.items.slice();
 
+  // Apply filters first (before sort & pagination)
+  if (type === 'destinations' && activeRegion !== '全部') {
+    list = list.filter(function(d) { return regionMap[d.name] === activeRegion; });
+  } else if (type === 'hotels') {
+    if (activeFilter && activeFilter !== '全部') list = list.filter(function(h) { return h.loc.includes(activeFilter); });
+  } else if (type === 'flights') {
+    var fromVal = document.getElementById('filterFrom')?.value;
+    var toVal = document.getElementById('filterTo')?.value;
+    if (fromVal && fromVal !== '全部') list = list.filter(function(f) { return f.from === fromVal; });
+    if (toVal && toVal !== '全部') list = list.filter(function(f) { return f.to === toVal; });
+  } else if (type === 'cars') {
+    if (activeFilter && activeFilter !== '全部') list = list.filter(function(c) { return c.type === activeFilter; });
+  }
+
   // Sort
   if (sortMode === 'hot') { list.sort(function(a, b) { return b.price - a.price; }); }
   else if (sortMode === 'recommend') {
@@ -428,27 +442,15 @@ function render() {
     else list.sort(function(a, b) { return (b.direct ? 1 : 0) - (a.direct ? 1 : 0); });
   } else if (sortMode === 'recent') { list.reverse(); }
 
-  // Paginate
+  // Paginate (after filter + sort)
   var totalPages = Math.ceil(list.length / pageSize);
   if (currentPage > totalPages) currentPage = totalPages || 1;
   var start = (currentPage - 1) * pageSize;
   var pagedList = list.slice(start, start + pageSize);
 
-  // Apply filters
-  if (type === 'hotels') {
-    if (activeFilter && activeFilter !== '全部') list = list.filter(h => h.loc.includes(activeFilter));
-  } else if (type === 'flights') {
-    const fromVal = document.getElementById('filterFrom')?.value;
-    const toVal = document.getElementById('filterTo')?.value;
-    if (fromVal && fromVal !== '全部') list = list.filter(f => f.from === fromVal);
-    if (toVal && toVal !== '全部') list = list.filter(f => f.to === toVal);
-  } else if (type === 'cars') {
-    if (activeFilter && activeFilter !== '全部') list = list.filter(c => c.type === activeFilter);
-  }
-
   // Update count
-  const countEl = document.getElementById('resultCount');
-  if (countEl) countEl.textContent = `共 ${list.length} 条`;
+  var countEl = document.getElementById('resultCount');
+  if (countEl) countEl.textContent = '共 ' + list.length + ' 条';
 
   if (!list.length) {
     container.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>没有匹配的结果</p></div>';
@@ -462,11 +464,6 @@ function render() {
     }).join('') + '</div>';
     renderPagination(list.length);
     return;
-  }
-
-  // Apply region filter
-  if (type === 'destinations' && activeRegion !== '全部') {
-    list = list.filter(d => regionMap[d.name] === activeRegion);
   }
 
   // Destinations use a specific layout
